@@ -82,7 +82,7 @@ async function addorUpdateJob(event) {
   const job = {
     jobName: document.querySelector("#jobName").value,
     client: document.querySelector("#client").value,
-    location: document.querySelector("#location").value,
+    location: document.querySelector("#locationInput").value,
     startDate: document.querySelector("#startDate").value,
     endDate: document.querySelector("#endDate").value,
     //TODO: travelDays: document.querySelector("#travelDays").value,
