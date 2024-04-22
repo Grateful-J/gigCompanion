@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timecard</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <h1>Timecard</h1>
+
+    <script type="module" src="./timecard.js"></script>
+
+    <div id="timecard">
+      <h3>Clock In</h3>
+      <div id="clock-in">
+        <input type time id="clock-in-time" placeholder="HH:MM" />
+        <button id="clock-in-button">Clock In</button>
+      </div>
+      <h3>Clock Out</h3>
+      <div id="clock-out">
+        <input type time id="clock-out-time" placeholder="HH:MM" />
+        <button id="clock-out-button">Clock Out</button>
+      </div>
+
+      <h3>Description</h3>
+      <input type="text" id="description" placeholder="What was the task?" />
+      <button id="submit-button">Submit</button>
+
+      <h3>Summary</h3>
+      <div id="summary">
+        <!-- Table of time entries -->
+        <table id="time-entries">
+          <tr>
+            <th>Description</th>
+            <th>Clock In</th>
+            <th>Clock Out</th>
+            <th>Duration</th>
+            <th>Actions</th>
+          </tr>
+        </table>
+
+        <button id="Previous Submissions">Previous Submissions</button>
+      </div>
+    </div>
+  </body>
+</html>
