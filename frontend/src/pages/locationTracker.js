@@ -230,3 +230,5 @@ function resetForm() {
   const submitBtn = document.querySelector('button[type="submit"]');
   submitBtn.textContent = "Add Job";
 }
+
+//TODO add pagation to cycle through jobs
