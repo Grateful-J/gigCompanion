@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Right to Work Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div id="app" class="max-w-4xl mx-auto p-4">
+      <div id="day-count" class="flex justify-around items-center p-4 text-4xl mb-8">
+        <div class="border-2 border-gray-200 rounded-lg p-4 flex-1 mx-2">
+          <div id="rtw-counter">Right to Work Days: 00</div>
+        </div>
+        <div class="border-2 border-blue-200 rounded-lg p-4 flex-1 mx-2">
+          <div id="non-rtw-counter">Non-Right to Work Days: 00</div>
+        </div>
+      </div>
+
+      <!-- Form for adding jobs -->
+      <form id="job-form" class="grid grid-cols-1 gap-4 mb-8">
+        <input type="text" id="jobName" placeholder="Job Name" required class="input input-bordered w-full" />
+        <input type="text" id="client" placeholder="Client" required class="input input-bordered w-full" />
+        <input type="text" id="locationInput" placeholder="Enter a location" />
+
+        <div class="flex gap-4">
+          <div class="flex-1">
+            <label for="startDate" class="block mb-2">Start Date:</label>
+            <input type="date" id="startDate" required class="input input-bordered w-full" />
+          </div>
+          <div class="flex-1">
+            <label for="endDate" class="block mb-2">End Date:</label>
+            <input type="date" id="endDate" required class="input input-bordered w-full" />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Job</button>
+      </form>
+
+      <!-- Display jobs -->
+      <div class="overflow-x-auto">
+        <table id="jobs-table" class="table w-full border border-gray-200">
+          <thead>
+            <tr class="text-center">
+              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Job Name</th>
+              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Client</th>
+              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Location</th>
+              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Start Date</th>
+              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">End Date</th>
+              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">RTW</th>
+              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Days Worked</th>
+              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Edit</th>
+              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Delete</th>
+            </tr>
+          </thead>
+
+          <tbody id="jobs-container">
+            <!-- Job rows will be inserted here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <script type="module" src="/location-tracker.js"></script>
+  </body>
+</html>
