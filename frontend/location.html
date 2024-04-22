@@ -9,6 +9,7 @@
   </head>
   <body>
     <div id="app" class="max-w-4xl mx-auto p-4">
+      <div id="navbar-placeholder"></div>
       <div id="day-count" class="flex justify-around items-center p-4 text-4xl mb-8">
         <div class="border-2 border-gray-200 rounded-lg p-4 flex-1 mx-2">
           <div id="rtw-counter">Right to Work Days: 00</div>
@@ -60,6 +61,19 @@
         </table>
       </div>
     </div>
+    <script type="module">
+      function loadNavbar() {
+        fetch("navbar.html")
+          .then((response) => response.text())
+          .then((html) => {
+            document.getElementById("navbar-placeholder").innerHTML = html;
+          });
+      }
+
+      window.onload = function () {
+        loadNavbar();
+      };
+    </script>
     <script type="module" src="./src/pages/locationTracker.js"></script>
   </body>
 </html>
