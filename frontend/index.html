@@ -3,26 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
     <title>Gig Companion</title>
   </head>
-  <body>
-    <div id="app" class="bg-gray-100 text-center max-w-4xl mx-auto p-4">
-      <div id="navbar" class="flex justify-between p-0">
-        <a href="/">Home</a>
-        <a href="/timecard">timecard</a>
-        <a href="/location">Location</a>
-        <a href="/job">Jobs</a>
-        <a href="/invoice">Invoice</a>
-        <a href="/user">User</a>
-        <a href="/login">Login</a>
-        <a href="/signup">Signup</a>
+  <body class="bg-blue-200">
+    <div id="app" class="max-w-4xl mx-auto p-4">
+      <div id="navbar" class="flex justify-center items-center py-4">
+        <a href="/" class="mr-4">Home</a>
+        <a href="/timecard" class="mr-4">Timecard</a>
+        <a href="/location" class="mr-4">Location</a>
+        <a href="/job" class="mr-4">Jobs</a>
+        <a href="/invoice" class="mr-4">Invoice</a>
+        <a href="/user" class="mr-4">User</a>
+        <a href="/login" class="mr-4">Login</a>
+        <a href="/signup" class="mr-4">Signup</a>
         <a href="/logout">Logout</a>
       </div>
 
-      <div id="homepage">
-        <h1>Gig Companion</h1>
-        <p>Gig Companion is a platform that offers tools for keeping freelancers organized</p>
+      <div class="text-center mt-8">
+        <h1 class="text-4xl font-bold text-gray-800">Gig Companion</h1>
+        <p class="text-lg text-gray-600 mt-4">Gig Companion is a platform that offers tools for keeping freelancers organized</p>
       </div>
     </div>
     <script type="module" src="/main.js"></script>

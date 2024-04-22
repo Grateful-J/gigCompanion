@@ -4,44 +4,68 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Timecard</title>
-    <link rel="stylesheet" href="./style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   </head>
-  <body>
-    <h1>Timecard</h1>
+  <body class="bg-gray-100">
+    <div id="app" class="max-w-4xl mx-auto p-4">
+      <h1 class="text-3xl font-bold text-gray-800 mb-4">Timecard</h1>
 
-    <script type="module" src="./timecard.js"></script>
+      <div id="timecard" class="bg-white p-4 rounded-lg shadow-md">
+        <h3 class="text-lg font-semibold mb-2">Clock In</h3>
+        <div id="clock-in" class="flex items-center mb-4">
+          <input
+            type="time"
+            id="clock-in-time"
+            class="flex-1 mr-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
+            placeholder="HH:MM"
+          />
+          <button id="clock-in-button" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">Clock In</button>
+        </div>
 
-    <div id="timecard">
-      <h3>Clock In</h3>
-      <div id="clock-in">
-        <input type time id="clock-in-time" placeholder="HH:MM" />
-        <button id="clock-in-button">Clock In</button>
-      </div>
-      <h3>Clock Out</h3>
-      <div id="clock-out">
-        <input type time id="clock-out-time" placeholder="HH:MM" />
-        <button id="clock-out-button">Clock Out</button>
-      </div>
+        <h3 class="text-lg font-semibold mb-2">Clock Out</h3>
+        <div id="clock-out" class="flex items-center mb-4">
+          <input
+            type="time"
+            id="clock-out-time"
+            class="flex-1 mr-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
+            placeholder="HH:MM"
+          />
+          <button id="clock-out-button" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">Clock Out</button>
+        </div>
 
-      <h3>Description</h3>
-      <input type="text" id="description" placeholder="What was the task?" />
-      <button id="submit-button">Submit</button>
+        <h3 class="text-lg font-semibold mb-2">Description</h3>
+        <input
+          type="text"
+          id="description"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
+          placeholder="What was the task?"
+        />
+        <button id="submit-button" class="block w-full mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">
+          Submit
+        </button>
 
-      <h3>Summary</h3>
-      <div id="summary">
-        <!-- Table of time entries -->
-        <table id="time-entries">
-          <tr>
-            <th>Description</th>
-            <th>Clock In</th>
-            <th>Clock Out</th>
-            <th>Duration</th>
-            <th>Actions</th>
-          </tr>
-        </table>
-
-        <button id="Previous Submissions">Previous Submissions</button>
+        <h3 class="text-lg font-semibold mt-8 mb-2">Summary</h3>
+        <div id="summary" class="overflow-x-auto">
+          <table id="time-entries" class="w-full border-collapse border border-gray-300">
+            <thead>
+              <tr>
+                <th class="px-4 py-2 text-left bg-gray-100 border-b border-gray-300">Description</th>
+                <th class="px-4 py-2 text-left bg-gray-100 border-b border-gray-300">Clock In</th>
+                <th class="px-4 py-2 text-left bg-gray-100 border-b border-gray-300">Clock Out</th>
+                <th class="px-4 py-2 text-left bg-gray-100 border-b border-gray-300">Duration</th>
+                <th class="px-4 py-2 text-left bg-gray-100 border-b border-gray-300">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Table rows will be dynamically generated -->
+            </tbody>
+          </table>
+        </div>
+        <button id="previous-submissions" class="block w-full mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">
+          Previous Submissions
+        </button>
       </div>
     </div>
+    <script type="module" src="./timecard.js"></script>
   </body>
 </html>
