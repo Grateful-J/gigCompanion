@@ -30,7 +30,7 @@ loader.importLibrary("places").then(async () => {
   const options = {
     bounds: defaultBounds,
     componentRestrictions: { country: "us" },
-    fields: ["address_components", "geometry", "icon", "name"],
+    fields: ["geometry", "name", "adr_address"], // address_components, geometry, icon, name, adr_address
     strictBounds: false,
   };
   autocomplete = new google.maps.places.Autocomplete(input, options);
