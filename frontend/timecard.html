@@ -12,60 +12,62 @@
       <h1 class="text-3xl font-bold text-gray-800 mb-4">Timecard</h1>
 
       <div id="timecard" class="bg-white p-4 rounded-lg shadow-md">
-        <h3 class="text-lg font-semibold mb-2">Clock In</h3>
-        <div id="clock-in" class="flex items-center mb-4">
-          <input
-            type="time"
-            id="clock-in-time"
-            class="flex-1 mr-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
-            placeholder="HH:MM"
-          />
-          <button id="clock-in-button" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">Clock In</button>
-        </div>
+        <form id="timecard-form">
+          <h3 class="text-lg font-semibold mb-2">Clock In</h3>
+          <div id="clock-in" class="flex items-center mb-4">
+            <input
+              type="time"
+              id="clock-in-time"
+              class="flex-1 mr-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
+              placeholder="HH:MM"
+            />
+            <button id="clock-in-button" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">Clock In</button>
+          </div>
 
-        <h3 class="text-lg font-semibold mb-2">Clock Out</h3>
-        <div id="clock-out" class="flex items-center mb-4">
-          <input
-            type="time"
-            id="clock-out-time"
-            class="flex-1 mr-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
-            placeholder="HH:MM"
-          />
-          <button id="clock-out-button" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">Clock Out</button>
-        </div>
-
-        <h3 class="text-lg font-semibold mb-2">Description</h3>
-        <input
-          type="text"
-          id="description"
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
-          placeholder="What was the task?"
-        />
-        <button id="submit-button" class="block w-full mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">
-          Submit
-        </button>
-
-        <h3 class="text-lg font-semibold mt-8 mb-2">Summary</h3>
-        <div id="summary" class="overflow-x-auto">
-          <table id="time-entries" class="w-full border-collapse border border-gray-300">
-            <thead>
-              <tr>
-                <th class="px-4 py-2 text-left bg-gray-100 border-b border-gray-300">Description</th>
-                <th class="px-4 py-2 text-left bg-gray-100 border-b border-gray-300">Clock In</th>
-                <th class="px-4 py-2 text-left bg-gray-100 border-b border-gray-300">Clock Out</th>
-                <th class="px-4 py-2 text-left bg-gray-100 border-b border-gray-300">Duration</th>
-                <th class="px-4 py-2 text-left bg-gray-100 border-b border-gray-300">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Table rows will be dynamically generated -->
-            </tbody>
-          </table>
-        </div>
-        <button id="previous-submissions" class="block w-full mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">
-          Previous Submissions
-        </button>
+          <h3 class="text-lg font-semibold mb-2">Clock Out</h3>
+          <div id="clock-out" class="flex items-center mb-4">
+            <input
+              type="time"
+              id="clock-out-time"
+              class="flex-1 mr-2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
+              placeholder="HH:MM"
+            />
+            <button id="clock-out-button" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">Clock Out</button>
+          </div>
+        </form>
       </div>
+
+      <h3 class="text-lg font-semibold mb-2">Description</h3>
+      <input
+        type="text"
+        id="description"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none"
+        placeholder="What was the task?"
+      />
+      <button id="submit-button" class="block w-full mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">
+        Submit
+      </button>
+
+      <h3 class="text-lg font-semibold mt-8 mb-2">Summary</h3>
+      <div id="summary" class="overflow-x-auto">
+        <table id="time-entries" class="w-full border-collapse border border-gray-300">
+          <thead>
+            <tr>
+              <th class="px-4 py-2 text-left bg-gray-100 border-b border-gray-300">Description</th>
+              <th class="px-4 py-2 text-left bg-gray-100 border-b border-gray-300">Clock In</th>
+              <th class="px-4 py-2 text-left bg-gray-100 border-b border-gray-300">Clock Out</th>
+              <th class="px-4 py-2 text-left bg-gray-100 border-b border-gray-300">Duration</th>
+              <th class="px-4 py-2 text-left bg-gray-100 border-b border-gray-300">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Table rows will be dynamically generated -->
+          </tbody>
+        </table>
+      </div>
+      <button id="previous-submissions" class="block w-full mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">
+        Previous Submissions
+      </button>
     </div>
     <script type="module">
       function loadNavbar() {

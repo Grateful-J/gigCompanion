@@ -1,4 +1,4 @@
-//Compute total hours
+/* //Compute total hours
 const computeTotalHours = (clockIn, clockOut) => {
   const clockInDate = new Date(clockIn);
   const clockOutDate = new Date(clockOut);
@@ -15,5 +15,5 @@ document.querySelector("#timecard-form").addEventListener("submit", (event) => {
   document.querySelector("#total-hours").value = totalHours;
   document.querySelector("#timecard-form").submit();
 });
-
+ */
 // TODO: Handle timecard submissions in batches
