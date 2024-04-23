@@ -3,7 +3,17 @@ import { Loader } from "@googlemaps/js-api-loader";
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const gAPIKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
-let map = null;
+//Global variable for jobs
+let globalJobs = [];
+
+//Global variable to track the editing state
+let isEditing = false;
+let editingJobID = "";
+
+//Global variable for storing address
+let globalAddress = [];
+
+//let map = null;
 let autocomplete;
 
 // Loads Google Maps API
@@ -34,14 +44,14 @@ loader.importLibrary("places").then(async () => {
     strictBounds: false,
   };
   autocomplete = new google.maps.places.Autocomplete(input, options);
+
+  // Add event listener for place selection
+  autocomplete.addListener("place_changed", () => {
+    const selectedPlace = autocomplete.getPlace();
+    console.log("Selected Place Object:", selectedPlace);
+    // Do something with the selected place object
+  });
 });
-
-//Global variable for jobs
-let globalJobs = [];
-
-//Global variable to track the editing state
-let isEditing = false;
-let editingJobID = "";
 
 //On page load fetch jobs & listens for form submit
 fetchJobs();
