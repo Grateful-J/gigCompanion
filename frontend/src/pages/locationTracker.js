@@ -11,10 +11,7 @@ let isEditing = false;
 let editingJobID = "";
 
 //Global variable for storing address
-let globalAddress = [];
-
-//let map = null;
-let autocomplete;
+let currentState = ""; //to store autofilled state for form logic (is RTW or not)
 
 // Loads Google Maps API
 const loader = new Loader({
@@ -43,7 +40,8 @@ loader.importLibrary("places").then(async () => {
     fields: ["address_components", "geometry", "name", "adr_address"], // address_components, geometry, icon, name, adr_address
     strictBounds: false,
   };
-  autocomplete = new google.maps.places.Autocomplete(input, options);
+
+  let autocomplete = new google.maps.places.Autocomplete(input, options);
 
   // Add event listener for place selection
   autocomplete.addListener("place_changed", () => {
@@ -58,6 +56,8 @@ loader.importLibrary("places").then(async () => {
     let state = selectedPlace.address_components[4].short_name;
     let postalCode = selectedPlace.address_components[6].long_name;
     let country = selectedPlace.address_components[5].long_name;
+
+    currentState = state; //updates global variable for r2w logic
 
     //console log address examples
     console.log(`Street Number: ${streetNumber}`);
@@ -99,7 +99,7 @@ async function addorUpdateJob(event) {
   const job = {
     jobName: document.querySelector("#jobName").value,
     client: document.querySelector("#client").value,
-    location: document.querySelector("#locationInput").value,
+    location: currentState,
     startDate: document.querySelector("#startDate").value,
     endDate: document.querySelector("#endDate").value,
     //TODO: travelDays: document.querySelector("#travelDays").value,
