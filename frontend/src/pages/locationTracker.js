@@ -212,7 +212,9 @@ function displayJobs(jobs) {
   <td class="border-b border-gray-200 p-2">${job.isRTW ? "Yes" : "No"}</td>
   <td class="border-b border-gray-200 p-2">${daysWorked}</td>
   <td class="border-b border-gray-200 p-2"><button class="edit-btn" data-id="${job._id}">Edit</button></td>
-  <td class="border-b border-gray-200 p-2"><button class="delete-btn" data-id="${job._id}">Delete</button></td>
+  <td class="border-b border-gray-200 p-2"><button class="delete-btn bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" data-id="${
+    job._id
+  }">Delete</button></td>
 `;
   });
 
