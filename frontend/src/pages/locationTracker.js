@@ -50,6 +50,22 @@ loader.importLibrary("places").then(async () => {
     const selectedPlace = autocomplete.getPlace();
     console.log("Selected Place Object:", selectedPlace);
     // Do something with the selected place object
+
+    // Address component Variables
+    let streetNumber = selectedPlace.address_components[0].long_name;
+    let streetName = selectedPlace.address_components[1].short_name;
+    let city = selectedPlace.address_components[2].short_name;
+    let state = selectedPlace.address_components[4].short_name;
+    let postalCode = selectedPlace.address_components[6].long_name;
+    let country = selectedPlace.address_components[5].long_name;
+
+    //console log address examples
+    console.log(`Street Number: ${streetNumber}`);
+    console.log(`Street Name: ${streetName}`);
+    console.log(`City: ${city}`);
+    console.log(`State: ${state}`);
+    console.log(`Postal Code: ${postalCode}`);
+    console.log(`Country: ${country}`);
   });
 });
 
