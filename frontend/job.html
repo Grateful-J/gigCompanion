@@ -3,10 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Jobs</title>
   </head>
-  <body>
+  <body class="bg-grey-100 p-4">
     <div id="navbar-placeholder"></div>
+
+    <div class="overflow-x-auto">
+      <table id="jobs-table" class="table w-full border border-gray-200">
+        <thead>
+          <tr class="text-center">
+            <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Job Name</th>
+            <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Client</th>
+            <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Location</th>
+            <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Start Date</th>
+            <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">End Date</th>
+            <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">RTW</th>
+            <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Days Worked</th>
+            <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Edit</th>
+            <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Delete</th>
+          </tr>
+        </thead>
+
+        <tbody id="jobs-container">
+          <!-- Job rows will be inserted here -->
+        </tbody>
+      </table>
+    </div>
   </body>
   <script type="module">
     function loadNavbar() {
@@ -22,5 +45,5 @@
     };
   </script>
 
-  <script src="./src/pages/job.js"></script>
+  <script type="module" src="./src/pages/job.js"></script>
 </html>
