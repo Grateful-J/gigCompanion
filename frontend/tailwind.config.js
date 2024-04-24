@@ -6,4 +6,13 @@ export default {
     extend: {},
   },
   plugins: [require("tailwindcss"), require("autoprefixer")],
+
+  compilerOptions: {
+    // ...
+    baseUrl: ".",
+    paths: {
+      "@/*": ["./src/*"],
+    },
+    // ...
+  },
 };
