@@ -10,6 +10,10 @@ const jobSchema = new mongoose.Schema(
     endDate: Date,
     travelDays: Number,
     isRTW: { type: Boolean, default: false },
+    jobCode: String,
+    isFreelance: { type: Boolean, default: false },
+    rate: Number,
+    isLocal: { type: Boolean, default: false },
   },
 
   {
@@ -26,6 +30,7 @@ const jobSchema = new mongoose.Schema(
   endDate: Date,
   travelDays: Number,
   isRTW: { type: Boolean, default: false }
+  jobCode: String
 }); */
 
 // Pre-save hook to set isRTW based on location
