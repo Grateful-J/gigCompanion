@@ -3,22 +3,60 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <div id="navbar-placeholder"></div>
-  </body>
-  <script type="module">
-    function loadNavbar() {
-      fetch("navbar.html")
-        .then((response) => response.text())
-        .then((html) => {
-          document.getElementById("navbar-placeholder").innerHTML = html;
-        });
-    }
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>User Page</title>
 
-    window.onload = function () {
-      loadNavbar();
-    };
-  </script>
+    <script type="module" src="./src/pages/user.js"></script>
+  </head>
+  <body class="bg-blue-300 flex-col items-center justify-center min-h-screen">
+    <div id="navbar-placeholder" class="block text-white"></div>
+    <div id="app">
+      <div>
+        <h1>User Account</h1>
+      </div>
+
+      <div class="overflow-x-auto text-center mb-0">
+        <table id="users-table" class="table w-full border border-gray-200">
+          <thead>
+            <tr class="text-center">
+              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">First Name</th>
+              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Last Name</th>
+              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Email</th>
+              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Phone</th>
+              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Edit</th>
+              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Delete</th>
+            </tr>
+          </thead>
+          <tbody id="users-container">
+            <!-- User rows will be inserted here -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="text-center">
+        <button id="add-user" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add User</button>
+      </div>
+
+      <div id="user-modal" class="hidden">
+        <!-- User modal will be inserted here -->
+      </div>
+
+      <div id="user-delete-modal" class="hidden">
+        <!-- User delete modal will be inserted here -->
+      </div>
+    </div>
+    <script type="module">
+      function loadNavbar() {
+        fetch("navbar.html")
+          .then((response) => response.text())
+          .then((html) => {
+            document.getElementById("navbar-placeholder").innerHTML = html;
+          });
+      }
+
+      window.onload = function () {
+        loadNavbar();
+      };
+    </script>
+  </body>
 </html>
