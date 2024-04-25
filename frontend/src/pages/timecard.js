@@ -27,7 +27,31 @@ document.querySelector("#timecard-form").addEventListener("submit", (event) => {
 //duration: Number,
 //isSubmited: { type: Boolean, default: false }
 
-// Assuming you already have the necessary setup for event listeners and fetching data
+const url = apiBaseUrl + "/api/timecards";
+
+// Function to reset form
+function resetForm() {
+  document.querySelector("#timecard-form").reset();
+}
+
+// TODO: Fetch timecards from API
+
+// Fetch timecards from API
+fetch(url)
+  .then((response) => response.json())
+  .then((data) => {
+    const timecardsContainer = document.querySelector("#timecards-container");
+    timecardsContainer.innerHTML = "";
+    data.forEach((timecard) => {
+      const timecardElement = document.createElement("div");
+      timecardElement.classList.add("p-4", "border-b", "border-gray-300", "flex", "justify-between");
+      timecardElement.innerHTML = `<p>${timecard.clockIn.toLocaleString()}</p><p>${timecard.clockOut.toLocaleString()}</p><p>${
+        timecard.description
+      }</p><p>${timecard.duration}</p>`;
+      timecardsContainer.appendChild(timecardElement);
+    });
+  })
+  .catch((error) => console.error(error));
 
 // Function to handle task creation
 function createTask(description) {
