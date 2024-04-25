@@ -32,12 +32,14 @@ document.querySelector("#timecard-form").addEventListener("submit", (event) => {
 // Function to handle task creation
 function createTask(description) {
   // Send request to backend to create a new task with the provided description
-  const task = document.querySelector("#description").value;
+  const task = {
+    description: document.querySelector("#description").value,
+  };
   console.log(`description: ${task}`);
 
   // Send request to backend to create a new task
 
-  fetch(`${apiBaseUrl}/api/timecard`, {
+  fetch(`${apiBaseUrl}/api/timecards`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
