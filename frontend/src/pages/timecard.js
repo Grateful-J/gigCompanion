@@ -1,3 +1,5 @@
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+
 /* //Compute total hours
 const computeTotalHours = (clockIn, clockOut) => {
   const clockInDate = new Date(clockIn);
@@ -18,11 +20,36 @@ document.querySelector("#timecard-form").addEventListener("submit", (event) => {
  */
 // TODO: Handle timecard submissions in batches
 
+//TODO: API calls to /timecard:
+//clockIn: Date,
+// clockOut: Date,
+//description: String,
+//duration: Number,
+//isSubmited: { type: Boolean, default: false }
+
 // Assuming you already have the necessary setup for event listeners and fetching data
 
 // Function to handle task creation
 function createTask(description) {
   // Send request to backend to create a new task with the provided description
+  const task = document.querySelector("#description").value;
+  console.log(`description: ${task}`);
+
+  // Send request to backend to create a new task
+
+  fetch(`${apiBaseUrl}/api/timecard`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(task),
+  })
+    .then((response) => response.json())
+    .then((data) => console.log(data))
+    .catch((error) => console.error(error));
+
+  console.log(`New task updated: ${task}`);
+
   // Upon successful creation, enable clock controls
   document.getElementById("clock-controls").classList.remove("hidden");
 }

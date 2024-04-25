@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Timecard = require("../models/timecard.model");
+const Timecard = require("../models/timecards.model");
 
 //GET all timecards
 router.get("/", async (req, res) => {

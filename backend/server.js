@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const jobRoutes = require("./routes/jobRoutes"); // Adjusted for a models directory
 const locationRoutes = require("./routes/locationRoutes");
+const timeCardRoutes = require("./routes/timecardRoutes");
 
 // Express app
 const app = express();
@@ -24,6 +25,7 @@ app.get("/", (req, res) => {
 //Use Routes
 app.use("/api/jobs", jobRoutes);
 app.use("/api/locations", locationRoutes);
+app.use("/api/timecards", timeCardRoutes);
 
 // Serve static assets if in production
 const port = process.env.PORT || 3000;

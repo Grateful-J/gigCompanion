@@ -15,3 +15,5 @@ const timecardSchema = new mongoose.Schema(
 );
 
 const Timecard = mongoose.model("Timecard", timecardSchema);
+
+module.exports = Timecard;
