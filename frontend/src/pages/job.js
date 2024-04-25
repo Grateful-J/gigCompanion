@@ -65,7 +65,9 @@ document.addEventListener("click", async function (event) {
     //console.log(`jobID: ${jobId}`);
     //console.log(`editBtn: ${editBtn}`);
 
-    // edit row
+    //TODO: figure out way to edit jobCode, rate, isFreelance, isLocal
+
+    //TODO: add edit button functionality
   }
 });
 
