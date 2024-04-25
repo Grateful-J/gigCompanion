@@ -14,6 +14,9 @@ const jobSchema = new mongoose.Schema(
     isFreelance: { type: Boolean, default: false },
     rate: { type: Number, default: 650 },
     isLocal: { type: Boolean, default: false },
+    straightTime: Number,
+    overTime: Number,
+    doubleTime: Number,
   },
 
   {

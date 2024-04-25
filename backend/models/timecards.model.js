@@ -5,10 +5,8 @@ const timecardSchema = new mongoose.Schema(
     clockIn: Date,
     clockOut: Date,
     description: String,
-    totalHours: Number,
-    straightTime: Number,
-    overTime: Number,
-    doubleTime: Number,
+    duration: Number,
+    isSubmited: { type: Boolean, default: false },
   },
 
   {
