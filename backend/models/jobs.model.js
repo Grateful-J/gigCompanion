@@ -12,7 +12,7 @@ const jobSchema = new mongoose.Schema(
     isRTW: { type: Boolean, default: false },
     jobCode: String,
     isFreelance: { type: Boolean, default: false },
-    rate: Number,
+    rate: { type: Number, default: 650 },
     isLocal: { type: Boolean, default: false },
   },
 
