@@ -5,8 +5,8 @@ const Timecard = require("../models/timecards.model");
 //GET all timecards
 router.get("/", async (req, res) => {
   try {
-    const timecards = await Timecard.find({});
-    res.status(200).json(timecards);
+    const timecard = await Timecard.find({});
+    res.status(200).json(timecard);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

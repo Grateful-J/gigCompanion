@@ -1,31 +1,19 @@
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
-/* //Compute total hours
-const computeTotalHours = (clockIn, clockOut) => {
-  const clockInDate = new Date(clockIn);
-  const clockOutDate = new Date(clockOut);
-  const totalHours = (clockOutDate - clockInDate) / 1000 / 60 / 60;
-  return totalHours;
-};
-
-//event listener on sumbit run computeTotalHours
-document.querySelector("#timecard-form").addEventListener("submit", (event) => {
-  event.preventDefault();
-  const clockIn = document.querySelector("#clock-in-time").value;
-  const clockOut = document.querySelector("#clock-out-time").value;
-  const totalHours = computeTotalHours(clockIn, clockOut);
-  document.querySelector("#total-hours").value = totalHours;
-  document.querySelector("#timecard-form").submit();
-});
- */
-// TODO: Handle timecard submissions in batches
-
-//TODO: API calls to /timecard:
+//API calls to /timecard:
 //clockIn: Date,
-// clockOut: Date,
+//clockOut: Date,
 //description: String,
 //duration: Number,
 //isSubmited: { type: Boolean, default: false }
+
+//Functions List:
+//Get Timecards- fetchTimecards()
+//Display timecards- displayTimecards()
+//Create timecard- createTask()
+//Edit timecard- editTimecard()
+//Delete timecard- deleteTimecard()
+//Reset form- resetForm()
 
 const url = apiBaseUrl + "/api/timecards";
 
@@ -34,30 +22,59 @@ function resetForm() {
   document.querySelector("#timecard-form").reset();
 }
 
-// TODO: Fetch timecards from API
+//Get Timecards
+async function fetchTimecards() {
+  try {
+    const response = await fetch(url);
+    const timecards = await response.json();
+    displayTimecards(timecards);
+  } catch (error) {
+    console.error("Failed to fetch timecards", error);
+  }
+}
 
-// Fetch timecards from API
-fetch(url)
-  .then((response) => response.json())
-  .then((data) => {
-    const timecardsContainer = document.querySelector("#timecards-container");
-    timecardsContainer.innerHTML = "";
-    data.forEach((timecard) => {
-      const timecardElement = document.createElement("div");
-      timecardElement.classList.add("p-4", "border-b", "border-gray-300", "flex", "justify-between");
-      timecardElement.innerHTML = `<p>${timecard.clockIn.toLocaleString()}</p><p>${timecard.clockOut.toLocaleString()}</p><p>${
-        timecard.description
-      }</p><p>${timecard.duration}</p>`;
-      timecardsContainer.appendChild(timecardElement);
-    });
-  })
-  .catch((error) => console.error(error));
+//Display timecards
+function displayTimecards(timecards) {
+  const timecardContainer = document.querySelector("#time-entries-container");
+  timecardContainer.innerHTML = "";
+  timecards.forEach((timecard) => {
+    // Convert string representations of dates to Date objects
+    const clockInTime = new Date(timecard.clockIn);
+    let clockOutTime;
+    if (timecard.clockOut !== undefined) {
+      clockOutTime = new Date(timecard.clockOut);
+    } else {
+      clockOutTime = new Date();
+    }
+
+    let ClockInTime = clockInTime.getTime();
+    let ClockOutTime = clockOutTime.getTime();
+
+    // Calculate duration in HH:MM format
+    const duration = ClockOutTime - ClockInTime;
+    const hours = Math.floor(duration / (1000 * 60 * 60));
+    const minutes = Math.floor((duration / (1000 * 60)) % 60);
+    const totalDuration = `${hours}:${minutes.toString().padStart(2, "0")}`;
+
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td class="border-b border-gray-200 p-2">${timecard.description}</td>
+      <td class="border-b border-gray-200 p-2">${clockInTime.getHours()}:${String(clockInTime.getMinutes()).padStart(2, "0")}</td>
+      <td class="border-b border-gray-200 p-2">${clockOutTime.getHours()}:${String(clockOutTime.getMinutes()).padStart(2, "0")}</td>
+      <td class="border-b border-gray-200 p-2">${totalDuration}</td>
+      <td class="border-b border-gray-200 p-2">Actions</td>
+    `;
+
+    timecardContainer.appendChild(row); // Add the row to the table
+  });
+}
 
 // Function to handle task creation
 function createTask(description) {
   // Send request to backend to create a new task with the provided description
   const task = {
-    description: document.querySelector("#description").value,
+    description: description,
+    clockIn: new Date(),
   };
   console.log(`description: ${task}`);
 
@@ -80,8 +97,20 @@ function createTask(description) {
   document.getElementById("clock-controls").classList.remove("hidden");
 }
 
+// Event listener for creating a task when the button is clicked
+document.getElementById("create-task-button").addEventListener("click", function () {
+  const description = document.querySelector("#description").value;
+  createTask(description);
+});
+
+// Fetch and display timecards when the page loads
+window.onload = function () {
+  fetchTimecards();
+};
+
 // Function to handle clock in
-function clockIn() {
+function clockIn(description) {
+  // Update clock in time
   // Send request to backend to clock in for the current task
 }
 
