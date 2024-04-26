@@ -38,6 +38,9 @@ function displayTimecards(timecards) {
   const timecardContainer = document.querySelector("#time-entries-container");
   timecardContainer.innerHTML = "";
   timecards.forEach((timecard) => {
+    // Timecard ID variable for event listeners
+    const timecardId = timecard._id;
+
     // Convert string representations of dates to Date objects
     const clockInTime = new Date(timecard.clockIn);
     let clockOutTime;
@@ -58,11 +61,13 @@ function displayTimecards(timecards) {
 
     const row = document.createElement("tr");
     row.innerHTML = `
+      <td class="hidden" id="data-id">${timecardId}</td>
       <td class="border-b border-gray-200 p-2">${timecard.description}</td>
       <td class="border-b border-gray-200 p-2">${clockInTime.getHours()}:${String(clockInTime.getMinutes()).padStart(2, "0")}</td>
       <td class="border-b border-gray-200 p-2">${clockOutTime.getHours()}:${String(clockOutTime.getMinutes()).padStart(2, "0")}</td>
       <td class="border-b border-gray-200 p-2">${totalDuration}</td>
-      <td class="border-b border-gray-200 p-2">Actions</td>
+      <td class="border-b border-gray-200 p-2"><button class="edit-btn" data-id="${timecardId}">Edit</button></td>
+      <td class="border-b border-gray-200 p-2"><button class="delete-btn bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" data-id="${timecardId}">Delete</button></td>
     `;
 
     timecardContainer.appendChild(row); // Add the row to the table
@@ -118,6 +123,25 @@ function clockIn(description) {
 function clockOut() {
   // Send request to backend to clock out for the current task
 }
+
+// Function to handle task deletion
+function deleteTimecard(timecardId) {
+  // Send request to backend to delete the task with the provided ID
+  fetch(`${apiBaseUrl}/api/timecards/${timecardId}`, {
+    method: "DELETE",
+  })
+    .then((response) => response.json())
+    .then((data) => console.log(data))
+    .catch((error) => console.error(error));
+}
+
+//Event listener for delete button
+document.getElementById("time-entries-container").addEventListener("click", (event) => {
+  if (event.target.classList.contains("delete-btn")) {
+    const timecardId = event.target.getAttribute("data-id");
+    deleteTimecard(timecardId);
+  }
+});
 
 // Event listener for create task button
 document.getElementById("create-task-button").addEventListener("click", function (event) {
