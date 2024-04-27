@@ -66,7 +66,7 @@ function displayTimecards(timecards) {
     <td class="border-b border-gray-200 p-2">${clockInTime.getHours()}:${String(clockInTime.getMinutes()).padStart(2, "0")}</td>
     <td class="border-b border-gray-200 p-2">${clockOutTime}</td>
     <td class="border-b border-gray-200 p-2">${totalDuration}</td>
-    <td class="border-b border-gray-200 p-2"><button class="edit-btn" data-id="${timecardId}">Edit</button></td>
+    <td class="border-b border-gray-200 p-2"><button class="edit-btn bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" id="edit-btn" data-id="${timecardId}">Edit</button></td>
     <td class="border-b border-gray-200 p-2"><button class="delete-btn bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" data-id="${timecardId}">Delete</button></td>
   `;
 
@@ -154,6 +154,8 @@ document.getElementById("time-entries-container").addEventListener("click", (eve
 // Event listener for create task button
 document.getElementById("create-task-button").addEventListener("click", function (event) {
   event.preventDefault();
+
+  // Get task description
   const description = document.getElementById("description").value;
   if (description.trim() !== "") {
     createTask(description);
@@ -174,4 +176,17 @@ document.getElementById("clock-in-button").addEventListener("click", function (e
 document.getElementById("clock-out-button").addEventListener("click", function (event) {
   event.preventDefault();
   clockOut();
+});
+
+//Event listener for edit button
+document.getElementById("time-entries-container").addEventListener("click", (event) => {
+  if (event.target.classList.contains("edit-btn")) {
+    //displays the clock controls
+    document.getElementById("clock-controls").classList.remove("hidden");
+
+    //repopulates the time fields with data from API
+
+    const timecardId = event.target.getAttribute("data-id");
+    console.log(`The edit taget is: ${timecardId}`);
+  }
 });
