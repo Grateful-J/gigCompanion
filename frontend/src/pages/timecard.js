@@ -197,8 +197,8 @@ document.getElementById("time-entries-container").addEventListener("click", (eve
     } else {
       // If clockOutTime is "Pending", set it to the current time
       const currentDate = new Date();
-      const hours = currentDate.getHours();
-      const minutes = currentDate.getMinutes();
+      const hours = currentDate.getHours().toString().padStart(2, "0"); // Ensure two-digit format with leading zero
+      const minutes = currentDate.getMinutes().toString().padStart(2, "0"); // Ensure two-digit format with leading zero
       const formattedCurrentTime = `${hours}:${minutes.toString().padStart(2, "0")}`;
       document.getElementById("clock-out-input").value = formattedCurrentTime;
     }
