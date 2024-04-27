@@ -37,7 +37,7 @@ function displayTimecards(timecards) {
 
     // Check if clockOutTime is defined & perform duration calculation
     if (timecard.clockOut !== undefined) {
-      clockOutTime = timecard.clockOut;
+      clockOutTime = new Date(timecard.clockOut);
       const duration = clockOutTime - clockInTime;
       const hours = Math.floor(duration / (1000 * 60 * 60));
       const minutes = Math.floor((duration / (1000 * 60)) % 60);
@@ -79,7 +79,6 @@ function createTask(description) {
   };
 
   // Send request to backend to create a new task
-
   fetch(`${apiBaseUrl}/api/timecards`, {
     method: "POST",
     headers: {
@@ -112,12 +111,16 @@ function clockIn(description) {
 function clockOut() {
   // retrieves current _id
   const timecardId = document.querySelector("#data-id").textContent;
-  const clockOutTimeString = document.querySelector("#clock-out-input").value;
-  console.log(`current clockout string: ${clockOutTimeString}`);
+  const clockOutTime = document.querySelector("#clock-out-input").value;
+  console.log(`Clock Out Time: ${clockOutTime}`);
 
-  // Parse the clockOutTime string to a Date object
-  const clockOutTime = new Date(clockOutTimeString);
-  console.log(`current clockOutTime: ${clockOutTime}`);
+  // Append a dummy date to the time string to create a full date and time string
+  const dummyDate = new Date().toISOString().split("T")[0]; // grabas today's date in YYYY-MM-DD format
+  const clockOutDateTimeString = `${dummyDate}T${clockOutTime}:00`;
+
+  // Parse the full date and time string into a Date object
+  const clockOutDate = new Date(clockOutDateTimeString);
+  console.log(`Clock Out: ${clockOutDate}`);
 
   // Send request to backend to clock out for the current task
   fetch(`${apiBaseUrl}/api/timecards/${timecardId}`, {
@@ -125,10 +128,17 @@ function clockOut() {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ clockOut: clockOutTime }),
-  });
-
-  console.log(`card edited: ${timecardId}`);
+    body: JSON.stringify({ clockOut: clockOutDate }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to update clock-out time");
+      }
+      console.log(`Card edited successfully: ${timecardId}`);
+      // Optionally, you can fetch and display updated timecards here
+      // fetchTimecards();
+    })
+    .catch((error) => console.error(error));
 }
 
 // Function to handle task deletion
@@ -190,7 +200,7 @@ document.getElementById("time-entries-container").addEventListener("click", (eve
       const hours = currentDate.getHours().toString().padStart(2, "0"); // Ensure two-digit format with leading zero
       const minutes = currentDate.getMinutes().toString().padStart(2, "0"); // Ensure two-digit format with leading zero
       const formattedCurrentTime = `${hours}:${minutes.toString().padStart(2, "0")}`;
-      document.getElementById("clock-out-input").value = currentDate;
+      document.getElementById("clock-out-input").value = formattedCurrentTime;
     }
 
     // Store the timecard ID for later use
