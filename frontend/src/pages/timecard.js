@@ -187,6 +187,11 @@ document.getElementById("time-entries-container").addEventListener("click", (eve
   if (event.target.classList.contains("edit-btn")) {
     // Store the timecard ID of the edited timecard
     const editedTimecardId = event.target.getAttribute("data-id");
+
+    //temporariliy set "data-id" to "edited-timecard-id"
+    event.target.setAttribute("data-id", "edited-timecard-id");
+
+    // Store the timecard ID in the hidden input field
     document.getElementById("edited-timecard-id").textContent = editedTimecardId;
 
     // Displays the clock controls

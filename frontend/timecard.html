@@ -69,6 +69,10 @@
         Previous Submissions
       </button>
     </div>
+    <div>
+      <!-- Hidden element for storing the currently edited timecard ID -->
+      <input type="hidden" id="edited-timecard-id" value="" />
+    </div>
     <script type="module">
       function loadNavbar() {
         fetch("navbar.html")
