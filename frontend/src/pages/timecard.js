@@ -1,6 +1,10 @@
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const url = apiBaseUrl + "/api/timecards";
 
+//Global variables
+let isEditing;
+let editTargetTimecardID;
+
 // Function to reset form
 function resetForm() {
   document.querySelector("#timecard-form").reset();
