@@ -44,31 +44,31 @@ function displayTimecards(timecards) {
     // Convert string representations of dates to Date objects
     const clockInTime = new Date(timecard.clockIn);
     let clockOutTime;
+    let totalDuration;
+
+    // Check if clockOutTime is defined
     if (timecard.clockOut !== undefined) {
       clockOutTime = new Date(timecard.clockOut);
+      const duration = clockOutTime - clockInTime;
+      const hours = Math.floor(duration / (1000 * 60 * 60));
+      const minutes = Math.floor((duration / (1000 * 60)) % 60);
+      totalDuration = `${hours}:${minutes.toString().padStart(2, "0")}`;
     } else {
-      clockOutTime = new Date();
+      // Display "Pending" or a placeholder for clock out time
+      clockOutTime = "Pending";
+      totalDuration = "Pending";
     }
-
-    let ClockInTime = clockInTime.getTime();
-    let ClockOutTime = clockOutTime.getTime();
-
-    // Calculate duration in HH:MM format
-    const duration = ClockOutTime - ClockInTime;
-    const hours = Math.floor(duration / (1000 * 60 * 60));
-    const minutes = Math.floor((duration / (1000 * 60)) % 60);
-    const totalDuration = `${hours}:${minutes.toString().padStart(2, "0")}`;
 
     const row = document.createElement("tr");
     row.innerHTML = `
-      <td class="hidden" id="data-id">${timecardId}</td>
-      <td class="border-b border-gray-200 p-2">${timecard.description}</td>
-      <td class="border-b border-gray-200 p-2">${clockInTime.getHours()}:${String(clockInTime.getMinutes()).padStart(2, "0")}</td>
-      <td class="border-b border-gray-200 p-2">${clockOutTime.getHours()}:${String(clockOutTime.getMinutes()).padStart(2, "0")}</td>
-      <td class="border-b border-gray-200 p-2">${totalDuration}</td>
-      <td class="border-b border-gray-200 p-2"><button class="edit-btn" data-id="${timecardId}">Edit</button></td>
-      <td class="border-b border-gray-200 p-2"><button class="delete-btn bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" data-id="${timecardId}">Delete</button></td>
-    `;
+    <td class="hidden" id="data-id">${timecardId}</td>
+    <td class="border-b border-gray-200 p-2">${timecard.description}</td>
+    <td class="border-b border-gray-200 p-2">${clockInTime.getHours()}:${String(clockInTime.getMinutes()).padStart(2, "0")}</td>
+    <td class="border-b border-gray-200 p-2">${clockOutTime}</td>
+    <td class="border-b border-gray-200 p-2">${totalDuration}</td>
+    <td class="border-b border-gray-200 p-2"><button class="edit-btn" data-id="${timecardId}">Edit</button></td>
+    <td class="border-b border-gray-200 p-2"><button class="delete-btn bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" data-id="${timecardId}">Delete</button></td>
+  `;
 
     timecardContainer.appendChild(row); // Add the row to the table
   });
@@ -122,6 +122,14 @@ function clockIn(description) {
 // Function to handle clock out
 function clockOut() {
   // Send request to backend to clock out for the current task
+
+  fetch(`${apiBaseUrl}/api/timecards/${timecardId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ clockOut: new Date() }),
+  });
 }
 
 // Function to handle task deletion
@@ -149,6 +157,8 @@ document.getElementById("create-task-button").addEventListener("click", function
   const description = document.getElementById("description").value;
   if (description.trim() !== "") {
     createTask(description);
+    //then update the table
+    fetchTimecards();
   } else {
     // Show error message or handle empty description
   }
