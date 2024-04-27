@@ -32,7 +32,6 @@ async function fetchTimecards() {
     console.error("Failed to fetch timecards", error);
   }
 }
-
 //Display timecards
 function displayTimecards(timecards) {
   const timecardContainer = document.querySelector("#time-entries-container");
@@ -41,12 +40,18 @@ function displayTimecards(timecards) {
     // Timecard ID variable for event listeners
     const timecardId = timecard._id;
 
-    // Convert string representations of dates to Date objects
-    const clockInTime = new Date(timecard.clockIn);
+    let clockInTime;
     let clockOutTime;
     let totalDuration;
 
-    // Check if clockOutTime is defined
+    // Set Clock In Time to current time
+    if (!timecard.clockIn) {
+      clockInTime = new Date(); // Set clockInTime to current time
+    } else {
+      clockInTime = new Date(timecard.clockIn); // Convert string representation to Date object
+    }
+
+    // Check if clockOutTime is defined & perform duration calculation
     if (timecard.clockOut !== undefined) {
       clockOutTime = new Date(timecard.clockOut);
       const duration = clockOutTime - clockInTime;
@@ -63,7 +68,7 @@ function displayTimecards(timecards) {
     row.innerHTML = `
     <td class="hidden" id="data-id">${timecardId}</td>
     <td class="border-b border-gray-200 p-2">${timecard.description}</td>
-    <td class="border-b border-gray-200 p-2">${clockInTime.getHours()}:${String(clockInTime.getMinutes()).padStart(2, "0")}</td>
+    <td class="border-b border-gray-200 p-2">${formatTime(clockInTime)}</td>
     <td class="border-b border-gray-200 p-2">${clockOutTime}</td>
     <td class="border-b border-gray-200 p-2">${totalDuration}</td>
     <td class="border-b border-gray-200 p-2"><button class="edit-btn bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" id="edit-btn" data-id="${timecardId}">Edit</button></td>
@@ -72,6 +77,13 @@ function displayTimecards(timecards) {
 
     timecardContainer.appendChild(row); // Add the row to the table
   });
+}
+
+// Helper function to format time as HH:mm
+function formatTime(date) {
+  const hours = date.getHours().toString().padStart(2, "0"); // Ensure two-digit format with leading zero
+  const minutes = date.getMinutes().toString().padStart(2, "0"); // Ensure two-digit format with leading zero
+  return `${hours}:${minutes}`;
 }
 
 // Function to handle task creation
