@@ -1,20 +1,4 @@
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-
-//API calls to /timecard:
-//clockIn: Date,
-//clockOut: Date,
-//description: String,
-//duration: Number,
-//isSubmited: { type: Boolean, default: false }
-
-//Functions List:
-//Get Timecards- fetchTimecards()
-//Display timecards- displayTimecards()
-//Create timecard- createTask()
-//Edit timecard- editTimecard()
-//Delete timecard- deleteTimecard()
-//Reset form- resetForm()
-
 const url = apiBaseUrl + "/api/timecards";
 
 // Function to reset form
