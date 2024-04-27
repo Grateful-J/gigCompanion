@@ -37,7 +37,7 @@ function displayTimecards(timecards) {
 
     // Check if clockOutTime is defined & perform duration calculation
     if (timecard.clockOut !== undefined) {
-      clockOutTime = new Date(timecard.clockOut);
+      clockOutTime = timecard.clockOut;
       const duration = clockOutTime - clockInTime;
       const hours = Math.floor(duration / (1000 * 60 * 60));
       const minutes = Math.floor((duration / (1000 * 60)) % 60);
@@ -77,7 +77,6 @@ function createTask(description) {
     description: description,
     clockIn: new Date(),
   };
-  console.log(`description: ${task}`);
 
   // Send request to backend to create a new task
 
@@ -92,7 +91,7 @@ function createTask(description) {
     .then((data) => console.log(data))
     .catch((error) => console.error(error));
 
-  console.log(`New task updated: ${task}`);
+  console.log(`New Task Created: Description- ${task.description}, Clock In- ${task.clockIn}`);
 
   // Upon successful creation, enable clock controls
   document.getElementById("clock-controls").classList.remove("hidden");
@@ -111,15 +110,25 @@ function clockIn(description) {
 
 // Function to handle clock out
 function clockOut() {
-  // Send request to backend to clock out for the current task
+  // retrieves current _id
+  const timecardId = document.querySelector("#data-id").textContent;
+  const clockOutTimeString = document.querySelector("#clock-out-input").value;
+  console.log(`current clockout string: ${clockOutTimeString}`);
 
+  // Parse the clockOutTime string to a Date object
+  const clockOutTime = new Date(clockOutTimeString);
+  console.log(`current clockOutTime: ${clockOutTime}`);
+
+  // Send request to backend to clock out for the current task
   fetch(`${apiBaseUrl}/api/timecards/${timecardId}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ clockOut: new Date() }),
+    body: JSON.stringify({ clockOut: clockOutTime }),
   });
+
+  console.log(`card edited: ${timecardId}`);
 }
 
 // Function to handle task deletion
@@ -181,7 +190,7 @@ document.getElementById("time-entries-container").addEventListener("click", (eve
       const hours = currentDate.getHours().toString().padStart(2, "0"); // Ensure two-digit format with leading zero
       const minutes = currentDate.getMinutes().toString().padStart(2, "0"); // Ensure two-digit format with leading zero
       const formattedCurrentTime = `${hours}:${minutes.toString().padStart(2, "0")}`;
-      document.getElementById("clock-out-input").value = formattedCurrentTime;
+      document.getElementById("clock-out-input").value = currentDate;
     }
 
     // Store the timecard ID for later use
