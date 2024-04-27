@@ -70,12 +70,6 @@ function formatTime(date) {
   return `${hours}:${minutes}`;
 }
 
-// Event listener for creating a task when the button is clicked
-document.getElementById("create-task-button").addEventListener("click", function () {
-  const description = document.querySelector("#description").value;
-  createTask(description);
-});
-
 // Function to handle task creation
 function createTask(description) {
   // Send request to backend to create a new task with the provided description
@@ -138,6 +132,12 @@ function deleteTimecard(timecardId) {
     .then((data) => console.log(data))
     .catch((error) => console.error(error));
 }
+
+// Event listener for creating a task when the button is clicked
+document.getElementById("create-task-button").addEventListener("click", function () {
+  const description = document.querySelector("#description").value;
+  createTask(description);
+});
 
 //Event listener for delete button
 document.getElementById("time-entries-container").addEventListener("click", (event) => {
