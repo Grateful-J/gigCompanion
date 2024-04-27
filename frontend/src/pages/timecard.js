@@ -184,9 +184,27 @@ document.getElementById("time-entries-container").addEventListener("click", (eve
     //displays the clock controls
     document.getElementById("clock-controls").classList.remove("hidden");
 
-    //repopulates the time fields with data from API
+    // Repopulate the form fields with data from the API
+    const description = event.target.closest("tr").querySelector(".border-b:nth-child(2)").textContent;
+    const clockInTime = event.target.closest("tr").querySelector(".border-b:nth-child(3)").textContent;
+    const clockOutTime = event.target.closest("tr").querySelector(".border-b:nth-child(4)").textContent;
 
+    document.getElementById("description").value = description;
+    document.getElementById("clock-in-input").value = clockInTime;
+
+    if (clockOutTime != "Pending") {
+      document.getElementById("clock-out-input").value = clockOutTime;
+    } else {
+      // If clockOutTime is "Pending", set it to the current time
+      const currentDate = new Date();
+      const hours = currentDate.getHours();
+      const minutes = currentDate.getMinutes();
+      const formattedCurrentTime = `${hours}:${minutes.toString().padStart(2, "0")}`;
+      document.getElementById("clock-out-input").value = formattedCurrentTime;
+    }
+
+    // Store the timecard ID for later use
     const timecardId = event.target.getAttribute("data-id");
-    console.log(`The edit taget is: ${timecardId}`);
+    console.log(`The edited timecard ID is: ${timecardId}`);
   }
 });
