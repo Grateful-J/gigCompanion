@@ -52,9 +52,9 @@ loader.importLibrary("places").then(async () => {
     // Address component Variables
     let streetNumber = selectedPlace.address_components[0].long_name;
     let streetName = selectedPlace.address_components[1].short_name;
-    let city = selectedPlace.address_components[2].short_name;
-    let state = selectedPlace.address_components[4].short_name;
-    let postalCode = selectedPlace.address_components[6].long_name;
+    let city = selectedPlace.address_components[3].short_name;
+    let state = selectedPlace.address_components[6].short_name;
+    let postalCode = selectedPlace.address_components[7].long_name;
     let country = selectedPlace.address_components[5].long_name;
 
     currentState = state; //updates global variable for r2w logic
@@ -148,6 +148,7 @@ async function fetchJobs() {
   }
 }
 
+//TODO: Fix math on counters. upper counters dont match rtw day math
 //Displays Counter of Right to Work days
 function updateCounters(jobs) {
   let rtwDays = 0;
