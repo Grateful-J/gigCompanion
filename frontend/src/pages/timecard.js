@@ -106,16 +106,20 @@ function clockIn(description) {
   // Update clock in time
   // Send request to backend to clock in for the current task
 }
-
 // Function to handle clock out
 function clockOut() {
-  // retrieves current _id
-  const timecardId = document.querySelector("#data-id").textContent;
+  // Retrieve the timecard ID of the edited timecard
+  const timecardId = document.querySelector("#edited-timecard-id").textContent;
+
+  // Retrieve the clock-out time from the input field
   const clockOutTime = document.querySelector("#clock-out-input").value;
   console.log(`Clock Out Time: ${clockOutTime}`);
 
-  // Append a dummy date to the time string to create a full date and time string
-  const dummyDate = new Date().toISOString().split("T")[0]; // grabas today's date in YYYY-MM-DD format
+  // Get today's date
+  const today = new Date();
+  const dummyDate = today.toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+
+  // Combine today's date with the provided clock out time
   const clockOutDateTimeString = `${dummyDate}T${clockOutTime}:00`;
 
   // Parse the full date and time string into a Date object
@@ -178,10 +182,14 @@ document.getElementById("clock-out-button").addEventListener("click", function (
   clockOut();
 });
 
-//Event listener for edit button
+// Event listener for edit button
 document.getElementById("time-entries-container").addEventListener("click", (event) => {
   if (event.target.classList.contains("edit-btn")) {
-    //displays the clock controls
+    // Store the timecard ID of the edited timecard
+    const editedTimecardId = event.target.getAttribute("data-id");
+    document.getElementById("edited-timecard-id").textContent = editedTimecardId;
+
+    // Displays the clock controls
     document.getElementById("clock-controls").classList.remove("hidden");
 
     // Repopulate the form fields with data from the API
@@ -203,8 +211,6 @@ document.getElementById("time-entries-container").addEventListener("click", (eve
       document.getElementById("clock-out-input").value = formattedCurrentTime;
     }
 
-    // Store the timecard ID for later use
-    const timecardId = event.target.getAttribute("data-id");
-    console.log(`The edited timecard ID is: ${timecardId}`);
+    console.log(`The edited timecard ID is: ${editedTimecardId}`);
   }
 });
