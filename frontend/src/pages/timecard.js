@@ -86,6 +86,12 @@ function formatTime(date) {
   return `${hours}:${minutes}`;
 }
 
+// Event listener for creating a task when the button is clicked
+document.getElementById("create-task-button").addEventListener("click", function () {
+  const description = document.querySelector("#description").value;
+  createTask(description);
+});
+
 // Function to handle task creation
 function createTask(description) {
   // Send request to backend to create a new task with the provided description
@@ -113,12 +119,6 @@ function createTask(description) {
   // Upon successful creation, enable clock controls
   document.getElementById("clock-controls").classList.remove("hidden");
 }
-
-// Event listener for creating a task when the button is clicked
-document.getElementById("create-task-button").addEventListener("click", function () {
-  const description = document.querySelector("#description").value;
-  createTask(description);
-});
 
 // Fetch and display timecards when the page loads
 window.onload = function () {
@@ -160,21 +160,6 @@ document.getElementById("time-entries-container").addEventListener("click", (eve
   if (event.target.classList.contains("delete-btn")) {
     const timecardId = event.target.getAttribute("data-id");
     deleteTimecard(timecardId);
-  }
-});
-
-// Event listener for create task button
-document.getElementById("create-task-button").addEventListener("click", function (event) {
-  event.preventDefault();
-
-  // Get task description
-  const description = document.getElementById("description").value;
-  if (description.trim() !== "") {
-    createTask(description);
-    //then update the table
-    fetchTimecards();
-  } else {
-    // Show error message or handle empty description
   }
 });
 
