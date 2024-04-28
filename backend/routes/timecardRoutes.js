@@ -33,6 +33,16 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
+// PATCH to mark timecard as submitted
+router.patch("/submit/:id", async (req, res) => {
+  try {
+    const updatedTimecard = await Timecard.findByIdAndUpdate(req.params.id, { isSubmited: true }, { new: true });
+    res.status(200).json(updatedTimecard);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 //DELETE a timecard
 router.delete("/:id", async (req, res) => {
   try {

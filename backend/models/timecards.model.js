@@ -7,6 +7,8 @@ const timecardSchema = new mongoose.Schema(
     description: String,
     duration: Number,
     isSubmited: { type: Boolean, default: false },
+    dateSubmited: Date,
+    submissionBatchID: String,
   },
 
   {
