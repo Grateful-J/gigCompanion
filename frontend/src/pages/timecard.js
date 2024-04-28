@@ -97,6 +97,7 @@ function createTask(description) {
 
   // Upon successful creation, enable clock controls
   document.getElementById("clock-controls").classList.remove("hidden");
+  fetchTimecards();
 }
 
 // Fetch and display timecards when the page loads
@@ -158,6 +159,9 @@ function deleteTimecard(timecardId) {
     .then((response) => response.json())
     .then((data) => console.log(data))
     .catch((error) => console.error(error));
+
+  console.log(`Timecard Deleted: ${timecardId}`);
+  fetchTimecards();
 }
 
 function submitBatchTimecards() {
