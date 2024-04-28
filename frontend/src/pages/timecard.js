@@ -5,9 +5,13 @@ const url = apiBaseUrl + "/api/timecards";
 let isEditing;
 let editTargetTimecardID;
 
-// Function to reset form
+// Function to reset inputs
 function resetForm() {
-  document.querySelector("#timecard-form").reset();
+  document.getElementById("description").value = "";
+  document.getElementById("clock-in-input").value = "";
+  document.getElementById("clock-out-input").value = "";
+  isEditing = false;
+  editTargetTimecardID = "";
 }
 
 //Get Timecards
@@ -77,7 +81,6 @@ function formatTime(date) {
 
 // Function to handle task creation
 function createTask(description) {
-  // Send request to backend to create a new task with the provided description
   const task = {
     description: description,
     clockIn: new Date(),
@@ -144,8 +147,9 @@ function clockOut() {
         throw new Error("Failed to update clock-out time");
       }
       console.log(`Card edited successfully: ${timecardId}`);
-      // Optionally, you can fetch and display updated timecards here
-      // fetchTimecards();
+      //Fetch and display updated timecards here
+      fetchTimecards();
+      resetForm();
     })
     .catch((error) => console.error(error));
 }
@@ -222,5 +226,8 @@ document.getElementById("time-entries-container").addEventListener("click", (eve
     }
 
     console.log(`The edited timecard ID is: ${editedTimecardId}`);
+
+    //Snap to top of window
+    window.scrollTo(0, 0);
   }
 });
