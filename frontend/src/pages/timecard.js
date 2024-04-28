@@ -4,6 +4,8 @@ const url = apiBaseUrl + "/api/timecards";
 //Global variables
 let isEditing;
 let editTargetTimecardID;
+let globalHours = 0;
+let globalMinutes = 0;
 
 // Function to reset inputs
 function resetForm() {
@@ -46,6 +48,23 @@ function displayTimecards(timecards) {
         const minutes = Math.floor((duration / (1000 * 60)) % 60);
         totalDuration = `${hours}:${minutes.toString().padStart(2, "0")}`;
         clockOutTime = formatTime(clockOutTime);
+
+        // Calculates total hours and minutes
+        globalHours += hours;
+        globalMinutes += minutes;
+
+        if (globalMinutes >= 60) {
+          globalMinutes -= 60;
+          globalHours += 1;
+        }
+
+        //Updates Front end total hours and minutes
+        const totalHours = document.getElementById("total-hours");
+        const totalMinutes = document.getElementById("total-minutes");
+        const globalDuration = document.getElementById("total-duration");
+        globalDuration.textContent = globalHours + ":" + globalMinutes.toString().padStart(2, "0");
+        totalHours.textContent = globalHours;
+        totalMinutes.textContent = globalMinutes;
 
         // Checks to see if duration is undefined and POSTs total duration, hours & minutes
         if (timecard.duration != undefined || "Pending") {
@@ -251,15 +270,9 @@ function submitBatchTimecards() {
       fetchTimecards(); // Refresh the list of timecards
     })
     .catch((error) => console.error("Error submitting timecards:", error));
-}
 
-// Function to update total-hours & total-minutes
-function updateTimecardHours() {
-  let hours = 0;
-  let minutes = 0;
-  let totalHours = document.getElementById("total-hours");
-  let totalMinutes = document.getElementById("total-minutes");
-  timecards.forEach((timecard) => {});
+  // reset page upon successful submission
+  window.location.reload();
 }
 
 // Event listener for submit button
