@@ -4,6 +4,8 @@ const url = apiBaseUrl + "/api/timecards";
 //Global variables
 let isEditing;
 let editTargetTimecardID;
+let submissionIds = [];
+console.log(`The Submission Ids are: ${submissionIds}`);
 
 // Function to reset inputs
 function resetForm() {
@@ -59,7 +61,7 @@ function displayTimecards(timecards) {
 
     const row = document.createElement("tr");
     row.innerHTML = `
-    <td class="hidden" id="data-id">${timecardId}</td>
+    <td><input type="checkbox" class="submit-checkbox text-center p-0" id="data-id" data-id="${timecardId}"></td>
     <td class="border-b border-gray-200 p-2">${timecard.description}</td>
     <td class="border-b border-gray-200 p-2">${formatTime(clockInTime)}</td>
     <td class="border-b border-gray-200 p-2">${clockOutTime}</td>
@@ -164,6 +166,65 @@ function deleteTimecard(timecardId) {
     .then((data) => console.log(data))
     .catch((error) => console.error(error));
 }
+
+//function to handle submit button
+function submitTimecard([sumbissionIds]) {
+  //
+  fetch(`${apiBaseUrl}/api/timecards/${timecardId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ submissionBatchID: sumbissionIds }),
+  }).then((response) => {
+    if (!response.ok) {
+      throw new Error("Failed to update submissionBatchID");
+    }
+    console.log(`Card edited successfully: ${timecardId}`);
+    //Fetch and display updated timecards here
+    fetchTimecards();
+    resetForm();
+  });
+}
+
+// Function to handle the batch submission of timecards
+function submitBatchTimecards() {
+  /*   //gets all id timecards in table and adds to submissionIds array
+  const timecardRows = document.querySelectorAll("tr");
+  submissionIds = [];
+  console.log(timecardRows);
+  timecardRows.forEach((row) => {
+    const timecardId = row.getAttribute("data-id");
+    console.log(timecardId);
+    submissionIds.push(timecardId);
+  });
+ */
+  fetch(`${apiBaseUrl}/api/timecards/submit-multiple`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ ids: submissionIds }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to submit timecards");
+      }
+      return response.json();
+    })
+    .then((result) => {
+      console.log(result.message);
+      fetchTimecards(); // Refresh the list of timecards
+      submissionIds = []; // Clear the submission IDs array after successful submission
+    })
+    .catch((error) => console.error("Error submitting timecards:", error));
+}
+
+// Event listener for submit button
+document.getElementById("submit-tasks").addEventListener("click", (event) => {
+  console.log("submit button clicked");
+  submitBatchTimecards();
+});
 
 // Event listener for creating a task when the button is clicked
 document.getElementById("create-task-button").addEventListener("click", function () {

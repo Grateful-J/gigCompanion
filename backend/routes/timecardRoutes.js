@@ -43,6 +43,24 @@ router.patch("/submit/:id", async (req, res) => {
   }
 });
 
+// PATCH to mark multiple timecards as submitted
+router.patch("/submit-multiple", async (req, res) => {
+  const { ids } = req.body; // Array of timecard IDs
+  try {
+    const updates = await Timecard.updateMany(
+      { _id: { $in: ids } }, // Filter to select timecards with IDs in the provided array
+      { $set: { isSubmited: true } } // Set isSubmitted to true
+    );
+    if (updates.modifiedCount === ids.length) {
+      res.status(200).json({ message: `${updates.modifiedCount} timecards submitted successfully` });
+    } else {
+      res.status(400).json({ message: "Some timecards were not found and could not be updated" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 //DELETE a timecard
 router.delete("/:id", async (req, res) => {
   try {
