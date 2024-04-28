@@ -46,6 +46,7 @@ function displayTimecards(timecards) {
       const hours = Math.floor(duration / (1000 * 60 * 60));
       const minutes = Math.floor((duration / (1000 * 60)) % 60);
       totalDuration = `${hours}:${minutes.toString().padStart(2, "0")}`;
+      clockOutTime = formatTime(clockOutTime);
     } else {
       // Display "Pending" or a placeholder for clock out time
       clockOutTime = "Pending";
