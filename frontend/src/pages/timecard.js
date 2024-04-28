@@ -169,7 +169,7 @@ function submitBatchTimecards() {
   const selectedCheckboxes = document.querySelectorAll(".submit-checkbox:checked");
   const idsToSubmit = Array.from(selectedCheckboxes).map((checkbox) => checkbox.getAttribute("data-id"));
 
-  console.log("Submitting IDs:", idsToSubmit); // Log the IDs to verify
+  //console.log("Submitting IDs:", idsToSubmit); // Log the IDs to verify
 
   if (idsToSubmit.length === 0) {
     console.error("No timecards selected for submission.");
@@ -177,7 +177,7 @@ function submitBatchTimecards() {
   }
 
   const requestUrl = `${apiBaseUrl}/api/timecards/submit-multiple`;
-  console.log("Making request to:", requestUrl);
+  //console.log("Making request to:", requestUrl);
   fetch(requestUrl, {
     method: "PATCH",
     headers: {
@@ -200,7 +200,7 @@ function submitBatchTimecards() {
 
 // Event listener for submit button
 document.getElementById("submit-tasks").addEventListener("click", (event) => {
-  console.log("submit button clicked");
+  event.preventDefault();
   submitBatchTimecards();
 });
 
