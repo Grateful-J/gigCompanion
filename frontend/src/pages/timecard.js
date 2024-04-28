@@ -270,3 +270,16 @@ document.getElementById("time-entries-container").addEventListener("click", (eve
     window.scrollTo(0, 0);
   }
 });
+
+// Event Listener for select all button and toggle check all checkboxes
+
+document.getElementById("select-all-btn").addEventListener("click", (event) => {
+  const checkboxes = document.querySelectorAll("input[type='checkbox']");
+  checkboxes.forEach((checkbox) => {
+    if (checkbox.checked) {
+      checkbox.checked = false;
+    } else {
+      checkbox.checked = true;
+    }
+  });
+});
