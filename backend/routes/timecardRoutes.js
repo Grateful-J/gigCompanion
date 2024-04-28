@@ -23,6 +23,16 @@ router.post("/", async (req, res) => {
   }
 });
 
+// PATCH to mark multiple timecards as submitted
+router.patch("/submit-multiple", (req, res) => {
+  console.log("Handling submit-multiple with IDs:", req.body.ids);
+  const { ids } = req.body;
+  console.log("IDs to submit:", ids);
+  Timecard.updateMany({ _id: { $in: ids } }, { $set: { isSubmited: true } })
+    .then((result) => res.status(200).json({ message: `${result.modifiedCount} timecards submitted successfully` }))
+    .catch((error) => res.status(500).json({ message: error.message }));
+});
+
 //PATCH a timecard
 router.patch("/:id", async (req, res) => {
   try {
@@ -38,24 +48,6 @@ router.patch("/submit/:id", async (req, res) => {
   try {
     const updatedTimecard = await Timecard.findByIdAndUpdate(req.params.id, { isSubmited: true }, { new: true });
     res.status(200).json(updatedTimecard);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// PATCH to mark multiple timecards as submitted
-router.patch("/submit-multiple", async (req, res) => {
-  const { ids } = req.body; // Array of timecard IDs
-  try {
-    const updates = await Timecard.updateMany(
-      { _id: { $in: ids } }, // Filter to select timecards with IDs in the provided array
-      { $set: { isSubmited: true } } // Set isSubmitted to true
-    );
-    if (updates.modifiedCount === ids.length) {
-      res.status(200).json({ message: `${updates.modifiedCount} timecards submitted successfully` });
-    } else {
-      res.status(400).json({ message: "Some timecards were not found and could not be updated" });
-    }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

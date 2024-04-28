@@ -4,8 +4,6 @@ const url = apiBaseUrl + "/api/timecards";
 //Global variables
 let isEditing;
 let editTargetTimecardID;
-let submissionIds = [];
-console.log(`The Submission Ids are: ${submissionIds}`);
 
 // Function to reset inputs
 function resetForm() {
@@ -167,44 +165,25 @@ function deleteTimecard(timecardId) {
     .catch((error) => console.error(error));
 }
 
-//function to handle submit button
-function submitTimecard([sumbissionIds]) {
-  //
-  fetch(`${apiBaseUrl}/api/timecards/${timecardId}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ submissionBatchID: sumbissionIds }),
-  }).then((response) => {
-    if (!response.ok) {
-      throw new Error("Failed to update submissionBatchID");
-    }
-    console.log(`Card edited successfully: ${timecardId}`);
-    //Fetch and display updated timecards here
-    fetchTimecards();
-    resetForm();
-  });
-}
-
-// Function to handle the batch submission of timecards
 function submitBatchTimecards() {
-  /*   //gets all id timecards in table and adds to submissionIds array
-  const timecardRows = document.querySelectorAll("tr");
-  submissionIds = [];
-  console.log(timecardRows);
-  timecardRows.forEach((row) => {
-    const timecardId = row.getAttribute("data-id");
-    console.log(timecardId);
-    submissionIds.push(timecardId);
-  });
- */
-  fetch(`${apiBaseUrl}/api/timecards/submit-multiple`, {
+  const selectedCheckboxes = document.querySelectorAll(".submit-checkbox:checked");
+  const idsToSubmit = Array.from(selectedCheckboxes).map((checkbox) => checkbox.getAttribute("data-id"));
+
+  console.log("Submitting IDs:", idsToSubmit); // Log the IDs to verify
+
+  if (idsToSubmit.length === 0) {
+    console.error("No timecards selected for submission.");
+    return;
+  }
+
+  const requestUrl = `${apiBaseUrl}/api/timecards/submit-multiple`;
+  console.log("Making request to:", requestUrl);
+  fetch(requestUrl, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ ids: submissionIds }),
+    body: JSON.stringify({ ids: idsToSubmit }),
   })
     .then((response) => {
       if (!response.ok) {
@@ -215,7 +194,6 @@ function submitBatchTimecards() {
     .then((result) => {
       console.log(result.message);
       fetchTimecards(); // Refresh the list of timecards
-      submissionIds = []; // Clear the submission IDs array after successful submission
     })
     .catch((error) => console.error("Error submitting timecards:", error));
 }
