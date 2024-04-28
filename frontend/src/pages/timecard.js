@@ -46,6 +46,27 @@ function displayTimecards(timecards) {
         const minutes = Math.floor((duration / (1000 * 60)) % 60);
         totalDuration = `${hours}:${minutes.toString().padStart(2, "0")}`;
         clockOutTime = formatTime(clockOutTime);
+
+        // Checks to see if duration is undefined and POSTs total duration, hours & minutes
+        if (timecard.duration != undefined || "Pending") {
+          let duration = totalDuration;
+
+          const response = fetch(`${apiBaseUrl}/api/timecards/${timecard._id}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ duration: duration, totalHours: hours, totalMinutes: minutes }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Failed to update timecard");
+              }
+            })
+            .catch((error) => {
+              console.error("Failed to update timecard:", error);
+            });
+        }
       }
 
       const row = document.createElement("tr");
@@ -107,14 +128,47 @@ window.onload = function () {
 
 // Function to handle clock in
 function clockIn(description) {
-  // Update clock in time
-  // Send request to backend to clock in for the current task
+  // Retrieve the timecard ID of the edited timecard
+  const timecardId = document.querySelector("#edited-timecard-id").textContent;
+  // Retrieve the clock-in time from the input field
+  const clockInTime = document.querySelector("#clock-in-input").value;
+  console.log(`Clock In Time: ${clockInTime}`);
+
+  // Get today's date
+  const today = new Date();
+  const dummyDate = today.toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+
+  // Combine today's date with the provided clock in time
+  const clockInDateTimeString = `${dummyDate}T${clockInTime}:00`;
+
+  // Parse the full date and time string into a Date object
+  const clockInDate = new Date(clockInDateTimeString);
+  console.log(`Clock In: ${clockInDate}`);
+
+  // Send request to backend to clock In for the current task
+  fetch(`${apiBaseUrl}/api/timecards/${timecardId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ clockIn: clockInDate }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to update clock-out time");
+      }
+      console.log(`Card edited successfully: ${timecardId}`);
+      //Fetch and display updated timecards here
+      fetchTimecards();
+      resetForm();
+    })
+    .catch((error) => console.error(error));
 }
+
 // Function to handle clock out
 function clockOut() {
   // Retrieve the timecard ID of the edited timecard
   const timecardId = document.querySelector("#edited-timecard-id").textContent;
-
   // Retrieve the clock-out time from the input field
   const clockOutTime = document.querySelector("#clock-out-input").value;
   console.log(`Clock Out Time: ${clockOutTime}`);
@@ -164,6 +218,7 @@ function deleteTimecard(timecardId) {
   fetchTimecards();
 }
 
+// Function to handle batch timecard submission
 function submitBatchTimecards() {
   const selectedCheckboxes = document.querySelectorAll(".submit-checkbox:checked");
   const idsToSubmit = Array.from(selectedCheckboxes).map((checkbox) => checkbox.getAttribute("data-id"));
@@ -176,6 +231,7 @@ function submitBatchTimecards() {
   }
 
   const requestUrl = `${apiBaseUrl}/api/timecards/submit-multiple`;
+
   //console.log("Making request to:", requestUrl);
   fetch(requestUrl, {
     method: "PATCH",
@@ -195,6 +251,15 @@ function submitBatchTimecards() {
       fetchTimecards(); // Refresh the list of timecards
     })
     .catch((error) => console.error("Error submitting timecards:", error));
+}
+
+// Function to update total-hours & total-minutes
+function updateTimecardHours() {
+  let hours = 0;
+  let minutes = 0;
+  let totalHours = document.getElementById("total-hours");
+  let totalMinutes = document.getElementById("total-minutes");
+  timecards.forEach((timecard) => {});
 }
 
 // Event listener for submit button
