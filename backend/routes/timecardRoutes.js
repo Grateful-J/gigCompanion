@@ -2,14 +2,13 @@ const express = require("express");
 const router = express.Router();
 const Timecard = require("../models/timecards.model");
 
-//GET all timecards
 router.get("/", async (req, res) => {
   try {
-    const { isSubmitted } = req.query;
+    const isSubmitted = req.query.isSubmitted; // This will be a string "true" or "false", or undefined
     let query = {};
 
-    if (isSubmitted) {
-      query.isSubmited = isSubmitted === "true"; // Convert query parameter to boolean
+    if (isSubmitted !== undefined) {
+      query.isSubmitted = isSubmitted === "true"; // Compare with the string "true"
     }
 
     const timecards = await Timecard.find(query);

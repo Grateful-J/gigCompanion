@@ -14,51 +14,57 @@ function resetForm() {
   editTargetTimecardID = "";
 }
 
-//Get Timecards
+// Function to fetch and display unsubmitted timecards
 async function fetchTimecards() {
   try {
-    const response = await fetch(url);
+    const response = await fetch(`${apiBaseUrl}/api/timecards?isSubmitted=false`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch timecards");
+    }
     const timecards = await response.json();
     displayTimecards(timecards);
   } catch (error) {
-    console.error("Failed to fetch timecards", error);
+    console.error("Failed to fetch timecards:", error);
   }
 }
+
 //Display timecards
 function displayTimecards(timecards) {
   const timecardContainer = document.querySelector("#time-entries-container");
   timecardContainer.innerHTML = "";
-  timecards.forEach((timecard) => {
-    // Timecard ID variable for event listeners
-    const timecardId = timecard._id;
+  timecards
+    .filter((timecard) => !timecard.isSubmitted)
+    .forEach((timecard) => {
+      // Timecard ID variable for event listeners
+      const timecardId = timecard._id;
 
-    let clockInTime;
-    let clockOutTime;
-    let totalDuration;
+      let clockInTime;
+      let clockOutTime;
+      let totalDuration;
 
-    // Set Clock In Time to current time
-    if (!timecard.clockIn) {
-      clockInTime = new Date(); // Set clockInTime to current time
-    } else {
-      clockInTime = new Date(timecard.clockIn); // Convert string representation to Date object
-    }
+      // Set Clock In Time to current time
+      if (!timecard.clockIn) {
+        clockInTime = new Date(); // Set clockInTime to current time
+      } else {
+        clockInTime = new Date(timecard.clockIn); // Convert string representation to Date object
+      }
 
-    // Check if clockOutTime is defined & perform duration calculation
-    if (timecard.clockOut !== undefined) {
-      clockOutTime = new Date(timecard.clockOut);
-      const duration = clockOutTime - clockInTime;
-      const hours = Math.floor(duration / (1000 * 60 * 60));
-      const minutes = Math.floor((duration / (1000 * 60)) % 60);
-      totalDuration = `${hours}:${minutes.toString().padStart(2, "0")}`;
-      clockOutTime = formatTime(clockOutTime);
-    } else {
-      // Display "Pending" or a placeholder for clock out time
-      clockOutTime = "Pending";
-      totalDuration = "Pending";
-    }
+      // Check if clockOutTime is defined & perform duration calculation
+      if (timecard.clockOut !== undefined) {
+        clockOutTime = new Date(timecard.clockOut);
+        const duration = clockOutTime - clockInTime;
+        const hours = Math.floor(duration / (1000 * 60 * 60));
+        const minutes = Math.floor((duration / (1000 * 60)) % 60);
+        totalDuration = `${hours}:${minutes.toString().padStart(2, "0")}`;
+        clockOutTime = formatTime(clockOutTime);
+      } else {
+        // Display "Pending" or a placeholder for clock out time
+        clockOutTime = "Pending";
+        totalDuration = "Pending";
+      }
 
-    const row = document.createElement("tr");
-    row.innerHTML = `
+      const row = document.createElement("tr");
+      row.innerHTML = `
     <td><input type="checkbox" class="submit-checkbox text-center p-0" id="data-id" data-id="${timecardId}"></td>
     <td class="border-b border-gray-200 p-2">${timecard.description}</td>
     <td class="border-b border-gray-200 p-2">${formatTime(clockInTime)}</td>
@@ -68,8 +74,8 @@ function displayTimecards(timecards) {
     <td class="border-b border-gray-200 p-2"><button class="delete-btn bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" data-id="${timecardId}">Delete</button></td>
   `;
 
-    timecardContainer.appendChild(row); // Add the row to the table
-  });
+      timecardContainer.appendChild(row); // Add the row to the table
+    });
 }
 
 // Helper function to format time as HH:mm
