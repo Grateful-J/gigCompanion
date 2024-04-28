@@ -32,50 +32,39 @@ async function fetchTimecards() {
 function displayTimecards(timecards) {
   const timecardContainer = document.querySelector("#time-entries-container");
   timecardContainer.innerHTML = "";
-  timecards
-    .filter((timecard) => !timecard.isSubmitted)
-    .forEach((timecard) => {
-      // Timecard ID variable for event listeners
-      const timecardId = timecard._id;
 
-      let clockInTime;
-      let clockOutTime;
-      let totalDuration;
+  timecards.forEach((timecard) => {
+    if (!timecard.isSubmitted) {
+      // Additional client-side safeguard
+      let clockInTime = timecard.clockIn ? new Date(timecard.clockIn) : new Date();
+      let clockOutTime = timecard.clockOut ? new Date(timecard.clockOut) : "Pending";
+      let totalDuration = "Pending";
 
-      // Set Clock In Time to current time
-      if (!timecard.clockIn) {
-        clockInTime = new Date(); // Set clockInTime to current time
-      } else {
-        clockInTime = new Date(timecard.clockIn); // Convert string representation to Date object
-      }
-
-      // Check if clockOutTime is defined & perform duration calculation
-      if (timecard.clockOut !== undefined) {
-        clockOutTime = new Date(timecard.clockOut);
+      if (timecard.clockOut) {
         const duration = clockOutTime - clockInTime;
         const hours = Math.floor(duration / (1000 * 60 * 60));
         const minutes = Math.floor((duration / (1000 * 60)) % 60);
         totalDuration = `${hours}:${minutes.toString().padStart(2, "0")}`;
         clockOutTime = formatTime(clockOutTime);
-      } else {
-        // Display "Pending" or a placeholder for clock out time
-        clockOutTime = "Pending";
-        totalDuration = "Pending";
       }
 
       const row = document.createElement("tr");
       row.innerHTML = `
-    <td><input type="checkbox" class="submit-checkbox text-center p-0" id="data-id" data-id="${timecardId}"></td>
-    <td class="border-b border-gray-200 p-2">${timecard.description}</td>
-    <td class="border-b border-gray-200 p-2">${formatTime(clockInTime)}</td>
-    <td class="border-b border-gray-200 p-2">${clockOutTime}</td>
-    <td class="border-b border-gray-200 p-2">${totalDuration}</td>
-    <td class="border-b border-gray-200 p-2"><button class="edit-btn bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" id="edit-btn" data-id="${timecardId}">Edit</button></td>
-    <td class="border-b border-gray-200 p-2"><button class="delete-btn bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" data-id="${timecardId}">Delete</button></td>
-  `;
-
+        <td><input type="checkbox" class="submit-checkbox" data-id="${timecard._id}"></td>
+        <td class="border-b border-gray-200 p-2">${timecard.description}</td>
+        <td class="border-b border-gray-200 p-2">${formatTime(clockInTime)}</td>
+        <td class="border-b border-gray-200 p-2">${clockOutTime}</td>
+        <td class="border-b border-gray-200 p-2">${totalDuration}</td>
+        <td class="border-b border-gray-200 p-2"><button class="edit-btn bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" data-id="${
+          timecard._id
+        }">Edit</button></td>
+        <td class="border-b border-gray-200 p-2"><button class="delete-btn bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" data-id="${
+          timecard._id
+        }">Delete</button></td>
+      `;
       timecardContainer.appendChild(row); // Add the row to the table
-    });
+    }
+  });
 }
 
 // Helper function to format time as HH:mm
