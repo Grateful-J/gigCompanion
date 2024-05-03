@@ -1,6 +1,8 @@
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const url = apiBaseUrl + "/api/timecards";
 
+//TODO: Find out why navbar is not working
+
 //Global variables
 let isEditing;
 let editTargetTimecardID;
