@@ -9,6 +9,17 @@ let editTargetTimecardID;
 let globalHours = 0;
 let globalMinutes = 0;
 
+//Load navbar
+function loadNavbar() {
+  fetch("navbar.html")
+    .then((response) => response.text())
+    .then((html) => {
+      document.getElementById("navbar-placeholder").innerHTML = html;
+    });
+}
+
+loadNavbar();
+
 // Function to reset inputs
 function resetForm() {
   document.getElementById("description").value = "";
