@@ -5,7 +5,7 @@ const jwtSecret = process.env.JWT_SECRET;
 
 // POST a new User and return it
 exports.register = async (req, res, next) => {
-  const { username, password } = req.body;
+  const { username, password, firstName, lastName, email, phoneNumber } = req.body;
   if (password.length < 6) {
     return res.status(400).json({ message: "Password less than 6 characters" });
   }
@@ -17,6 +17,10 @@ exports.register = async (req, res, next) => {
         await User.create({
           username,
           password: hash,
+          firstName,
+          lastName,
+          email,
+          phoneNumber,
         })
           .then((user) => {
             const maxAge = 3 * 60 * 60;
