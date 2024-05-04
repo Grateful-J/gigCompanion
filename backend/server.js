@@ -3,6 +3,7 @@ const cors = require("cors");
 const path = require("path");
 const mongoose = require("mongoose");
 require("dotenv").config();
+const cookieParser = require("cookie-parser");
 const jobRoutes = require("./routes/jobRoutes"); // Adjusted for a models directory
 const locationRoutes = require("./routes/locationRoutes");
 const timeCardRoutes = require("./routes/timecardRoutes");
@@ -18,6 +19,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Middle-ware for JSON in API
 app.use(express.json());
+app.use(cookieParser());
 
 // API "GET" Commands
 app.get("/", (req, res) => {
