@@ -49,36 +49,31 @@ exports.login = async (req, res, next) => {
   }
 };
 
-//Updates user role from basic to admin
 exports.update = async (req, res, next) => {
   const { role, id } = req.body;
-  //Verifies if both role & ID are present
+  // Verifying if role and id is presnt
   if (role && id) {
-    // Verifies if role is an admin {
+    // Verifying if the value of role is admin
     if (role === "admin") {
       await User.findById(id)
         .then((user) => {
-          if (user !== "admin") {
+          // Third - Verifies the user is not an admin
+          if (user.role !== "admin") {
             user.role = role;
-            user.save((error) => {
-              if (error) {
-                res.status(400).json({ message: "User role not updated" });
-                process.exit(1);
-              }
-              res.status(201).json({ message: "User role updated" });
-            });
+            return user.save(); // Save the updated user object to the database
           } else {
-            res.status(400).json({ message: "User is already an admin" });
+            res.status(400).json({ message: "User is already an Admin" });
           }
         })
         .catch((error) => {
-          res.status(400).json({ message: "An error occurred", error });
+          res.status(400).json({ message: "An error occurred", error: error.message });
         });
-      return res.status(200).json({ message: "User role updated" });
     } else {
-      res.status(400).json({ message: "User role is not an admin" });
+      res.status(400).json({
+        message: "Role is not admin",
+      });
     }
   } else {
-    res.status(400).json({ message: "Both role & ID are required" });
+    res.status(400).json({ message: "Role or Id not present" });
   }
 };
