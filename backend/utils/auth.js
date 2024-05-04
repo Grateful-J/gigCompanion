@@ -56,7 +56,24 @@ exports.update = async (req, res, next) => {
   if (role && id) {
     // Verifies if role is an admin {
     if (role === "admin") {
-      await User.findByIdAndUpdate(id, { role: role });
+      await User.findById(id)
+        .then((user) => {
+          if (user !== "admin") {
+            user.role = role;
+            user.save((error) => {
+              if (error) {
+                res.status(400).json({ message: "User role not updated" });
+                process.exit(1);
+              }
+              res.status(201).json({ message: "User role updated" });
+            });
+          } else {
+            res.status(400).json({ message: "User is already an admin" });
+          }
+        })
+        .catch((error) => {
+          res.status(400).json({ message: "An error occurred", error });
+        });
       return res.status(200).json({ message: "User role updated" });
     } else {
       res.status(400).json({ message: "User role is not an admin" });
