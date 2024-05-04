@@ -19,9 +19,17 @@ exports.register = async (req, res, next) => {
           password: hash,
         })
           .then((user) => {
+            const maxAge = 3 * 60 * 60;
+            const token = jwt.sign({ id: user._id, username, role: user.role }, jwtSecret, {
+              expiresIn: maxAge, // 3 hours in seconds
+            });
+            res.cookie("jwt", token, {
+              httpOnly: true,
+              maxAge: maxAge * 1000, // 3hrs in ms
+            });
             res.status(201).json({
               message: "User successfully created",
-              user,
+              user: user_id,
             });
           })
           .catch((error) => {
