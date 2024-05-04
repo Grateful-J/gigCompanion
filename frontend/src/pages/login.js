@@ -1,4 +1,4 @@
-import "/style.css";
+//import "/style.css";
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const url = apiBaseUrl + "/api";
 

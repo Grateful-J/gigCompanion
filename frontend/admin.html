@@ -4,24 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Portal</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet" />
     <script type="module" src="./src/pages/adminPortal.js"></script>
   </head>
-  <body class="bg-gray-600 text-white text-center">
+  <body class="bg-gray-100">
     <div id="app">
-      <div id="navbar-placeholder"></div>
+      <div id="navbar-placeholder" class="mt-0">...</div>
       <div id="admin-portal">
         <h1>Admin Portal</h1>
         <p>Welcome, Admin</p>
         <button id="logout-btn">Logout</button>
         <div id="admin-portal-content">
-          <div id="users-container" class="text-center p-4">
+          <div class="text-center p-4">
             <!-- Table with Users and Buttons to Edit or Delete Them -->
             <table id="users-table">
               <thead>
                 <tr>
-                  <th>First Name</th>
-                  <th>Last Name</th>
+                  <th class="border-b border-gray-100 p-2">First Name</th>
+                  <th class="border-b border-gray-200 p-2">Last Name</th>
                   <th>Email</th>
                   <th>Phone</th>
                   <th>Edit</th>

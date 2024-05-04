@@ -7,43 +7,98 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="module" src="./src/pages/login.js"></script>
   </head>
-  <body class="bg-gray-600">
-    <!-- Login Page -->
-    <div id="app" class="text-center text-white m-4 p-4">
-      <div id="navbar-placeholder" class="text-center"></div>
+  <body class="bg-gray-800 min-h-screen flex flex-col text-gray-200">
+    <!-- Navbar Placeholder -->
+    <nav id="navbar-placeholder" class="bg-gray-700 w-full py-4 px-8 text-lg">
+      <span>Navbar</span>
+    </nav>
 
+    <!-- Login Page Container -->
+    <div id="app" class="w-full max-w-lg p-8 space-y-6 bg-gray-700 rounded-lg shadow-lg mx-auto mt-4">
       <!-- Login form -->
       <div id="login">
-        <h1>Login</h1>
-        <form id="login-form">
-          <label for="username">Username:</label>
-          <input type="text" id="login-username" placeholder="username" name="login-username" autocomplete="username" required />
-          <label for="password">Password:</label>
-          <input type="password" id="login-password" placeholder="password" name="login-password" autocomplete="current-password" />
-          <button type="submit">Login</button>
+        <h1 class="text-3xl font-semibold mb-6">Login</h1>
+        <form id="login-form" class="space-y-4">
+          <div>
+            <label for="login-username" class="block mb-2">Username:</label>
+            <input
+              type="text"
+              id="login-username"
+              placeholder="username"
+              name="login-username"
+              autocomplete="username"
+              required
+              class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded focus:outline-none focus:border-blue-500"
+            />
+          </div>
+          <div>
+            <label for="login-password" class="block mb-2">Password:</label>
+            <input
+              type="password"
+              id="login-password"
+              placeholder="password"
+              name="login-password"
+              autocomplete="current-password"
+              required
+              class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded focus:outline-none focus:border-blue-500"
+            />
+          </div>
+          <button type="submit" class="w-full py-2 bg-blue-500 hover:bg-blue-600 rounded focus:outline-none focus:ring-4 focus:ring-blue-300">
+            Login
+          </button>
         </form>
 
-        <!--Button to show Signup form-->
-        <div class="m-4 p-4">
-          <button id="signup-btn">Signup</button>
+        <!-- Button to show Signup form -->
+        <div class="mt-4">
+          <button id="signup-btn" class="py-2 px-4 bg-gray-500 hover:bg-gray-600 rounded focus:outline-none">Signup</button>
         </div>
       </div>
 
       <!-- Signup form -->
       <div id="signup" class="hidden">
-        <h1>Signup</h1>
-        <form id="signup-form">
-          <label for="username">Username:</label>
-          <input type="text" id="signup-username" placeholder="username" name="signup-username" autocomplete="username" />
-          <label for="password">Password:</label>
-          <input type="password" id="signup-password" placeholder="password" name="signup-password" autocomplete="new-password" />
-          <label for="confirm-password">Confirm Password:</label>
-          <input type="password" id="confirm-password" name="confirm-password" autocomplete="new-password" required />
-          <button type="submit">Signup</button>
+        <h1 class="text-2xl font-semibold mb-4">Signup</h1>
+        <form id="signup-form" class="space-y-4">
+          <div>
+            <label for="signup-username" class="block mb-2">Username:</label>
+            <input
+              type="text"
+              id="signup-username"
+              placeholder="username"
+              name="signup-username"
+              autocomplete="username"
+              class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded focus:outline-none focus:border-blue-500"
+            />
+          </div>
+          <div>
+            <label for="signup-password" class="block mb-2">Password:</label>
+            <input
+              type="password"
+              id="signup-password"
+              placeholder="password"
+              name="signup-password"
+              autocomplete="new-password"
+              class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded focus:outline-none focus:border-blue-500"
+            />
+          </div>
+          <div>
+            <label for="confirm-password" class="block mb-2">Confirm Password:</label>
+            <input
+              type="password"
+              id="confirm-password"
+              name="confirm-password"
+              autocomplete="new-password"
+              required
+              class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded focus:outline-none focus:border-blue-500"
+            />
+          </div>
+          <button type="submit" class="w-full py-2 bg-blue-500 hover:bg-blue-600 rounded focus:outline-none focus:ring-4 focus:ring-blue-300">
+            Signup
+          </button>
         </form>
       </div>
 
-      <div id="error-message">
+      <!-- Error Message Display -->
+      <div id="error-message" class="text-red-500">
         <p id="error-text"></p>
       </div>
     </div>

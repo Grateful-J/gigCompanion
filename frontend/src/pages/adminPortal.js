@@ -1,3 +1,4 @@
+import "/style.css";
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 // Function to Load navbar
@@ -27,15 +28,15 @@ function displayUsers(users) {
   users.forEach((user) => {
     const row = document.createElement("tr");
     row.innerHTML = `
-      <td>${user.firstName}</td>
-      <td>${user.lastName}</td>
-      <td>${user.email}</td>
-      <td>${user.phoneNumber}</td>
+      <td class="border-b border-gray-200 p-2">${user.firstName}</td>
+      <td class="border-b border-gray-200 p-2">${user.lastName}</td>
+      <td class="border-b border-gray-200 p-2">${user.email}</td>
+      <td class="border-b border-gray-200 p-2">${user.phoneNumber}</td>
       <td>
-        <button class="edit-btn" data-user-id="${user._id}">Edit</button>
+        <button class="edit-btn border-b border-gray-200 p-2" data-user-id="${user._id}">Edit</button>
       </td>
       <td>
-        <button class="delete-btn" data-user-id="${user._id}">Delete</button>
+        <button class="delete-btn border-b border-gray-200 p-2" data-user-id="${user._id}">Delete</button>
       </td>
     `;
     usersContainer.appendChild(row);
