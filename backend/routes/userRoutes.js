@@ -13,8 +13,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-//
-
+/* 
 //POST a new User
 router.post("/", async (req, res) => {
   const newUser = new User(req.body);
@@ -24,7 +23,7 @@ router.post("/", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-});
+}); */
 
 //POST a new User
 router.route("/register").post(register);

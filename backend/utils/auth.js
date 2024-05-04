@@ -29,7 +29,7 @@ exports.register = async (req, res, next) => {
             });
             res.status(201).json({
               message: "User successfully created",
-              user: user_id,
+              user: user._id,
             });
           })
           .catch((error) => {

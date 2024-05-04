@@ -1,6 +1,6 @@
 import "/style.css";
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-const url = apiBaseUrl + "/api/users";
+const url = apiBaseUrl + "/api";
 
 // Function to Load navbar
 function loadNavbar() {
@@ -21,13 +21,13 @@ function resetForm() {
   document.getElementById("signup-password").value = "";
 }
 
-// Event lister for login form submit
+// Event lister for login form submit using usersRoutes
 document.getElementById("login-form").addEventListener("submit", async function (event) {
   event.preventDefault();
   const username = document.getElementById("login-username").value;
   const password = document.getElementById("login-password").value;
   try {
-    const response = await fetch(`${url}/login`, {
+    const response = await fetch(`${url}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -44,12 +44,8 @@ document.getElementById("login-form").addEventListener("submit", async function 
     window.location.href = "/user";
   } catch (error) {
     document.getElementById("error-message").textContent = error.message;
-  } finally {
-    resetForm();
   }
 });
-
-// Event lister for user signup form submit
 
 // Event lister for user signup form submit
 document.getElementById("signup-form").addEventListener("submit", async function (event) {
@@ -57,7 +53,7 @@ document.getElementById("signup-form").addEventListener("submit", async function
   const username = document.getElementById("signup-username").value;
   const password = document.getElementById("signup-password").value;
   try {
-    const response = await fetch(`${url}/signup`, {
+    const response = await fetch(`${url}/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -68,14 +64,10 @@ document.getElementById("signup-form").addEventListener("submit", async function
       const error = await response.json();
       throw new Error(error.message);
     }
-    const user = await response.json();
-    localStorage.setItem("user", JSON.stringify(user));
-    resetForm();
-    window.location.href = "/user";
-  } catch (error) {
-    document.getElementById("error-message").textContent = error.message;
   } finally {
     resetForm();
+    document.getElementById("signup").classList.add("hidden");
+    document.getElementById("login").classList.remove("hidden");
   }
 });
 
