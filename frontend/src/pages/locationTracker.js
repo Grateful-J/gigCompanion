@@ -3,6 +3,17 @@ import { Loader } from "@googlemaps/js-api-loader";
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const gAPIKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
+// Function to Load navbar
+function loadNavbar() {
+  fetch("navbar.html")
+    .then((response) => response.text())
+    .then((html) => {
+      document.getElementById("navbar-placeholder").innerHTML = html;
+    });
+}
+
+loadNavbar();
+
 //Global variable for jobs
 let globalJobs = [];
 

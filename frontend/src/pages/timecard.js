@@ -9,7 +9,7 @@ let editTargetTimecardID;
 let globalHours = 0;
 let globalMinutes = 0;
 
-//Load navbar
+// Function to Load navbar
 function loadNavbar() {
   fetch("navbar.html")
     .then((response) => response.text())

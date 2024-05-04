@@ -61,19 +61,7 @@
         </table>
       </div>
     </div>
-    <script type="module">
-      function loadNavbar() {
-        fetch("navbar.html")
-          .then((response) => response.text())
-          .then((html) => {
-            document.getElementById("navbar-placeholder").innerHTML = html;
-          });
-      }
 
-      window.onload = function () {
-        loadNavbar();
-      };
-    </script>
     <script type="module" src="./src/pages/locationTracker.js"></script>
   </body>
 </html>
