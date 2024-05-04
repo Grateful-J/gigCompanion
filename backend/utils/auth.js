@@ -1,4 +1,5 @@
 const User = require("../models/users.model");
+const bcrypt = require("bcryptjs"); //encrypts passwords
 
 // POST a new User and return it
 exports.register = async (req, res, next) => {
