@@ -25,6 +25,7 @@ exports.register = async (req, res, next) => {
             });
             res.cookie("jwt", token, {
               httpOnly: true,
+              secure: process.env.NODE_ENV === "production",
               maxAge: maxAge * 1000, // 3hrs in ms
             });
             res.status(201).json({
@@ -48,42 +49,42 @@ exports.register = async (req, res, next) => {
   }
 };
 
-// Login a User and return it
+// POST a login
 exports.login = async (req, res, next) => {
   const { username, password } = req.body;
-  // Validates if username and passwordare not empty
   if (!username || !password) {
     return res.status(400).json({ message: "Both username & password are required" });
   }
   try {
     const user = await User.findOne({ username });
     if (!user) {
-      res.status(400).json({ message: "User or password combo not found" });
-    } else {
-      //uses bcrypt to compare passwords
-      bcrypt.compare(password, user.password).then((result) => {
-        if (result) {
-          const maxAge = 3 * 60 * 60;
-          const token = jwt.sign({ id: user._id, username, role: user.role }, jwtSecret, {
-            expiresIn: maxAge, // 3 hours in seconds
-          });
-          res.cookie("jwt", token, {
-            httpOnly: true,
-            maxAge: maxAge * 1000, // 3hrs in ms
-          });
-          res.status(200).json({
-            message: "User successfully logged in",
-            user: user._id,
-          });
-        } else {
-          res.status(400).json({ message: "User or password combo not found" });
-        }
-      });
+      return res.status(400).json({ message: "User or password combination not found" });
     }
+    bcrypt.compare(password, user.password).then((result) => {
+      if (result) {
+        const maxAge = 3 * 60 * 60; // 3 hours in seconds
+        const token = jwt.sign({ id: user._id, username, role: user.role }, jwtSecret, {
+          expiresIn: maxAge,
+        });
+        console.log("Setting cookie");
+        res.cookie("jwt", token, {
+          httpOnly: true,
+          maxAge: maxAge * 1000, // Convert to milliseconds
+          secure: process.env.NODE_ENV === "production", // Secure cookie in production
+        });
+        console.log("Cookie set");
+        res.status(200).json({
+          message: "User successfully logged in",
+          user: user._id,
+        });
+      } else {
+        res.status(400).json({ message: "User or password combination not found" });
+      }
+    });
   } catch (error) {
     res.status(400).json({
-      message: "Error occured",
-      error: error.mesage,
+      message: "Error occurred",
+      error: error.message,
     });
   }
 };
@@ -117,20 +118,33 @@ exports.update = async (req, res, next) => {
     res.status(400).json({ message: "Role or Id not present" });
   }
 };
-
 // DELETE a user
+// Function to Delete User
 exports.deleteUser = async (req, res, next) => {
-  const { id } = req.body;
-  await User.findById(id)
-    .then((user) => {
-      if (user) {
-        return user.deleteOne();
-      } else {
-        res.status(400).json({ message: "User not found" });
-      }
-    })
-    .then((user) => res.status(201).json({ message: "User successfully deleted", user }))
-    .catch((error) => res.status(400).json({ message: "An error occurred", error: error.message }));
+  const userId = req.body.userId; // Assuming userId is sent in the request body
+  if (!userId) {
+    return res.status(400).json({ message: "User ID is required" });
+  }
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Optionally verify the role from the token instead of middleware
+    const token = req.cookies.jwt; // Get JWT token from cookies
+    const decoded = jwt.verify(token, jwtSecret);
+    if (decoded.role !== "admin") {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    await User.findByIdAndDelete(userId);
+    res.status(200).json({ message: "User successfully deleted" });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
+  }
 };
 
 // Authenticates an admin user

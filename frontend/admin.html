@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="./src/pages/adminPortal.js"></script>
+  </head>
+  <body class="bg-gray-600 text-white text-center">
+    <div id="app">
+      <div id="navbar-placeholder"></div>
+      <div id="admin-portal">
+        <h1>Admin Portal</h1>
+        <p>Welcome, Admin</p>
+        <button id="logout-btn">Logout</button>
+        <div id="admin-portal-content">
+          <div id="users-container" class="text-center p-4">
+            <!-- Table with Users and Buttons to Edit or Delete Them -->
+            <table id="users-table">
+              <thead>
+                <tr>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Edit</th>
+                  <th>Delete</th>
+                </tr>
+              </thead>
+              <tbody id="users-container">
+                <!-- Users will be inserted here -->
+              </tbody>
+            </table>
+          </div>
+          <button id="add-user-btn">Add User</button>
+        </div>
+        <div id="admin-portal-footer">
+          <p>&copy; 2024. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

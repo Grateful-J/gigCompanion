@@ -21,7 +21,7 @@ function resetForm() {
   document.getElementById("signup-password").value = "";
 }
 
-// Event lister for login form submit using usersRoutes
+// On login form submit call login API, check if admin and send to admin page, else go to user page
 document.getElementById("login-form").addEventListener("submit", async function (event) {
   event.preventDefault();
   const username = document.getElementById("login-username").value;
@@ -33,17 +33,28 @@ document.getElementById("login-form").addEventListener("submit", async function 
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ username, password }),
+      credentials: "include",
     });
+
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.message);
     }
-    const user = await response.json();
-    localStorage.setItem("user", JSON.stringify(user));
-    resetForm();
-    window.location.href = "/user";
+    // After successfully logging in
+    const { token, user } = await response.json();
+    localStorage.setItem("jwt", token); // Store the JWT token
+    localStorage.setItem("user", JSON.stringify(user)); // Store the user object
+
+    // Redirect to appropriate page based on user role
+    if (user.role === "admin") {
+      window.location.href = "/admin";
+    } else {
+      window.location.href = "/user";
+    }
   } catch (error) {
-    document.getElementById("error-message").textContent = error.message;
+    alert(error.message);
+  } finally {
+    resetForm();
   }
 });
 
