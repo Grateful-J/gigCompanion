@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { register, login, update } = require("../utils/auth"); // imports auth & login functions for user auth
+const { register, login, update, deleteUser } = require("../utils/auth"); // imports auth & login functions for user auth
 const User = require("../models/users.model");
 
 //Get All Users
@@ -33,21 +33,14 @@ router.route("/login").post(login);
 //PUT an update to user Role
 router.route("/update").put(update);
 
+// DELETE a user
+router.route("/deleteUser").delete(deleteUser);
+
 //PATCH a User
 router.patch("/:id", async (req, res) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
     res.status(200).json(updatedUser);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-//Delete a User
-router.delete("/:id", async (req, res) => {
-  try {
-    const deletedUser = await User.findByIdAndDelete(req.params.id);
-    res.status(200).json(deletedUser);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
