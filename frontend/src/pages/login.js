@@ -66,6 +66,7 @@ document.getElementById("signup-form").addEventListener("submit", async function
     }
   } finally {
     resetForm();
+    alert("User successfully created");
     document.getElementById("signup").classList.add("hidden");
     document.getElementById("login").classList.remove("hidden");
   }
