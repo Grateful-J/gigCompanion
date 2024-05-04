@@ -29,9 +29,39 @@ fetch(`${url}/users/${user}`, {
   .then((response) => response.json())
   .then((data) => {
     console.log(data);
-    document.getElementById("signup-username").value = data.username;
-    document.getElementById("first-name").value = data.firstName;
-    document.getElementById("last-name").value = data.lastName;
+    document.getElementById("username").value = data.username;
+    document.getElementById("firstName").value = data.firstName;
+    document.getElementById("lastName").value = data.lastName;
     document.getElementById("email").value = data.email;
-    document.getElementById("phone-number").value = data.phoneNumber;
+    document.getElementById("phoneNumber").value = data.phoneNumber;
+    document.getElementById("address").value = data.address === undefined ? "" : data.address;
   });
+
+// Event lister for update user form
+document.getElementById("profile-form").addEventListener("submit", async function (event) {
+  event.preventDefault();
+  const username = document.getElementById("username").value;
+  const firstName = document.getElementById("firstName").value;
+  const lastName = document.getElementById("lastName").value;
+  const email = document.getElementById("email").value;
+  const phoneNumber = document.getElementById("phoneNumber").value;
+  //const address = document.getElementById("address").value;
+  try {
+    const response = await fetch(`${url}/users/${user}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ username, firstName, lastName, email, phoneNumber }),
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message);
+    }
+  } finally {
+    resetForm();
+    alert(`"User successfully updated : " ${username}, ${firstName}, ${lastName}, ${email}, ${phoneNumber}`);
+    window.location.href = "/user";
+  }
+});
