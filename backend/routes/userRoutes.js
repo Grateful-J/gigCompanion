@@ -13,6 +13,16 @@ router.get("/", async (req, res) => {
   }
 });
 
+//Get a single User
+router.get("/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 //POST a new User
 router.route("/register").post(register);
 
