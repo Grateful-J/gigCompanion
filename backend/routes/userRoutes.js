@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { register } = require("../utils/auth");
+const { register, login } = require("../utils/auth"); // imports auth & login functions for user auth
 const User = require("../models/users.model");
 
 //Get All Users
@@ -26,6 +26,9 @@ router.post("/", async (req, res) => {
 
 //POST a new User
 router.route("/register").post(register);
+
+//POST a new login
+router.route("/login").post(login);
 
 //PATCH a User
 router.patch("/:id", async (req, res) => {
