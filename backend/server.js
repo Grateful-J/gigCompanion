@@ -8,7 +8,7 @@ const jobRoutes = require("./routes/jobRoutes"); // Adjusted for a models direct
 const locationRoutes = require("./routes/locationRoutes");
 const timeCardRoutes = require("./routes/timecardRoutes");
 const userRoutes = require("./routes/userRoutes");
-const userAuth = require("./utils/auth");
+const { adminAuth, userAuth } = require("./utils/auth");
 
 // Express app
 const app = express();
@@ -25,6 +25,10 @@ app.use(cookieParser());
 app.get("/", (req, res) => {
   res.send("Hello from node API! updated");
 });
+
+// User Protected Routes
+app.get("/admin", adminAuth, (req, res) => res.send("Admin Route"));
+app.get("/basic", userAuth, (req, res) => res.send("User Route"));
 
 //Use Routes
 app.use("/api/jobs", jobRoutes);

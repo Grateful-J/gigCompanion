@@ -133,7 +133,7 @@ exports.deleteUser = async (req, res, next) => {
     .catch((error) => res.status(400).json({ message: "An error occurred", error: error.message }));
 };
 
-// Validates if a user is an admin
+// Authenticates an admin user
 exports.adminAuth = (req, res, next) => {
   const token = req.cookies.jwt;
   if (token) {
@@ -142,6 +142,26 @@ exports.adminAuth = (req, res, next) => {
         return res.status(401).json({ message: "Not authorized" });
       } else {
         if (decodedToken.role !== "admin") {
+          return res.status(401).json({ message: "Not authorized" });
+        } else {
+          next();
+        }
+      }
+    });
+  } else {
+    return res.status(401).json({ message: "Not authorized, token not available" });
+  }
+};
+
+//Authenticates basic user
+exports.userAuth = (req, res, next) => {
+  const token = req.cookies.jwt;
+  if (token) {
+    jwt.verify(token, jwtSecret, (err, decodedToken) => {
+      if (err) {
+        return res.status(401).json({ message: "Not authorized" });
+      } else {
+        if (decodedToken.role !== "Basic") {
           return res.status(401).json({ message: "Not authorized" });
         } else {
           next();

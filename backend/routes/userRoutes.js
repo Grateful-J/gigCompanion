@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { register, login, update, deleteUser } = require("../utils/auth"); // imports auth & login functions for user auth
+const { register, login, update, deleteUser, adminAuth } = require("../utils/auth"); // imports auth & login functions for user auth
 const User = require("../models/users.model");
 
 //Get All Users
@@ -12,6 +12,8 @@ router.get("/", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+//
 
 //POST a new User
 router.post("/", async (req, res) => {
@@ -31,10 +33,10 @@ router.route("/register").post(register);
 router.route("/login").post(login);
 
 //PUT an update to user Role
-router.route("/update").put(update);
+router.route("/update").put(adminAuth, update);
 
 // DELETE a user
-router.route("/deleteUser").delete(deleteUser);
+router.route("/deleteUser").delete(adminAuth, deleteUser);
 
 //PATCH a User
 router.patch("/:id", async (req, res) => {
