@@ -1,5 +1,7 @@
 const User = require("../models/users.model");
 const bcrypt = require("bcryptjs"); //encrypts passwords
+const jwt = require("jsonwebtoken");
+const jwtSecret = process.env.JWT_SECRET;
 
 // POST a new User and return it
 exports.register = async (req, res, next) => {
