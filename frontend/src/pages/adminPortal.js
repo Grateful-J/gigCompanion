@@ -1,15 +1,6 @@
 import "/style.css";
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-
-// Function to Load navbar
-function loadNavbar() {
-  fetch("navbar.html")
-    .then((response) => response.text())
-    .then((html) => {
-      document.getElementById("navbar-placeholder").innerHTML = html;
-    });
-}
-
+import { loadNavbar } from "../components/navbar.js";
 loadNavbar();
 
 // Function to Fetch Users and Dynamically fill table users-table

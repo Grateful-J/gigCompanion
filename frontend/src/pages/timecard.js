@@ -1,5 +1,7 @@
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const url = apiBaseUrl + "/api/timecards";
+import { loadNavbar } from "../components/navbar.js";
+loadNavbar();
 
 //TODO: Find out why navbar is not working
 
@@ -8,17 +10,6 @@ let isEditing;
 let editTargetTimecardID;
 let globalHours = 0;
 let globalMinutes = 0;
-
-// Function to Load navbar
-function loadNavbar() {
-  fetch("navbar.html")
-    .then((response) => response.text())
-    .then((html) => {
-      document.getElementById("navbar-placeholder").innerHTML = html;
-    });
-}
-
-loadNavbar();
 
 // Function to reset inputs
 function resetForm() {

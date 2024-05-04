@@ -17,10 +17,10 @@ const userSchema = new mongoose.Schema(
       //required: true,
       //unique: true,
     },
-    //firstName: String,
-    //lastName: String,
+    firstName: String,
+    lastName: String,
     //birthday: Date,
-    //phoneNumber: String,
+    phoneNumber: String,
     role: {
       type: String,
       default: "basic",

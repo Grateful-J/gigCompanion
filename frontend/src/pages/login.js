@@ -1,16 +1,7 @@
 //import "/style.css";
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const url = apiBaseUrl + "/api";
-
-// Function to Load navbar
-function loadNavbar() {
-  fetch("navbar.html")
-    .then((response) => response.text())
-    .then((html) => {
-      document.getElementById("navbar-placeholder").innerHTML = html;
-    });
-}
-
+import { loadNavbar } from "../components/navbar.js";
 loadNavbar();
 
 // Function to reset inputs
