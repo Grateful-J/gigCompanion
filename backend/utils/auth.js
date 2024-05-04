@@ -46,13 +46,20 @@ exports.login = async (req, res, next) => {
     return res.status(400).json({ message: "Both username & password are required" });
   }
   try {
-    const user = await User.findOne({ username, password });
+    const user = await User.findOne({ username });
     if (!user) {
       res.status(400).json({ message: "User or password combo not found" });
     } else {
-      res.status(200).json({
-        message: "User successfully logged in",
-        user,
+      //uses bcrypt to compare passwords
+      bcrypt.compare(password, user.password).then((result) => {
+        if (result) {
+          res.status(200).json({
+            message: "Login successful",
+            user,
+          });
+        } else {
+          res.status(400).json({ message: "User or password combo not found" });
+        }
       });
     }
   } catch (error) {
