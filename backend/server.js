@@ -6,6 +6,7 @@ require("dotenv").config();
 const jobRoutes = require("./routes/jobRoutes"); // Adjusted for a models directory
 const locationRoutes = require("./routes/locationRoutes");
 const timeCardRoutes = require("./routes/timecardRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 // Express app
 const app = express();
@@ -26,7 +27,7 @@ app.get("/", (req, res) => {
 app.use("/api/jobs", jobRoutes);
 app.use("/api/locations", locationRoutes);
 app.use("/api/timecards", timeCardRoutes);
-app.use("/api/users", useuserRoutes);
+app.use("/api/users", userRoutes);
 
 // Serve static assets if in production
 const port = process.env.PORT || 3000;
