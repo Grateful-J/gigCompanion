@@ -48,3 +48,20 @@ exports.login = async (req, res, next) => {
     });
   }
 };
+
+//Updates user role from basic to admin
+exports.update = async (req, res, next) => {
+  const { role, id } = req.body;
+  //Verifies if both role & ID are present
+  if (role && id) {
+    // Verifies if role is an admin {
+    if (role === "admin") {
+      await User.findByIdAndUpdate(id, { role: role });
+      return res.status(200).json({ message: "User role updated" });
+    } else {
+      res.status(400).json({ message: "User role is not an admin" });
+    }
+  } else {
+    res.status(400).json({ message: "Both role & ID are required" });
+  }
+};
