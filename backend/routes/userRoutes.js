@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { register } = require("../utils/auth");
 const User = require("../models/users.model");
 
 //Get All Users
@@ -22,6 +23,9 @@ router.post("/", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+//POST a new User
+router.route("/register").post(register);
 
 //PATCH a User
 router.patch("/:id", async (req, res) => {

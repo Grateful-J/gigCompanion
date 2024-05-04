@@ -7,6 +7,7 @@ const jobRoutes = require("./routes/jobRoutes"); // Adjusted for a models direct
 const locationRoutes = require("./routes/locationRoutes");
 const timeCardRoutes = require("./routes/timecardRoutes");
 const userRoutes = require("./routes/userRoutes");
+const userAuth = require("./utils/auth");
 
 // Express app
 const app = express();
@@ -28,6 +29,7 @@ app.use("/api/jobs", jobRoutes);
 app.use("/api/locations", locationRoutes);
 app.use("/api/timecards", timeCardRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/auth", userRoutes);
 
 // Serve static assets if in production
 const port = process.env.PORT || 3000;
