@@ -88,6 +88,7 @@ exports.login = async (req, res, next) => {
   }
 };
 
+// PATCH an update to user Role
 exports.update = async (req, res, next) => {
   const { role, id } = req.body;
   // Verifying if role and id is presnt
@@ -117,6 +118,7 @@ exports.update = async (req, res, next) => {
   }
 };
 
+// DELETE a user
 exports.deleteUser = async (req, res, next) => {
   const { id } = req.body;
   await User.findById(id)
@@ -129,4 +131,24 @@ exports.deleteUser = async (req, res, next) => {
     })
     .then((user) => res.status(201).json({ message: "User successfully deleted", user }))
     .catch((error) => res.status(400).json({ message: "An error occurred", error: error.message }));
+};
+
+// Validates if a user is an admin
+exports.adminAuth = (req, res, next) => {
+  const token = req.cookies.jwt;
+  if (token) {
+    jwt.verify(token, jwtSecret, (err, decodedToken) => {
+      if (err) {
+        return res.status(401).json({ message: "Not authorized" });
+      } else {
+        if (decodedToken.role !== "admin") {
+          return res.status(401).json({ message: "Not authorized" });
+        } else {
+          next();
+        }
+      }
+    });
+  } else {
+    return res.status(401).json({ message: "Not authorized, token not available" });
+  }
 };
