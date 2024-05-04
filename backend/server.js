@@ -26,6 +26,7 @@ app.get("/", (req, res) => {
 app.use("/api/jobs", jobRoutes);
 app.use("/api/locations", locationRoutes);
 app.use("/api/timecards", timeCardRoutes);
+app.use("/api/users", useuserRoutes);
 
 // Serve static assets if in production
 const port = process.env.PORT || 3000;
