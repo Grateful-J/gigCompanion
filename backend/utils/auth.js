@@ -63,9 +63,17 @@ exports.login = async (req, res, next) => {
       //uses bcrypt to compare passwords
       bcrypt.compare(password, user.password).then((result) => {
         if (result) {
+          const maxAge = 3 * 60 * 60;
+          const token = jwt.sign({ id: user._id, username, role: user.role }, jwtSecret, {
+            expiresIn: maxAge, // 3 hours in seconds
+          });
+          res.cookie("jwt", token, {
+            httpOnly: true,
+            maxAge: maxAge * 1000, // 3hrs in ms
+          });
           res.status(200).json({
-            message: "Login successful",
-            user,
+            message: "User successfully logged in",
+            user: user._id,
           });
         } else {
           res.status(400).json({ message: "User or password combo not found" });
