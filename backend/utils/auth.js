@@ -8,19 +8,32 @@ exports.register = async (req, res, next) => {
     return res.status(400).json({ message: "Password less than 6 characters" });
   }
   try {
-    await User.create({
-      username,
-      password,
-    }).then((user) =>
-      res.status(200).json({
-        message: "User successfully created",
-        user,
-      })
-    );
-  } catch (err) {
-    res.status(401).json({
-      message: "User not successful created",
-      error: error.mesage,
+    bcrypt.hash(password, 10, async (err, hash) => {
+      if (err) {
+        return res.status(500).json({ message: err.message });
+      } else {
+        await User.create({
+          username,
+          password: hash,
+        })
+          .then((user) => {
+            res.status(201).json({
+              message: "User successfully created",
+              user,
+            });
+          })
+          .catch((error) => {
+            res.status(400).json({
+              message: "Error occured",
+              error: error.message,
+            });
+          });
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "Error occured",
+      error: error.message,
     });
   }
 };
