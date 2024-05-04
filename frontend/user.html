@@ -3,60 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log-In Page</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>User Page</title>
-
-    <script type="module" src="./src/pages/user.js"></script>
+    <script type="module" src="./src/pages/login.js"></script>
   </head>
-  <body class="bg-blue-300 flex-col items-center justify-center min-h-screen">
-    <div id="navbar-placeholder" class="block text-white"></div>
-    <div id="app">
-      <div>
-        <h1>User Account</h1>
+  <body class="bg-gray-800 min-h-screen flex flex-col text-gray-200">
+    <!-- Navbar Placeholder -->
+    <nav id="navbar-placeholder" class="bg-gray-700 w-full py-4 px-8 text-lg">
+      <span>Navbar</span>
+    </nav>
+
+    <!-- User Page Container -->
+    <div id="app" class="w-full max-w-lg p-8 space-y-6 bg-gray-700 rounded-lg shadow-lg mx-auto mt-4">
+      <!-- User Profile Container -->
+      <div id="user-profile">
+        <h1 class="text-3xl font-semibold mb-6">User Profile</h1>
+        <p id="user-name-greeting">Welcome,</p>
       </div>
 
-      <div class="overflow-x-auto text-center mb-0">
-        <table id="users-table" class="table w-full border border-gray-200">
-          <thead>
-            <tr class="text-center">
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">First Name</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Last Name</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Email</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Phone</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Edit</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Delete</th>
-            </tr>
-          </thead>
-          <tbody id="users-container">
-            <!-- User rows will be inserted here -->
-          </tbody>
-        </table>
-      </div>
+      <!-- Button to show Signup form -->
+      <div></div>
 
-      <div class="text-center">
-        <button id="add-user" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add User</button>
-      </div>
+      <!-- xxx -->
 
-      <div id="user-modal" class="hidden">
-        <!-- User modal will be inserted here -->
-      </div>
-
-      <div id="user-delete-modal" class="hidden">
-        <!-- User delete modal will be inserted here -->
+      <!-- Error Message Display -->
+      <div id="error-message" class="text-red-500">
+        <p id="error-text"></p>
       </div>
     </div>
-    <script type="module">
-      function loadNavbar() {
-        fetch("navbar.html")
-          .then((response) => response.text())
-          .then((html) => {
-            document.getElementById("navbar-placeholder").innerHTML = html;
-          });
-      }
-
-      window.onload = function () {
-        loadNavbar();
-      };
-    </script>
   </body>
 </html>
