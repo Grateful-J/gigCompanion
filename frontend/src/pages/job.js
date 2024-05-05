@@ -96,7 +96,7 @@ async function addJob() {
     isLocal,
   };
   try {
-    const response = await fetch(`${url}/job`, {
+    const response = await fetch(`${url}/jobs`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
