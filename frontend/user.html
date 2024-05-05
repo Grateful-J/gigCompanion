@@ -3,60 +3,75 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile Page</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>User Page</title>
-
     <script type="module" src="./src/pages/user.js"></script>
   </head>
-  <body class="bg-blue-300 flex-col items-center justify-center min-h-screen">
-    <div id="navbar-placeholder" class="block text-white"></div>
-    <div id="app">
-      <div>
-        <h1>User Account</h1>
-      </div>
+  <body class="bg-gray-800 min-h-screen flex flex-col text-gray-200">
+    <!-- Navbar Placeholder -->
+    <nav id="navbar-placeholder" class="bg-gray-700 w-full py-4 px-8 text-lg">
+      <span>Navbar</span>
+    </nav>
 
-      <div class="overflow-x-auto text-center mb-0">
-        <table id="users-table" class="table w-full border border-gray-200">
-          <thead>
-            <tr class="text-center">
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">First Name</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Last Name</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Email</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Phone</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Edit</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Delete</th>
-            </tr>
-          </thead>
-          <tbody id="users-container">
-            <!-- User rows will be inserted here -->
-          </tbody>
-        </table>
-      </div>
-
-      <div class="text-center">
-        <button id="add-user" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add User</button>
-      </div>
-
-      <div id="user-modal" class="hidden">
-        <!-- User modal will be inserted here -->
-      </div>
-
-      <div id="user-delete-modal" class="hidden">
-        <!-- User delete modal will be inserted here -->
-      </div>
+    <!-- User Profile Container -->
+    <div id="app" class="w-full max-w-lg p-8 space-y-6 bg-gray-700 rounded-lg shadow-lg mx-auto mt-4">
+      <h1 class="text-3xl font-semibold mb-6">User Profile</h1>
+      <form id="profile-form" class="space-y-4">
+        <div>
+          <label for="username" class="block mb-2">Username:</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            required
+            class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded focus:outline-none focus:border-blue-500"
+          />
+        </div>
+        <div>
+          <label for="firstName" class="block mb-2">First Name:</label>
+          <input
+            type="text"
+            id="firstName"
+            name="firstName"
+            required
+            class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded focus:outline-none focus:border-blue-500"
+          />
+        </div>
+        <div>
+          <label for="lastName" class="block mb-2">Last Name:</label>
+          <input
+            type="text"
+            id="lastName"
+            name="lastName"
+            required
+            class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded focus:outline-none focus:border-blue-500"
+          />
+        </div>
+        <div>
+          <label for="email" class="block mb-2">Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded focus:outline-none focus:border-blue-500"
+          />
+        </div>
+        <div>
+          <label for="phoneNumber" class="block mb-2">Phone Number:</label>
+          <input
+            type="tel"
+            id="phoneNumber"
+            name="phoneNumber"
+            required
+            class="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded focus:outline-none focus:border-blue-500"
+          />
+        </div>
+        <div><!-- Add more fields as needed like address, city, state, zip code, etc.  TBD--></div>
+        <button type="submit" class="w-full py-2 bg-blue-500 hover:bg-blue-600 rounded focus:outline-none focus:ring-4 focus:ring-blue-300">
+          Update Profile
+        </button>
+      </form>
     </div>
-    <script type="module">
-      function loadNavbar() {
-        fetch("navbar.html")
-          .then((response) => response.text())
-          .then((html) => {
-            document.getElementById("navbar-placeholder").innerHTML = html;
-          });
-      }
-
-      window.onload = function () {
-        loadNavbar();
-      };
-    </script>
   </body>
 </html>

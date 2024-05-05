@@ -23,4 +23,4 @@ ENV NODE_ENV=production
 CMD ["node", "server.js"]
 
 # Run the front end
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]

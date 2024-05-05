@@ -1,9 +1,10 @@
 import "/style.css";
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const gAPIKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+import { loadNavbar } from "../components/navbar.js";
+loadNavbar();
 
 //Fetches and displays jobs to job table
-
 let globalJobs;
 
 //GET all jobs

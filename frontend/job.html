@@ -3,57 +3,40 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.tailwindcss.com"></script>
     <title>Jobs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="./src/pages/job.js"></script>
   </head>
-
-  <body class="bg-blue-900 flex-col items-center justify-center min-h-screen">
-    <div id="navbar-placeholder" class="block text-white"></div>
-    <div id="app">
-      <div>
-        <h1>Jobs Go Here</h1>
+  <body class="bg-blue-900 text-gray-200 min-h-screen flex flex-col items-center justify-center">
+    <div id="navbar-placeholder" class="w-full"></div>
+    <div id="app" class="w-full max-w-6xl p-4">
+      <div class="text-center">
+        <h1 class="text-3xl font-bold mb-6">Jobs Overview</h1>
       </div>
 
-      <div class="overflow-x-auto text-center mb-0">
-        <table id="jobs-table" class="table w-full border border-gray-200">
+      <div class="overflow-x-auto">
+        <table id="jobs-table" class="table-auto w-full border-collapse border border-gray-200">
           <thead>
-            <tr class="text-center">
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Job Name</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Client</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Location</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Start Date</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">End Date</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Job Code</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Days Worked</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Rate</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Freelance?</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Local?</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Edit</th>
-              <th class="font-semibold text-gray-800 bg-gray-100 p-2 border-b-2 border-gray-200">Delete</th>
+            <tr class="bg-gray-800 text-gray-200">
+              <th class="font-semibold p-2 border-b border-gray-600">Job Name</th>
+              <th class="font-semibold p-2 border-b border-gray-600">Client</th>
+              <th class="font-semibold p-2 border-b border-gray-600">Location</th>
+              <th class="font-semibold p-2 border-b border-gray-600">Start Date</th>
+              <th class="font-semibold p-2 border-b border-gray-600">End Date</th>
+              <th class="font-semibold p-2 border-b border-gray-600">Job Code</th>
+              <th class="font-semibold p-2 border-b border-gray-600">Days Worked</th>
+              <th class="font-semibold p-2 border-b border-gray-600">Rate</th>
+              <th class="font-semibold p-2 border-b border-gray-600">Freelance?</th>
+              <th class="font-semibold p-2 border-b border-gray-600">Local?</th>
+              <th class="font-semibold p-2 border-b border-gray-600">Edit</th>
+              <th class="font-semibold p-2 border-b border-gray-600">Delete</th>
             </tr>
           </thead>
-
-          <tbody id="jobs-container">
+          <tbody id="jobs-container" class="bg-gray-700">
             <!-- Job rows will be inserted here -->
           </tbody>
         </table>
       </div>
     </div>
-
-    <script type="module">
-      function loadNavbar() {
-        fetch("navbar.html")
-          .then((response) => response.text())
-          .then((html) => {
-            document.getElementById("navbar-placeholder").innerHTML = html;
-          });
-      }
-
-      window.onload = function () {
-        loadNavbar();
-      };
-    </script>
-
-    <script type="module" src="./src/pages/job.js"></script>
   </body>
 </html>

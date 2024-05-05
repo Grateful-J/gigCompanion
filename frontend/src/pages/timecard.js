@@ -1,5 +1,9 @@
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const url = apiBaseUrl + "/api/timecards";
+import { loadNavbar } from "../components/navbar.js";
+loadNavbar();
+
+//TODO: Find out why navbar is not working
 
 //Global variables
 let isEditing;
