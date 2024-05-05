@@ -121,8 +121,30 @@ async function addJob() {
   }
 }
 
+// Function to delete job
+async function deleteJob(id) {
+  try {
+    const response = await fetch(`${url}/jobs/${id}`, {
+      method: "DELETE",
+    });
+    const data = await response.json();
+    console.log(data);
+    fetchJobs();
+  } catch (error) {
+    console.error("Failed to delete job", error);
+  }
+}
+
 // event listener for add job button to display add job form
 document.querySelector("#add-job-btn").addEventListener("click", displayJobForm);
 
 //event listener for submit button to add job
 document.querySelector("#job-form").addEventListener("submit", addJob);
+
+//event listener for delete button to delete job
+document.querySelector("#jobs-table").addEventListener("click", (event) => {
+  if (event.target.classList.contains("delete-btn")) {
+    const id = event.target.getAttribute("data-id");
+    deleteJob(id);
+  }
+});
