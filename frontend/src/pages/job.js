@@ -56,6 +56,18 @@ function displayJobs(jobs) {
   });
 }
 
+// Function to display job form
+function displayJobForm() {
+  const jobFormContainer = document.querySelector("#job-form-container");
+  jobFormContainer.classList.remove("hidden");
+}
+
+// Function to hide job form
+function hideJobForm() {
+  const jobFormContainer = document.querySelector("#job-form-container");
+  jobFormContainer.classList.add("hidden");
+}
+
 // Add event listener for edit buttons
 document.addEventListener("click", async function (event) {
   if (event.target.classList.contains("edit-btn")) {
@@ -126,17 +138,8 @@ async function addJob() {
   }
 }
 
-// Function to display job form
-function displayJobForm() {
-  const jobFormContainer = document.querySelector("#job-form-container");
-  jobFormContainer.classList.remove("hidden");
-}
-
-// Function to hide job form
-function hideJobForm() {
-  const jobFormContainer = document.querySelector("#job-form-container");
-  jobFormContainer.classList.add("hidden");
-}
-
-// event listener for add job button
+// event listener for add job button to display add job form
 document.querySelector("#add-job-btn").addEventListener("click", displayJobForm);
+
+//event listener for submit button to add job
+document.querySelector("#job-form").addEventListener("submit", addJob);
