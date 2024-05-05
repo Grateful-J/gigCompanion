@@ -1,6 +1,6 @@
 import "/style.css";
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-const gAPIKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+const url = apiBaseUrl + "/api";
 import { loadNavbar } from "../components/navbar.js";
 loadNavbar();
 
@@ -10,7 +10,7 @@ let globalJobs;
 //GET all jobs
 async function fetchJobs() {
   try {
-    const response = await fetch(`${apiBaseUrl}/api/jobs`);
+    const response = await fetch(`${url}/jobs`);
     const jobs = await response.json();
     globalJobs = jobs; //update global variable
     console.log(`fetched jobs: ${globalJobs[0]}`);
@@ -22,7 +22,6 @@ async function fetchJobs() {
 
 fetchJobs();
 
-// Display Jobs
 // Display Jobs
 function displayJobs(jobs) {
   const container = document.querySelector("#jobs-container");

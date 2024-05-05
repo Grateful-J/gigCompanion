@@ -36,6 +36,70 @@
             <!-- Job rows will be inserted here -->
           </tbody>
         </table>
+
+        <div id="jobs-buttons" class="flex flex-row justify-center mt-2 space-x-8 p-8">
+          <button
+            id="add-job-btn"
+            class="block w-full mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-green-600 focus:outline-none"
+            onclick="addJob()"
+          >
+            Add Job
+          </button>
+
+          <button
+            id="previous-jobs-btn"
+            class="block w-full mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-yellow-600 focus:outline-none"
+            onclick="previousJobs()"
+          >
+            Previous Jobs
+          </button>
+        </div>
+      </div>
+
+      <div id="previous-jobs" class="mt-6 hidden">
+        <h2 class="text-xl font-semibold mb-4">Previous Jobs</h2>
+        <div id="previous-jobs-search-container">
+          <input
+            id="previous-jobs-search"
+            type="text"
+            placeholder="Search"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+          />
+        </div>
+
+        <div id="previous-jobs-container">
+          <!--Displays table of 10x previous jobs with pagation -->
+          <div class="overflow-x-auto">
+            <table id="previous-jobs-table" class="table w-full border border-gray-200 text-gray-800 bg-gray-200">
+              <thead class="bg-gray-800 text-gray-200">
+                <tr class="text-center">
+                  <th class="font-semibold p-2 border-b-2 border-gray-600">Job Name</th>
+                  <th class="font-semibold p-2 border-b-2 border-gray-600">Client</th>
+                  <th class="font-semibold p-2 border-b-2 border-gray-600">Location</th>
+                  <th class="font-semibold p-2 border-b-2 border-gray-600">Start Date</th>
+                  <th class="font-semibold p-2 border-b-2 border-gray-600">End Date</th>
+                  <th class="font-semibold p-2 border-b-2 border-gray-600">Job Code</th>
+                  <th class="font-semibold p-2 border-b-2 border-gray-600">Days Worked</th>
+                  <th class="font-semibold p-2 border-b-2 border-gray-600">Rate</th>
+                  <th class="font-semibold p-2 border-b-2 border-gray-600">Freelance?</th>
+                  <th class="font-semibold p-2 border-b-2 border-gray-600">Local?</th>
+                  <th class="font-semibold p-2 border-b-2 border-gray-600">Edit</th>
+                  <th class="font-semibold p-2 border-b-2 border-gray-600">Delete</th>
+                </tr>
+              </thead>
+              <tbody id="previous-jobs-container" class="bg-gray-700">
+                <!-- Previous job rows will be inserted here -->
+              </tbody>
+            </table>
+
+            <!-- Previous Jobs Pagination -->
+            <div id="previous-jobs-pagination">
+              <!-- Previous Jobs Pagination will be inserted here -->
+              <button id="previous-jobs-previous-btn" class="previous-btn">Previous</button>
+              <button id="previous-jobs-next-btn" class="next-btn">Next</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </body>
