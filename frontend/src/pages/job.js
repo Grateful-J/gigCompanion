@@ -68,23 +68,6 @@ function hideJobForm() {
   jobFormContainer.classList.add("hidden");
 }
 
-// Add event listener for edit buttons
-document.addEventListener("click", async function (event) {
-  if (event.target.classList.contains("edit-btn")) {
-    const row = event.target.closest("tr");
-    const jobId = row.querySelector(".job-id").value;
-    const editBtn = row.querySelector(".edit-btn");
-
-    //console.log(`row: ${row}`);
-    //console.log(`jobID: ${jobId}`);
-    //console.log(`editBtn: ${editBtn}`);
-
-    //TODO: figure out way to edit jobCode, rate, isFreelance, isLocal
-
-    //TODO: add edit button functionality
-  }
-});
-
 // Function to add job
 async function addJob() {
   const jobName = document.querySelector("#job-name").value;
