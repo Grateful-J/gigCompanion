@@ -135,6 +135,45 @@ async function deleteJob(id) {
   }
 }
 
+// Function to edit job
+async function editJob(id) {
+  let job = {};
+  // get job data
+  try {
+    const response = await fetch(`${url}/jobs/${id}`);
+    job = await response.json();
+    console.log(job);
+  } catch (error) {
+    console.error("Failed to edit job", error);
+  } finally {
+    // Display edit form
+    displayJobForm();
+
+    const startDate = new Date(job.startDate);
+    const isoFormattedStartDate = startDate.toISOString().split("T")[0];
+    const endDate = new Date(job.endDate);
+    const isoFormattedEndDate = endDate.toISOString().split("T")[0];
+
+    // Set values in edit form
+    document.querySelector("#job-name").value = job.jobName;
+    document.querySelector("#client").value = job.client;
+    document.querySelector("#location").value = job.location;
+    document.querySelector("#start-date").value = isoFormattedStartDate;
+    document.querySelector("#end-date").value = isoFormattedEndDate;
+    document.querySelector("#job-code").value = job.jobCode;
+    document.querySelector("#rate").value = job.rate;
+    document.querySelector("#is-freelance").value = job.isFreelance;
+    document.querySelector("#is-local").value = job.isLocal;
+  }
+
+  // Change submit button text to "Update Job"
+  const submitBtn = document.querySelector('button[type="submit"]');
+  submitBtn.textContent = "Update Job";
+
+  // clear job variable
+  job = {};
+}
+
 // event listener for add job button to display add job form
 document.querySelector("#add-job-btn").addEventListener("click", displayJobForm);
 
@@ -145,6 +184,20 @@ document.querySelector("#job-form").addEventListener("submit", addJob);
 document.querySelector("#jobs-table").addEventListener("click", (event) => {
   if (event.target.classList.contains("delete-btn")) {
     const id = event.target.getAttribute("data-id");
-    deleteJob(id);
+
+    // confirm user wants to delete
+    if (confirm("Are you sure you want to delete this job?")) {
+      deleteJob(id);
+    } else {
+      return;
+    }
+  }
+});
+
+//event listener for edit button to edit job
+document.querySelector("#jobs-table").addEventListener("click", (event) => {
+  if (event.target.classList.contains("edit-btn")) {
+    const id = event.target.getAttribute("data-id");
+    editJob(id);
   }
 });
