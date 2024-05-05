@@ -73,4 +73,70 @@ document.addEventListener("click", async function (event) {
   }
 });
 
-//
+// Function to add job
+async function addJob() {
+  const jobName = document.querySelector("#job-name").value;
+  const client = document.querySelector("#client").value;
+  const location = document.querySelector("#location").value;
+  const startDate = document.querySelector("#start-date").value;
+  const endDate = document.querySelector("#end-date").value;
+  const jobCode = document.querySelector("#job-code").value;
+  const rate = document.querySelector("#rate").value;
+  const isFreelance = document.querySelector("#is-freelance").value;
+  const isLocal = document.querySelector("#is-local").value;
+  const job = {
+    jobName,
+    client,
+    location,
+    startDate,
+    endDate,
+    jobCode,
+    rate,
+    isFreelance,
+    isLocal,
+  };
+  try {
+    const response = await fetch(`${url}/job`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(job),
+    });
+    const data = await response.json();
+    console.log(data);
+    fetchJobs();
+  } catch (error) {
+    console.error("Failed to add job", error);
+  } finally {
+    // Clear input fields
+    document.querySelector("#job-name").value = "";
+    document.querySelector("#client").value = "";
+    document.querySelector("#location").value = "";
+    document.querySelector("#start-date").value = "";
+    document.querySelector("#end-date").value = "";
+    document.querySelector("#job-code").value = "";
+    document.querySelector("#rate").value = "";
+    document.querySelector("#is-freelance").value = "";
+    document.querySelector("#is-local").value = "";
+
+    // Alert and Hide job form
+    alert("Job added successfully: ");
+    hideJobForm();
+  }
+}
+
+// Function to display job form
+function displayJobForm() {
+  const jobFormContainer = document.querySelector("#job-form-container");
+  jobFormContainer.classList.remove("hidden");
+}
+
+// Function to hide job form
+function hideJobForm() {
+  const jobFormContainer = document.querySelector("#job-form-container");
+  jobFormContainer.classList.add("hidden");
+}
+
+// event listener for add job button
+document.querySelector("#add-job-btn").addEventListener("click", displayJobForm);

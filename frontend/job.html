@@ -15,7 +15,7 @@
       </div>
 
       <!-- Hidden form for addind/editing jobs -->
-      <div id="job-form-container" class="items-center justify-start space-y-4">
+      <div id="job-form-container" class="items-center justify-start space-y-4 hidden">
         <form id="job-form" class="flex flex-row flex-wrap justify-center items-center space-y-4 space-x-8">
           <input type="hidden" id="job-id" />
           <div>
@@ -95,7 +95,7 @@
           <button
             id="add-job-btn"
             class="block w-full mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-green-600 focus:outline-none"
-            onclick="addJob()"
+            onclick="displayJobForm()"
           >
             Add Job
           </button>
