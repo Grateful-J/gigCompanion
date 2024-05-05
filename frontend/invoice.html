@@ -13,7 +13,15 @@
       <span>Navbar</span>
     </nav>
 
-    <div class="container mx-auto px-4">
+    <!-- Main Flex Container (Jobs list on left / Timesheet on right) -->
+    <div class="flex w-full max-w-2xl"> </div>
+    
+
+
+    <!-- Invoice Page Container  with 2 columns evenly spaced-->
+    <div id="big-container" class="container mx-auto p-5 flex flex-row space-x-4 justify-center">
+
+      <div id="jobs">
       <h1 class="text-3xl font-bold mb-6 text-center">Invoicing & Job Review</h1>
       <div class="w-full max-w-lg">
         <label for="job-dropdown" class="block text-lg font-medium text-gray-300">Select a Job:</label>
@@ -25,6 +33,7 @@
         </select>
       </div>
 
+      <!-- Job Details -->
       <div id="job-details" class="mt-6 w-full max-w-lg bg-gray-700 p-4 rounded-lg shadow-lg">
         <h2 class="text-xl font-semibold mb-4">Job Details</h2>
         <table class="table-auto w-full">
@@ -73,5 +82,27 @@
         </table>
       </div>
     </div>
+
+           <!-- Timesheet -->
+           <div id="timesheet" class="mt-6 w-full max-w-lg bg-gray-700 p-4 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold mb-4">Timesheet</h2>
+            <table class="table-auto w-full">
+              <thead>
+                <tr>
+                  <th class="py-2 px-4">Date</th>
+                  <th class="py-2 px-4">Start Time</th>
+                  <th class="py-2 px-4">End Time</th>
+                  <th class="py-2 px-4">Hours Worked</th>
+                </tr>
+              </thead>
+              <tbody id="timesheet-table-body"></tbody>
+            </table>
+          </div>
+      </div>
+
+
+  </div>
+
+  
   </body>
 </html>
