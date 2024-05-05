@@ -31,11 +31,13 @@ document.getElementById("job-dropdown").addEventListener("change", function () {
   fetch(`${url}/jobs/${selectedJobId}`)
     .then((response) => response.json())
     .then((job) => {
+      startDate = new Date(job.startDate);
+      endDate = new Date(job.endDate);
       document.getElementById("job-name").textContent = job.jobName;
-      document.getElementById("start-date").textContent = job.startDate;
-      document.getElementById("end-date").textContent = job.endDate;
+      document.getElementById("start-date").textContent = startDate.toISOString().split("T")[0];
+      document.getElementById("end-date").textContent = endDate.toISOString().split("T")[0];
       document.getElementById("client").textContent = job.client;
-      document.getElementById("rate").textContent = job.rate;
+      document.getElementById("rate").textContent = "$" + job.rate;
       document.getElementById("location").textContent = job.location;
       //document.getElementById("job-code").textContent = job.code || "N/A";
       //document.getElementById("hours-st").textContent = job.stHours;
