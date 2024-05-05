@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoicing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="./src/pages/invoice.js"></script>
+  </head>
+  <body class="bg-gray-800 text-gray-200 min-h-screen flex flex-col items-center justify-center">
+    <!-- Navbar Placeholder -->
+    <nav id="navbar-placeholder" class="bg-gray-700 w-full py-4 px-8 text-lg">
+      <span>Navbar</span>
+    </nav>
+
+    <div class="container mx-auto px-4">
+      <h1 class="text-3xl font-bold mb-6 text-center">Invoicing & Job Review</h1>
+      <div class="w-full max-w-lg">
+        <label for="job-dropdown" class="block text-lg font-medium text-gray-300">Select a Job:</label>
+        <select
+          id="job-dropdown"
+          class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md bg-gray-700 text-white"
+        >
+          <!-- Options will be dynamically filled -->
+        </select>
+      </div>
+
+      <div id="job-details" class="mt-6 w-full max-w-lg bg-gray-700 p-4 rounded-lg shadow-lg">
+        <h2 class="text-xl font-semibold mb-4">Job Details</h2>
+        <table class="table-auto w-full">
+          <tbody>
+            <tr>
+              <td class="py-2 px-4">Job Name:</td>
+              <td id="job-name"></td>
+            </tr>
+            <tr>
+              <td class="py-2 px-4">Start Date:</td>
+              <td id="start-date"></td>
+            </tr>
+            <tr>
+              <td class="py-2 px-4">End Date:</td>
+              <td id="end-date"></td>
+            </tr>
+            <tr>
+              <td class="py-2 px-4">Client:</td>
+              <td id="client"></td>
+            </tr>
+            <tr>
+              <td class="py-2 px-4">Rate:</td>
+              <td id="rate"></td>
+            </tr>
+            <tr>
+              <td class="py-2 px-4">Location:</td>
+              <td id="location"></td>
+            </tr>
+            <tr>
+              <td class="py-2 px-4">Job Code:</td>
+              <td id="job-code"></td>
+            </tr>
+            <tr>
+              <td class="py-2 px-4">Hours (ST):</td>
+              <td id="hours-st"></td>
+            </tr>
+            <tr>
+              <td class="py-2 px-4">Hours (OT):</td>
+              <td id="hours-ot"></td>
+            </tr>
+            <tr>
+              <td class="py-2 px-4">Hours (DT):</td>
+              <td id="hours-dt"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
