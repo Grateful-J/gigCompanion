@@ -40,7 +40,7 @@ document.getElementById("login-form").addEventListener("submit", async function 
     if (user.role === "admin") {
       window.location.href = "/admin";
     } else {
-      window.location.href = "/user";
+      window.location.href = "/profile";
     }
   } catch (error) {
     alert(error.message);
