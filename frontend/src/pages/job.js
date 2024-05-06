@@ -248,3 +248,12 @@ document.querySelector("#jobs-table").addEventListener("click", (event) => {
     editJob(id);
   }
 });
+
+// event listener for submit button to submit job if isEditing is false
+document.querySelector('button[type="submit"]').addEventListener("click", () => {
+  if (!isEditing) {
+    submitNewJob();
+  } else {
+    updateJob(editingJobID);
+  }
+});
