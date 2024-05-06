@@ -257,3 +257,43 @@ document.querySelector('button[type="submit"]').addEventListener("click", () => 
     updateJob(editingJobID);
   }
 });
+
+// Function to display previous jobs in table
+function displayPreviousJobs(jobs) {
+  const jobsContainer = document.querySelector("#previous-jobs-container");
+  jobsContainer.innerHTML = "";
+  jobs.forEach((job) => {
+    const jobRow = document.createElement("tr");
+    jobRow.innerHTML = `
+      <td class="p-2 border-b border-gray-600">${job.jobName}</td>
+      <td class="p-2 border-b border-gray-600">${job.client}</td>
+      <td class="p-2 border-b border-gray-600">${job.location}</td>
+      <td class="p-2 border-b border-gray-600">${job.startDate}</td>
+      <td class="p-2 border-b border-gray-600">${job.endDate}</td>
+      <td class="p-2 border-b border-gray-600">${job.showCode}</td>
+      <td class="p-2 border-b border-gray-600">${job.daysWorked}</td>
+      <td class="p-2 border-b border-gray-600">${job.rate}</td>
+      <td class="p-2 border-b border-gray-600">${job.isFreelance}</td>
+      <td class="p-2 border-b border-gray-600">${job.isLocal}</td>
+      <td class="p-2 border-b border-gray-600">
+        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full delete-btn" data-id="${job._id}">Delete</button>
+      </td> 
+      <td class="p-2 border-b border-gray-600">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full edit-btn" data-id="${job._id}">Edit</button>
+      </td>
+    `;
+    jobsContainer.appendChild(jobRow);
+  });
+}
+
+// event listener to display previous jobs
+document.querySelector("#previous-jobs-btn").addEventListener("click", async () => {
+  const response = await fetch(`${url}/jobs`);
+  const jobs = await response.json();
+  console.log(`Loading Previous Jobs: ${jobs}`);
+
+  const previousJobFormContainer = document.querySelector("#previous-jobs");
+  previousJobFormContainer.classList.remove("hidden");
+
+  displayPreviousJobs(jobs);
+});
