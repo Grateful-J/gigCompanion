@@ -40,7 +40,7 @@ function displayJobs(jobs) {
         <td class="border-b border-gray-200 p-2">${job.location}</td>
         <td class="border-b border-gray-200 p-2">${new Date(job.startDate).toLocaleDateString()}</td>
         <td class="border-b border-gray-200 p-2">${new Date(job.endDate).toLocaleDateString()}</td>
-        <td class="border-b border-gray-200 p-2">${job.jobCode}</td>
+        <td class="border-b border-gray-200 p-2">${job.showCode}</td>
         <td class="border-b border-gray-200 p-2">${daysWorked}</td>
         <td class="border-b border-gray-200 p-2">${job.rate}</td>
         <td class="border-b border-gray-200 p-2">${job.isFreelance ? "Yes" : "No"}</td>
@@ -75,7 +75,7 @@ async function addJob() {
   const location = document.querySelector("#location").value;
   const startDate = document.querySelector("#start-date").value;
   const endDate = document.querySelector("#end-date").value;
-  const jobCode = document.querySelector("#job-code").value;
+  const showCode = document.querySelector("#show-code").value;
   const rate = document.querySelector("#rate").value;
   const isFreelance = document.querySelector("#is-freelance").value;
   const isLocal = document.querySelector("#is-local").value;
@@ -85,7 +85,7 @@ async function addJob() {
     location,
     startDate,
     endDate,
-    jobCode,
+    showCode,
     rate,
     isFreelance,
     isLocal,
@@ -160,7 +160,7 @@ async function editJob(id) {
     document.querySelector("#location").value = job.location;
     document.querySelector("#start-date").value = isoFormattedStartDate;
     document.querySelector("#end-date").value = isoFormattedEndDate;
-    document.querySelector("#job-code").value = job.jobCode;
+    document.querySelector("#show-code").value = job.showCode;
     document.querySelector("#rate").value = job.rate;
     document.querySelector("#is-freelance").value = job.isFreelance;
     document.querySelector("#is-local").value = job.isLocal;
