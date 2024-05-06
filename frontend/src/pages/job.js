@@ -77,7 +77,7 @@ function clearJobForm() {
 }
 
 // Function to add job
-async function addJob() {
+async function submitNewJob() {
   const jobName = document.querySelector("#job-name").value;
   const client = document.querySelector("#client").value;
   const location = document.querySelector("#location").value;
@@ -139,9 +139,7 @@ async function deleteJob(id) {
 async function editJob(id) {
   let job = {};
   isEditing = true;
-  console.log(`Editing job: ${id}`);
-  console.log(`isEditing: ${isEditing}`);
-  editingJobID = id;
+
   // get job data
   try {
     const response = await fetch(`${url}/jobs/${id}`);
@@ -222,6 +220,7 @@ async function updateJob(id) {
   } finally {
     // Clear input fields
     clearJobForm();
+    isEditing = false;
   }
 }
 
