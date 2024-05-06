@@ -12,6 +12,16 @@ router.get("/", async (req, res) => {
   }
 });
 
+//GET single job
+router.get("/:id", async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.id);
+    res.status(200).json(job);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 //POST new job
 router.post("/", async (req, res) => {
   const newJob = new Job(req.body);
