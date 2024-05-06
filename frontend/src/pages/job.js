@@ -6,6 +6,8 @@ loadNavbar();
 
 //Fetches and displays jobs to job table
 let globalJobs;
+let isEditing = false;
+let editingJobID = "";
 
 //GET all jobs
 async function fetchJobs() {
@@ -68,6 +70,12 @@ function hideJobForm() {
   jobFormContainer.classList.add("hidden");
 }
 
+// Function to clear job form
+function clearJobForm() {
+  const jobForm = document.querySelector("#job-form");
+  jobForm.reset();
+}
+
 // Function to add job
 async function addJob() {
   const jobName = document.querySelector("#job-name").value;
@@ -105,15 +113,7 @@ async function addJob() {
     console.error("Failed to add job", error);
   } finally {
     // Clear input fields
-    document.querySelector("#job-name").value = "";
-    document.querySelector("#client").value = "";
-    document.querySelector("#location").value = "";
-    document.querySelector("#start-date").value = "";
-    document.querySelector("#end-date").value = "";
-    document.querySelector("#job-code").value = "";
-    document.querySelector("#rate").value = "";
-    document.querySelector("#is-freelance").value = "";
-    document.querySelector("#is-local").value = "";
+    clearJobForm();
 
     // Alert and Hide job form
     alert("Job added successfully: ");
@@ -138,6 +138,10 @@ async function deleteJob(id) {
 // Function to edit job
 async function editJob(id) {
   let job = {};
+  isEditing = true;
+  console.log(`Editing job: ${id}`);
+  console.log(`isEditing: ${isEditing}`);
+  editingJobID = id;
   // get job data
   try {
     const response = await fetch(`${url}/jobs/${id}`);
@@ -170,15 +174,59 @@ async function editJob(id) {
   const submitBtn = document.querySelector('button[type="submit"]');
   submitBtn.textContent = "Update Job";
 
+  // Add event listener to submit button
+  submitBtn.addEventListener("click", () => {
+    updateJob(id);
+    resetForm();
+  });
+
   // clear job variable
   job = {};
 }
 
+// Function to PATCH job
+async function updateJob(id) {
+  const jobName = document.querySelector("#job-name").value;
+  const client = document.querySelector("#client").value;
+  const location = document.querySelector("#location").value;
+  const startDate = document.querySelector("#start-date").value;
+  const endDate = document.querySelector("#end-date").value;
+  const showCode = document.querySelector("#show-code").value;
+  const rate = document.querySelector("#rate").value;
+  const isFreelance = document.querySelector("#is-freelance").value;
+  const isLocal = document.querySelector("#is-local").value;
+  const job = {
+    jobName,
+    client,
+    location,
+    startDate,
+    endDate,
+    showCode,
+    rate,
+    isFreelance,
+    isLocal,
+  };
+  try {
+    const response = await fetch(`${url}/jobs/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(job),
+    });
+    const data = await response.json();
+    console.log(data);
+    fetchJobs();
+  } catch (error) {
+    console.error("Failed to update job", error);
+  } finally {
+    // Clear input fields
+    clearJobForm();
+  }
+}
+
 // event listener for add job button to display add job form
 document.querySelector("#add-job-btn").addEventListener("click", displayJobForm);
-
-//event listener for submit button to add job
-document.querySelector("#job-form").addEventListener("submit", addJob);
 
 //event listener for delete button to delete job
 document.querySelector("#jobs-table").addEventListener("click", (event) => {
