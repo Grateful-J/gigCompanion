@@ -13,31 +13,73 @@
       <span>Navbar</span>
     </nav>
 
-    <!-- container that holds the main content -->
-    <div id="app" class="container mx-auto p-5 flex flex-row space-x-1 justify-center">
+    <!-- Container that holds the main content -->
+    <div class="container mx-auto p-5 flex flex-col space-y-4 justify-center">
       <h1 class="text-3xl font-bold mb-6 text-center">Crew Call: Show Site Organizer</h1>
 
       <!-- Div that contains a left side bar, a right side bar, and the main content -->
-      <div id="big-container" class="container mx-auto p-5 flex flex-row space-x-1 justify-center">
+      <div class="flex flex-row space-x-4 border border-white rounded justify-between">
         <!-- Left sidebar: Jobs list with dynamic dropdown -->
-        <div id="jobs"></div>
+        <div class="flex flex-col border border-white rounded-lg w-1/4">
+          <div class="mb-6">
+            <label for="job-dropdown" class="block text-lg font-medium text-gray-300">Select a Job:</label>
+            <select
+              id="job-dropdown"
+              class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md bg-gray-700 text-white"
+            >
+              <!-- Options will be dynamically filled -->
+            </select>
+          </div>
 
-        <!-- Main content: Timesheet with dynamic table -->
-        <div id="timesheet"></div>
+          <!-- Job Details -->
+          <div class="mt-6 bg-gray-700 p-4 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold mb-4">Job Details</h2>
+            <table class="table-auto w-full">
+              <tbody>
+                <!-- Ensure all tags are properly closed -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Middle Main content: Timesheet with dynamic table -->
+        <div class="flex flex-col">
+          <table class="table w-full border border-white text-gray-800 bg-gray-200">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Hours Worked</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Table rows will be dynamically filled -->
+            </tbody>
+          </table>
+        </div>
 
         <!-- Right sidebar: Show Notes for selected Job -->
-        <div id="notes"></div>
+        <div class="flex flex-col">
+          <table class="table w-full border border-gray-200 text-gray-800 bg-gray-200">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Table rows will be dynamically filled -->
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <!-- Left sidebar: Jobs list with dynamic dropdown -->
-
-      <!-- Main content: Timesheet with dynamic table -->
-
-      <!-- Right sidebar: Show Notes for selected Job -->
-
       <!-- Bottom Div below Main content: Form to upload expenses -->
-
-      <!-- Footer ??  -->
+      <div class="bg-gray-700 p-4 mt-4 rounded-lg shadow-lg">
+        <h2 class="text-xl font-semibold mb-4">Expenses</h2>
+        <!-- Form or content for expenses goes here -->
+      </div>
     </div>
   </body>
 </html>
