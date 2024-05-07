@@ -17,6 +17,8 @@ const jobSchema = new mongoose.Schema(
     straightTime: Number,
     overTime: Number,
     doubleTime: Number,
+    isSubmitted: { type: Boolean, default: false },
+    isInvoiced: { type: Boolean, default: false },
   },
 
   {
