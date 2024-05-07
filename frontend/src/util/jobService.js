@@ -5,11 +5,11 @@ const url = apiBaseUrl + "/api/timecards";
 //TODO: Add fetchJobs that only isSubmitted = true
 
 //Fetches All Jobs
-async function fetchJobs() {
+async function fetchAndPopulateJobs() {
   try {
     const response = await fetch(`${apiBaseUrl}/api/jobs`);
     const jobs = await response.json();
-    //displayAndPopulateJobsDropdown(jobs);
+    populateJobsDropdown(jobs);
   } catch (e) {
     console.error("Failed to fetch jobs", e);
     return []; //
@@ -69,7 +69,7 @@ async function deleteJob(job) {
   }
 }
 
-function displayAndPopulateJobsDropdown(jobs) {
+function populateJobsDropdown(jobs) {
   const select = document.getElementById("job-dropdown");
   jobs.forEach((job) => {
     const option = document.createElement("option");
@@ -118,4 +118,4 @@ async function editJob(jobId) {
     }
   } */
 
-export { fetchJobs, addJob, editJob, deleteJob, displayAndPopulateJobsDropdown };
+export { fetchAndPopulateJobs, addJob, editJob, deleteJob, populateJobsDropdown };
