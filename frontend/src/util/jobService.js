@@ -16,6 +16,18 @@ async function fetchAndPopulateJobs() {
   }
 }
 
+//Function to fetch single job
+export async function fetchJob(jobId) {
+  try {
+    const response = await fetch(`${apiBaseUrl}/api/jobs/${jobId}`);
+    const job = await response.json();
+    return job;
+  } catch (e) {
+    console.error("Failed to fetch job", e);
+    return null;
+  }
+}
+
 async function addJob(job) {
   try {
     const response = await fetch(`${apiBaseUrl}/api/jobs`, {
