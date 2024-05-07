@@ -1,10 +1,15 @@
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+const url = apiBaseUrl + "/api/timecards";
 
+//TODO: refactor exisiting code to import from this file
+//TODO: Add fetchJobs that only isSubmitted = true
+
+//Fetches All Jobs
 async function fetchJobs() {
   try {
     const response = await fetch(`${apiBaseUrl}/api/jobs`);
     const jobs = await response.json();
-    displayJobs(jobs);
+    //displayAndPopulateJobsDropdown(jobs);
   } catch (e) {
     console.error("Failed to fetch jobs", e);
     return []; //
@@ -63,6 +68,17 @@ async function deleteJob(job) {
     console.error("Failed to delete job", error);
   }
 }
+
+function displayAndPopulateJobsDropdown(jobs) {
+  const select = document.getElementById("job-dropdown");
+  jobs.forEach((job) => {
+    const option = document.createElement("option");
+    option.value = job._id;
+    option.textContent = job.jobName;
+    select.appendChild(option);
+  });
+}
+
 // commented out temp until get back to baseline with new changes
 
 /* //EDIT Job
@@ -102,4 +118,4 @@ async function editJob(jobId) {
     }
   } */
 
-export { fetchJobs, addJob, editJob, deleteJob };
+export { fetchJobs, addJob, editJob, deleteJob, displayAndPopulateJobsDropdown };
