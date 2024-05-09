@@ -13,23 +13,111 @@
       <span>Navbar</span>
     </nav>
 
-    <!-- container that holds the main content -->
-    <div id="app" class="container mx-auto p-5 flex flex-row space-x-1 justify-center">
+    <!-- Container that holds the main content -->
+    <div class="container mx-auto p-5 flex flex-col space-y-4 justify-center">
       <h1 class="text-3xl font-bold mb-6 text-center">Crew Call: Show Site Organizer</h1>
 
-      <!-- container that holds the main content -->
+      <!-- Div that contains a left side bar, a right side bar, and the main content -->
+      <div class="flex flex-row space-x-4 border border-white rounded justify-between">
+        <!-- Left sidebar: Jobs list with dynamic dropdown -->
+        <div class="flex flex-col border border-white rounded-lg w-1/4">
+          <div class="mb-6">
+            <label for="job-dropdown" class="block text-lg font-medium text-gray-300">Select a Job:</label>
+            <select
+              id="job-dropdown"
+              class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md bg-gray-700 text-white"
+            >
+              <!-- Options will be dynamically filled -->
+            </select>
+          </div>
+          <!-- Job Details -->
+          <div id="job-details" class="mt-6 w-full max-w-lg bg-gray-700 p-4 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold mb-4">Job Details</h2>
+            <table class="table-auto w-full">
+              <tbody>
+                <tr>
+                  <td class="py-2 px-4">Job Name:</td>
+                  <td id="job-name"></td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-4">Start Date:</td>
+                  <td id="start-date"></td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-4">End Date:</td>
+                  <td id="end-date"></td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-4">Client:</td>
+                  <td id="client"></td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-4">Rate:</td>
+                  <td id="rate"></td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-4">Location:</td>
+                  <td id="location"></td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-4">Job Code:</td>
+                  <td id="job-code"></td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-4">Hours (ST):</td>
+                  <td id="hours-st"></td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-4">Hours (OT):</td>
+                  <td id="hours-ot"></td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-4">Hours (DT):</td>
+                  <td id="hours-dt"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-      <!-- frontend/crewcall.html -->
+        <!-- Middle Main content: Timesheet with dynamic table -->
+        <div class="flex flex-col w-1/2 border border-blue-500">
+          <table id="timesheet-table" class="table w-full border border-white text-gray-800 bg-gray-200">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Hours Worked</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Table rows will be dynamically filled -->
+            </tbody>
+          </table>
+        </div>
 
-      <!-- frontend/crewcall.html -->
+        <!-- Right sidebar: Show Notes for selected Job -->
+        <div class="flex flex-col w-1/4 border border-green-500 rounded-lg">
+          <table class="table w-full text-gray-800 bg-gray-200">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Table rows will be dynamically filled -->
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-      <!-- frontend/crewcall.html -->
-
-      <!-- frontend/crewcall.html -->
-
-      <!-- frontend/crewcall.html -->
-
-      <!-- frontend/crewcall.html -->
+      <!-- Bottom Div below Main content: Form to upload expenses -->
+      <div class="bg-gray-700 p-4 mt-4 rounded-lg shadow-lg border-white">
+        <h2 class="text-xl font-semibold mb-4">Expenses</h2>
+        <!-- Form or content for expenses goes here -->
+      </div>
     </div>
   </body>
 </html>
