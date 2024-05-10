@@ -5,4 +5,7 @@ greenlock.d/
 *.d/*.json
 backend/greenlock.d/config.json
 
+certs/
+
+
 

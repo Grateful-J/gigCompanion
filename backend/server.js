@@ -51,38 +51,27 @@ app.use("/api/timecards", timeCardRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", userRoutes);
 
-// Serve static assets if in production
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
-});
+// Database connection
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => console.log("Connected to Database"))
+  .catch(() => console.log("Error: Connecting to Database"));
 
+// Setting up the HTTPS server in production
 if (process.env.NODE_ENV === "production") {
-  // Use Greenlock for HTTPS in production
-  const greenlock = require("greenlock-express").init({
-    packageRoot: __dirname,
-    configDir: "./greenlock.d",
-    maintainerEmail: process.env.DEV_EMAIL.toString(),
-    cluster: false,
-  });
+  const sslOptions = {
+    key: fs.readFileSync(path.join(__dirname, "path/to/your/private.key")),
+    cert: fs.readFileSync(path.join(__dirname, "path/to/your/certificate.crt")),
+  };
 
-  // Serves on 80 and 443
-  // Get's SSL certificates magically!
-  greenlock.serve(app);
+  const port = process.env.PORT || 443;
+  https.createServer(sslOptions, app).listen(port, () => {
+    console.log(`HTTPS Server running on port ${port}`);
+  });
 } else {
-  // In development, use regular HTTP
+  // HTTP server for development
   const port = process.env.PORT || 3000;
   app.listen(port, () => {
     console.log(`HTTP Server running on port ${port}`);
   });
 }
-// Connects to Mongo DB using secure credentials
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log("Connected to Database");
-  })
-
-  .catch(() => {
-    console.log("Error: Connecting to Database");
-  });
