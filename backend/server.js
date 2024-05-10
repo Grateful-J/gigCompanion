@@ -1,3 +1,5 @@
+"use strict";
+
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -56,28 +58,17 @@ app.listen(port, () => {
 });
 
 if (process.env.NODE_ENV === "production") {
-  // In production, use Greenlock for HTTPS
-  const greenlockExpress = require("@root/greenlock-express");
-  greenlockExpress
-    .create({
-      packageRoot: __dirname,
-      maintainerEmail: devEmail, // Let's Encrypt notifications
-      cluster: false,
-      configDir: "./greenlock.d",
-      packageAgent: "your-server-name/1.0.0",
-      notify: function (event, details) {
-        if ("error" === event) {
-          console.error(details);
-        }
-      },
-      sites: [
-        {
-          subject: prodOriginURL, // gigCompanion domain
-          //altnames: ["yourdomain.com", "www.yourdomain.com"], // Alternative DNS names
-        },
-      ],
-    })
-    .serve(app);
+  // Use Greenlock for HTTPS in production
+  const greenlock = require("greenlock-express").init({
+    packageRoot: __dirname,
+    configDir: "./greenlock.d",
+    maintainerEmail: process.env.DEV_EMAIL,
+    cluster: false,
+  });
+
+  // Serves on 80 and 443
+  // Get's SSL certificates magically!
+  greenlock.serve(app);
 } else {
   // In development, use regular HTTP
   const port = process.env.PORT || 3000;
@@ -85,7 +76,6 @@ if (process.env.NODE_ENV === "production") {
     console.log(`HTTP Server running on port ${port}`);
   });
 }
-
 // Connects to Mongo DB using secure credentials
 mongoose
   .connect(process.env.MONGODB_URI)
