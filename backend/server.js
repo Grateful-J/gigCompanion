@@ -16,6 +16,7 @@ const app = express();
 // Pulls production environment variables
 const prodOriginURL = process.env.ORIGIN_INDEX;
 const devOriginURL = "http://localhost:5173";
+const devEmail = process.env.DEV_EMAIL;
 
 // Enable CORS with credentials for HTTPS or HTTP based on the environment
 app.use(
@@ -60,7 +61,7 @@ if (process.env.NODE_ENV === "production") {
   greenlockExpress
     .create({
       packageRoot: __dirname,
-      maintainerEmail: "your-email@example.com", // Let's Encrypt notifications
+      maintainerEmail: devEmail, // Let's Encrypt notifications
       cluster: false,
       configDir: "./greenlock.d",
       packageAgent: "your-server-name/1.0.0",
@@ -71,8 +72,8 @@ if (process.env.NODE_ENV === "production") {
       },
       sites: [
         {
-          subject: prodOriginURL, // Your domain
-          //altnames: ["yourdomain.com", "www.yourdomain.com"], // Alternative names
+          subject: prodOriginURL, // gigCompanion domain
+          //altnames: ["yourdomain.com", "www.yourdomain.com"], // Alternative DNS names
         },
       ],
     })
