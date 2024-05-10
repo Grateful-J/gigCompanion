@@ -1,4 +1,8 @@
 node_modules/
 .env
 /client/node_modules/
+greenlock.d
+backend/*.d
+backend/greenlock.d/config.json
+
 
