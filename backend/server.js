@@ -13,15 +13,18 @@ const { adminAuth, userAuth } = require("./utils/auth");
 // Express app
 const app = express();
 
-//Enable CORS
+// Pulls production environment variables
+const prodOriginHTML = process.env.ORIGIN_INDEX;
+
+// Enable CORS with credentials for HTTPS or HTTP based on the environment
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://192.168.1.244:5173"],
-
+    origin: process.env.NODE_ENV === "production" ? [prodOriginHTML] : ["http://localhost:5173"],
     credentials: true,
   })
 );
 
+// Serve static assets
 app.use(express.static(path.join(__dirname, "public")));
 
 // Middle-ware for JSON in API
