@@ -14,12 +14,12 @@ const { adminAuth, userAuth } = require("./utils/auth");
 const app = express();
 
 // Pulls production environment variables
-const prodOriginHTML = process.env.ORIGIN_INDEX;
+const prodOriginURL = process.env.ORIGIN_INDEX;
 
 // Enable CORS with credentials for HTTPS or HTTP based on the environment
 app.use(
   cors({
-    origin: process.env.NODE_ENV === "production" ? [prodOriginHTML] : ["http://localhost:5173"],
+    origin: process.env.NODE_ENV === "production" ? [prodOriginURL] : ["http://localhost:5173"],
     credentials: true,
   })
 );
@@ -52,6 +52,37 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
+
+if (process.env.NODE_ENV === "production") {
+  // In production, use Greenlock for HTTPS
+  const greenlockExpress = require("@root/greenlock-express");
+  greenlockExpress
+    .create({
+      packageRoot: __dirname,
+      maintainerEmail: "your-email@example.com", // Let's Encrypt notifications
+      cluster: false,
+      configDir: "./greenlock.d",
+      packageAgent: "your-server-name/1.0.0",
+      notify: function (event, details) {
+        if ("error" === event) {
+          console.error(details);
+        }
+      },
+      sites: [
+        {
+          subject: prodOriginURL, // Your domain
+          //altnames: ["yourdomain.com", "www.yourdomain.com"], // Alternative names
+        },
+      ],
+    })
+    .serve(app);
+} else {
+  // In development, use regular HTTP
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => {
+    console.log(`HTTP Server running on port ${port}`);
+  });
+}
 
 // Connects to Mongo DB using secure credentials
 mongoose
