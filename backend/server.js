@@ -15,11 +15,12 @@ const app = express();
 
 // Pulls production environment variables
 const prodOriginURL = process.env.ORIGIN_INDEX;
+const devOriginURL = "http://localhost:5173";
 
 // Enable CORS with credentials for HTTPS or HTTP based on the environment
 app.use(
   cors({
-    origin: process.env.NODE_ENV === "production" ? [prodOriginURL] : ["http://localhost:5173"],
+    origin: process.env.NODE_ENV === "production" ? [prodOriginURL] : devOriginURL,
     credentials: true,
   })
 );
