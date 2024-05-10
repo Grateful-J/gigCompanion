@@ -1,3 +1,5 @@
+"use strict";
+
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -13,15 +15,20 @@ const { adminAuth, userAuth } = require("./utils/auth");
 // Express app
 const app = express();
 
-//Enable CORS
+// Pulls production environment variables
+const prodOriginURL = process.env.ORIGIN_INDEX;
+const devOriginURL = "http://localhost:5173";
+const devEmail = process.env.DEV_EMAIL;
+
+// Enable CORS with credentials for HTTPS or HTTP based on the environment
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://192.168.1.244:5173"],
-
+    origin: process.env.NODE_ENV === "production" ? [prodOriginURL] : devOriginURL,
     credentials: true,
   })
 );
 
+// Serve static assets
 app.use(express.static(path.join(__dirname, "public")));
 
 // Middle-ware for JSON in API
@@ -50,6 +57,25 @@ app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
 
+if (process.env.NODE_ENV === "production") {
+  // Use Greenlock for HTTPS in production
+  const greenlock = require("greenlock-express").init({
+    packageRoot: __dirname,
+    configDir: "./greenlock.d",
+    maintainerEmail: process.env.DEV_EMAIL.toString(),
+    cluster: false,
+  });
+
+  // Serves on 80 and 443
+  // Get's SSL certificates magically!
+  greenlock.serve(app);
+} else {
+  // In development, use regular HTTP
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => {
+    console.log(`HTTP Server running on port ${port}`);
+  });
+}
 // Connects to Mongo DB using secure credentials
 mongoose
   .connect(process.env.MONGODB_URI)
