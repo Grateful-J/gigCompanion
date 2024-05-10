@@ -14,14 +14,5 @@
     "serverKeyType": "RSA-2048",
     "subscriberEmail": "mrdj863@gmail.com"
   },
-  "sites": [
-    {
-      "subject": "gigcompanion.duckdns.org",
-      "altnames": [
-        "gigcompanion.duckdns.org",
-        "www.gigcompanion.duckdns.org"
-      ],
-      "renewAt": 1
-    }
-  ]
+  "sites": []
 }

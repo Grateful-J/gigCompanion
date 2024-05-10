@@ -62,7 +62,7 @@ if (process.env.NODE_ENV === "production") {
   const greenlock = require("greenlock-express").init({
     packageRoot: __dirname,
     configDir: "./greenlock.d",
-    maintainerEmail: process.env.DEV_EMAIL,
+    maintainerEmail: process.env.DEV_EMAIL.toString(),
     cluster: false,
   });
 
