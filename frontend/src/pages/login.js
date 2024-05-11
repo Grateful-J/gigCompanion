@@ -1,5 +1,4 @@
 let apiBaseUrl;
-const url = apiBaseUrl + "/api";
 import { loadNavbar } from "../components/navbar.js";
 loadNavbar();
 
@@ -24,7 +23,7 @@ document.getElementById("login-form").addEventListener("submit", async function 
   const username = document.getElementById("login-username").value;
   const password = document.getElementById("login-password").value;
   try {
-    const response = await fetch(`${url}/auth/login`, {
+    const response = await fetch(`${apiBaseUrl}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -61,7 +60,7 @@ document.getElementById("signup-form").addEventListener("submit", async function
   const username = document.getElementById("signup-username").value;
   const password = document.getElementById("signup-password").value;
   try {
-    const response = await fetch(`${url}/auth/register`, {
+    const response = await fetch(`${apiBaseUrl}/api/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

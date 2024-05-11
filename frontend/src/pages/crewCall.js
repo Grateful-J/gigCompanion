@@ -1,5 +1,4 @@
 let apiBaseUrl;
-const url = apiBaseUrl + "/api/timecards";
 import { loadNavbar } from "../components/navbar.js";
 import { fetchAndPopulateJobs, populateJobsDropdown, fetchJob } from "../util/jobService.js";
 loadNavbar();

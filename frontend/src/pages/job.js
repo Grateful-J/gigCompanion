@@ -1,5 +1,4 @@
 let apiBaseUrl;
-const url = apiBaseUrl + "/api";
 import { loadNavbar } from "../components/navbar.js";
 loadNavbar();
 
@@ -107,7 +106,7 @@ async function submitNewJob() {
     isLocal,
   };
   try {
-    const response = await fetch(`${url}/jobs`, {
+    const response = await fetch(`${apiBaseUrl}/api/jobs`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -132,7 +131,7 @@ async function submitNewJob() {
 // Function to delete job
 async function deleteJob(id) {
   try {
-    const response = await fetch(`${url}/jobs/${id}`, {
+    const response = await fetch(`${apiBaseUrl}/api/jobs/${id}`, {
       method: "DELETE",
     });
     const data = await response.json();
@@ -150,7 +149,7 @@ async function editJob(id) {
 
   // get job data
   try {
-    const response = await fetch(`${url}/jobs/${id}`);
+    const response = await fetch(`${apiBaseUrl}/api/jobs/${id}`);
     job = await response.json();
     console.log(job);
   } catch (error) {
@@ -213,7 +212,7 @@ async function updateJob(id) {
     isLocal,
   };
   try {
-    const response = await fetch(`${url}/jobs/${id}`, {
+    const response = await fetch(`${apiBaseUrl}/api/jobs/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
