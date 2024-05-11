@@ -100,7 +100,7 @@ function displayTimecards(timecards) {
       const row = document.createElement("tr");
       row.innerHTML = `
         <td><input type="checkbox" class="submit-checkbox" data-id="${timecard._id}"></td>
-        <td class="border-b border-gray-200 p-2">${timecard.description}</td>
+        <td class="border-b border-gray-100 p-2">${timecard.description}</td>
         <td class="border-b border-gray-200 p-2">${formatTime(clockInTime)}</td>
         <td class="border-b border-gray-200 p-2">${clockOutTime}</td>
         <td class="border-b border-gray-200 p-2">${totalDuration}</td>
