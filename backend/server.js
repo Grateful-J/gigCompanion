@@ -1,6 +1,8 @@
-"use strict";
+//"use strict";
 
 const express = require("express");
+const https = require("https");
+const fs = require("fs");
 const cors = require("cors");
 const path = require("path");
 const mongoose = require("mongoose");
@@ -59,9 +61,13 @@ mongoose
 
 // Setting up the HTTPS server in production
 if (process.env.NODE_ENV === "production") {
+  //Stores cert and key files directory
+  const keyLocation = process.env.HTTPS_KEY_LOCATION;
+  const certLocation = process.env.HTTPS_CERT_LOCATION;
+
   const sslOptions = {
-    key: fs.readFileSync(path.join(__dirname, "path/to/your/private.key")),
-    cert: fs.readFileSync(path.join(__dirname, "path/to/your/certificate.crt")),
+    key: fs.readFileSync(path.join(__dirname, keyLocation)),
+    cert: fs.readFileSync(path.join(__dirname, certLocation)),
   };
 
   const port = process.env.PORT || 443;
