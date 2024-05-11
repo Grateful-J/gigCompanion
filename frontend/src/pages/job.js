@@ -1,15 +1,16 @@
-import "/style.css";
 let apiBaseUrl;
 const url = apiBaseUrl + "/api";
 import { loadNavbar } from "../components/navbar.js";
 loadNavbar();
 
 //checks if env is dev or prod
-if (import.meta.env.MODE === "development") {
+if (import.meta.env.VITE_MODE === "dev") {
   apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 } else {
   apiBaseUrl = import.meta.env.VITE_API_BASE_URL_PROD;
 }
+
+console.log("API Base URL:", apiBaseUrl);
 
 //Fetches and displays jobs to job table
 let globalJobs;
@@ -19,7 +20,7 @@ let editingJobID = "";
 //GET all jobs
 async function fetchJobs() {
   try {
-    const response = await fetch(`${url}/jobs`);
+    const response = await fetch(`${url}jobs`);
     const jobs = await response.json();
     globalJobs = jobs; //update global variable
     console.log(`fetched jobs: ${globalJobs[0]}`);
