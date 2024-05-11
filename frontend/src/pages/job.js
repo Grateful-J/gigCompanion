@@ -69,6 +69,7 @@ function displayJobs(jobs) {
 function displayJobForm() {
   const jobFormContainer = document.querySelector("#job-form-container");
   jobFormContainer.classList.remove("hidden");
+  window.scrollTo(0, 0);
 }
 
 // Function to hide job form
