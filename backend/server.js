@@ -30,9 +30,6 @@ app.use(
   })
 );
 
-// Serve static assets
-app.use(express.static(path.join(__dirname, "public")));
-
 // Middle-ware for JSON in API
 app.use(express.json());
 app.use(cookieParser());
@@ -81,3 +78,6 @@ if (process.env.NODE_ENV === "production") {
     console.log(`HTTP Server running on port ${port}`);
   });
 }
+
+// Serve static assets for production
+//app.use(express.static(path.join(__dirname, "public")));
