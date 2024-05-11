@@ -1,9 +1,16 @@
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+let apiBaseUrl;
 const url = apiBaseUrl + "/api/timecards";
 import { loadNavbar } from "../components/navbar.js";
 import { fetchAndPopulateJobs, populateJobsDropdown, fetchJob } from "../util/jobService.js";
 loadNavbar();
 fetchAndPopulateJobs();
+
+//checks if env is dev or prod
+if (import.meta.env.MODE === "development") {
+  apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+} else {
+  apiBaseUrl = import.meta.env.VITE_API_BASE_URL_PROD;
+}
 
 // Event listener for job dropdown
 const jobDropdown = document.getElementById("job-dropdown");
