@@ -1,19 +1,24 @@
 const mongoose = require("mongoose");
 
-const showDayEntries = new mongoose.Schema({
-  date: Date,
-  clockIn: Date,
-  breakTime: Number,
-  clockOut: Date,
-  description: String,
-  totalHours: Number,
-  totalMinutes: Number,
-  duration: String,
-  isSubmitted: { type: Boolean, default: false },
-  straightTime: Number,
-  overTime: Number,
-  doubleTime: Number,
-});
+const showDayEntries = new mongoose.Schema(
+  {
+    date: Date,
+    clockIn: Date,
+    breakTime: Number,
+    clockOut: Date,
+    description: String,
+    totalHours: Number,
+    totalMinutes: Number,
+    duration: String,
+    isSubmitted: { type: Boolean, default: false },
+    straightTime: Number,
+    overTime: Number,
+    doubleTime: Number,
+  },
+  {
+    timestamps: true,
+  }
+);
 
 const timecardSchema = new mongoose.Schema(
   {
