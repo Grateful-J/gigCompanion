@@ -8,10 +8,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="module" src="./src/pages/locationTracker.js"></script>
   </head>
-  <body class="bg-gray-700 text-gray-200">
-    <div id="app" class="w-full max-w-6xl">
-      <div id="navbar-placeholder" class="bg-gray-800 py-4 mb-4 rounded-lg shadow-lg text-lg text-center">Navbar</div>
+  <body class="bg-gray-800 min-h-screen flex flex-col text-gray-200 ">
+    <!-- Navbar Placeholder -->
+    <nav id="navbar-placeholder" class="bg-gray-700 w-full py-4 px-8 text-lg">
+      <span>Navbar</span>
+    </nav>
 
+    <div id="app" class="p-20">
       <div id="day-count" class="flex flex-col sm:flex-row justify-around items-center p-4 text-2xl mb-8 space-y-4 sm:space-y-0">
         <div class="border-2 border-gray-200 rounded-lg p-4 bg-gray-800">
           <div id="rtw-counter">Right to Work Days: 00</div>
@@ -74,5 +77,6 @@
         </table>
       </div>
     </div>
+  </div>
   </body>
 </html>

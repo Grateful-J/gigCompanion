@@ -1,9 +1,14 @@
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+let apiBaseUrl;
 const url = apiBaseUrl + "/api/timecards";
 import { loadNavbar } from "../components/navbar.js";
 loadNavbar();
 
-//TODO: Find out why navbar is not working
+//checks if env is dev or prod
+if (import.meta.env.VITE_MODE === "dev") {
+  apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+} else {
+  apiBaseUrl = import.meta.env.VITE_API_BASE_URL_PROD;
+}
 
 //Global variables
 let isEditing;
@@ -95,7 +100,7 @@ function displayTimecards(timecards) {
       const row = document.createElement("tr");
       row.innerHTML = `
         <td><input type="checkbox" class="submit-checkbox" data-id="${timecard._id}"></td>
-        <td class="border-b border-gray-200 p-2">${timecard.description}</td>
+        <td class="border-b border-gray-100 p-2">${timecard.description}</td>
         <td class="border-b border-gray-200 p-2">${formatTime(clockInTime)}</td>
         <td class="border-b border-gray-200 p-2">${clockOutTime}</td>
         <td class="border-b border-gray-200 p-2">${totalDuration}</td>

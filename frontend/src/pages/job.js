@@ -1,8 +1,15 @@
-import "/style.css";
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-const url = apiBaseUrl + "/api";
+let apiBaseUrl;
 import { loadNavbar } from "../components/navbar.js";
 loadNavbar();
+
+//checks if env is dev or prod
+if (import.meta.env.VITE_MODE === "dev") {
+  apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+} else {
+  apiBaseUrl = import.meta.env.VITE_API_BASE_URL_PROD;
+}
+
+console.log("API Base URL:", apiBaseUrl);
 
 //Fetches and displays jobs to job table
 let globalJobs;
@@ -12,7 +19,7 @@ let editingJobID = "";
 //GET all jobs
 async function fetchJobs() {
   try {
-    const response = await fetch(`${url}/jobs`);
+    const response = await fetch(`${apiBaseUrl}/api/jobs`);
     const jobs = await response.json();
     globalJobs = jobs; //update global variable
     console.log(`fetched jobs: ${globalJobs[0]}`);
@@ -62,6 +69,7 @@ function displayJobs(jobs) {
 function displayJobForm() {
   const jobFormContainer = document.querySelector("#job-form-container");
   jobFormContainer.classList.remove("hidden");
+  window.scrollTo(0, 0);
 }
 
 // Function to hide job form
@@ -99,7 +107,7 @@ async function submitNewJob() {
     isLocal,
   };
   try {
-    const response = await fetch(`${url}/jobs`, {
+    const response = await fetch(`${apiBaseUrl}/api/jobs`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -124,7 +132,7 @@ async function submitNewJob() {
 // Function to delete job
 async function deleteJob(id) {
   try {
-    const response = await fetch(`${url}/jobs/${id}`, {
+    const response = await fetch(`${apiBaseUrl}/api/jobs/${id}`, {
       method: "DELETE",
     });
     const data = await response.json();
@@ -139,10 +147,11 @@ async function deleteJob(id) {
 async function editJob(id) {
   let job = {};
   isEditing = true;
+  editingJobID = id; // Make sure this is correctly assigned
 
   // get job data
   try {
-    const response = await fetch(`${url}/jobs/${id}`);
+    const response = await fetch(`${apiBaseUrl}/api/jobs/${id}`);
     job = await response.json();
     console.log(job);
   } catch (error) {
@@ -205,7 +214,7 @@ async function updateJob(id) {
     isLocal,
   };
   try {
-    const response = await fetch(`${url}/jobs/${id}`, {
+    const response = await fetch(`${apiBaseUrl}/api/jobs/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

@@ -1,12 +1,17 @@
-import "/style.css";
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-const url = apiBaseUrl + "/api";
+let apiBaseUrl;
 import { loadNavbar } from "../components/navbar.js";
 loadNavbar();
 
+//checks if env is dev or prod
+if (import.meta.env.VITE_MODE === "dev") {
+  apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+} else {
+  apiBaseUrl = import.meta.env.VITE_API_BASE_URL_PROD;
+}
+
 // Example of loading jobs into the dropdown
 const loadJobs = function () {
-  fetch(url + "/jobs") // Your API endpoint to fetch jobs
+  fetch(`${apiBaseUrl}/api/jobs`)
     .then((response) => response.json())
     .then((jobs) => {
       const select = document.getElementById("job-dropdown");
@@ -28,7 +33,7 @@ document.getElementById("job-dropdown").addEventListener("change", function () {
   let startDate = new Date();
   let endDate = new Date();
   console.log(`Selected job ID: ${selectedJobId}`);
-  fetch(`${url}/jobs/${selectedJobId}`)
+  fetch(`${apiBaseUrl}/api/jobs/${selectedJobId}`)
     .then((response) => response.json())
     .then((job) => {
       startDate = new Date(job.startDate);

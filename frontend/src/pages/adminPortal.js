@@ -1,7 +1,13 @@
-import "/style.css";
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+let apiBaseUrl;
 import { loadNavbar } from "../components/navbar.js";
 loadNavbar();
+
+//checks if env is dev or prod
+if (import.meta.env.VITE_MODE === "dev") {
+  apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+} else {
+  apiBaseUrl = import.meta.env.VITE_API_BASE_URL_PROD;
+}
 
 // Function to Fetch Users and Dynamically fill table users-table
 async function fetchUsers() {

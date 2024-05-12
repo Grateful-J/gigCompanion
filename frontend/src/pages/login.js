@@ -1,8 +1,13 @@
-//import "/style.css";
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-const url = apiBaseUrl + "/api";
+let apiBaseUrl;
 import { loadNavbar } from "../components/navbar.js";
 loadNavbar();
+
+//checks if env is dev or prod
+if (import.meta.env.VITE_MODE === "dev") {
+  apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+} else {
+  apiBaseUrl = import.meta.env.VITE_API_BASE_URL_PROD;
+}
 
 // Function to reset inputs
 function resetForm() {
@@ -18,7 +23,7 @@ document.getElementById("login-form").addEventListener("submit", async function 
   const username = document.getElementById("login-username").value;
   const password = document.getElementById("login-password").value;
   try {
-    const response = await fetch(`${url}/auth/login`, {
+    const response = await fetch(`${apiBaseUrl}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -55,7 +60,7 @@ document.getElementById("signup-form").addEventListener("submit", async function
   const username = document.getElementById("signup-username").value;
   const password = document.getElementById("signup-password").value;
   try {
-    const response = await fetch(`${url}/auth/register`, {
+    const response = await fetch(`${apiBaseUrl}/api/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
