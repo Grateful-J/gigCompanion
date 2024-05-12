@@ -45,3 +45,8 @@ function populateJobDetails(job) {
   hoursOt.textContent = job.hoursOt;
   hoursDt.textContent = job.hoursDt;
 }
+
+// TIME CARD
+// DATE/ START TIME/ END TIME/ HOURS WORKED
+
+//

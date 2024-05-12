@@ -147,6 +147,7 @@ async function deleteJob(id) {
 async function editJob(id) {
   let job = {};
   isEditing = true;
+  editingJobID = id; // Make sure this is correctly assigned
 
   // get job data
   try {
