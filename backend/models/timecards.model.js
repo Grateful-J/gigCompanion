@@ -11,6 +11,7 @@ const timecardSchema = new mongoose.Schema(
     isSubmitted: { type: Boolean, default: false },
     dateSubmited: Date,
     submissionBatchID: String,
+    jobID: String,
   },
 
   {
