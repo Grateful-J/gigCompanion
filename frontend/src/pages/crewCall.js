@@ -36,20 +36,21 @@ jobDropdown.addEventListener("change", () => {
       addTimecardFlex(job);
 
       // Add global timecard if one does not exist
-      addGlobalTimecard();
+      addGlobalTimecard(job);
     });
   }
 });
 
 // Function to add POST a new global timecard if one does not exist
-function addGlobalTimecard() {
+function addGlobalTimecard(job) {
   fetch(`${apiBaseUrl}/api/timecards`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      job: jobDropdown.value,
+      jobID: job._id,
+      description: job.jobName,
       startDate: new Date(),
       endDate: new Date(),
       duration: duration,
