@@ -68,13 +68,19 @@ function addTimecardRows(job) {
     const formattedDate = new Date(rowDate).toLocaleDateString();
 
     // set class for each row to allow padding and empty space bewtween each row
-
     date.classList.add("py-2", "px-4");
 
     // TODO: set date to MM/DD/YYYY with no TIME
     date.innerHTML = formattedDate;
 
+    // TODO: find library to make proper HASH of rowID
+    const jobId = job._id;
+    const hashDate = formattedDate.replace(/\//g, "-");
+    const rowNumber = i + 1;
+    const rowId = `${jobId}-${hashDate}-${rowNumber}`;
+
     const row = document.createElement("tr");
+    row.setAttribute("id", rowId);
     const startTime = document.createElement("td");
     const endTime = document.createElement("td");
     const hoursWorked = document.createElement("td");
@@ -97,6 +103,7 @@ function addTimecardRows(job) {
     row.appendChild(hoursWorked);
     row.appendChild(confirm);
     table.appendChild(row);
+    console.log(`Row ${i + 1} added to table with ID: ${rowId}`);
   }
 }
 
