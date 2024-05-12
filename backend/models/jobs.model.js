@@ -29,13 +29,21 @@ const jobSchema = new mongoose.Schema(
 function calculateDuration(startDate, endDate) {
   const start = new Date(startDate);
   const end = new Date(endDate);
-  const duration = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+  const duration = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
   console.log("Calculated Duration:", duration);
   return duration;
 }
 
 function calculateTravelDays(isLocal, duration) {
-  const travelDays = isLocal ? 0 : Math.max(0, duration - 2);
+  // if not local, return 0 else calculate travel days
+  // travel days = duration - 2 if duration >=2
+  if (!isLocal) {
+    return 0;
+  } else if (duration >= 2) {
+    return 2;
+  } else {
+    return 0;
+  }
   console.log("Calculated Travel Days:", travelDays);
   return travelDays;
 }
