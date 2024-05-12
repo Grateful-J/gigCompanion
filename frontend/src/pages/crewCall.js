@@ -63,9 +63,13 @@ function addTimecardRows(job) {
   const baseDate = new Date(job.startDate);
   for (let i = 0; i < duration; i++) {
     //dynamically add date based off of start date
-    baseDate.setDate(baseDate.getDate() + 1);
-
+    const rowDate = baseDate.setDate(baseDate.getDate() + 1);
     const date = document.createElement("td");
+    const formattedDate = new Date(rowDate).toLocaleDateString();
+
+    // TODO: set date to MM/DD/YYYY with no TIME
+    date.innerHTML = formattedDate;
+
     const startTime = document.createElement("td");
     const endTime = document.createElement("td");
     const hoursWorked = document.createElement("td");
