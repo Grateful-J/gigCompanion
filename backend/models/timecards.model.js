@@ -48,6 +48,8 @@ function calculateDuration(clockIn, clockOut) {
   return duration;
 }
 
+//
+
 const Timecard = mongoose.model("Timecard", timecardSchema);
 
 module.exports = Timecard;

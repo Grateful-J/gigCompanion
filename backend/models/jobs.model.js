@@ -76,12 +76,14 @@ function calculateFields(doc, update) {
   }
 }
 
+// Pre-save hook: updates the 'duration' and 'travelDays' fields on "save"
 jobSchema.pre("save", function (next) {
   console.log("Pre-save: Starting to calculate fields for save operation.");
   calculateFields(this, this);
   next();
 });
 
+// Pre-findOneAndUpdate hook: Ensure _update and update are correctly referenced
 jobSchema.pre("findOneAndUpdate", function (next) {
   console.log("Pre-findOneAndUpdate: Starting to calculate fields for update operation.");
   const update = this.getUpdate();
