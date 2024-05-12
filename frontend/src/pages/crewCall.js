@@ -39,6 +39,13 @@ jobDropdown.addEventListener("change", () => {
 
 // Populate Job details with selected job
 function populateJobDetails(job) {
+  // Variables to Store Start & Stop Dates (formatted)
+  const initStartDate = new Date(job.startDate);
+  const initEndDate = new Date(job.endDate);
+  const formattedISOStart = initStartDate.toISOString().slice(0, 10);
+  const formattedISOStop = initEndDate.toISOString().slice(0, 10);
+
+  // Populate job details
   const jobName = document.getElementById("job-name");
   const startDate = document.getElementById("start-date");
   const endDate = document.getElementById("end-date");
@@ -50,8 +57,8 @@ function populateJobDetails(job) {
   const hoursOt = document.getElementById("hours-ot");
   const hoursDt = document.getElementById("hours-dt");
   jobName.textContent = job.jobName;
-  startDate.textContent = job.startDate;
-  endDate.textContent = job.endDate;
+  startDate.textContent = formattedISOStart;
+  endDate.textContent = formattedISOStop;
   client.textContent = job.client;
   rate.textContent = job.rate;
   location.textContent = job.location;
