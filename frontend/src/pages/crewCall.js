@@ -70,10 +70,11 @@ function addTimecardRows(job) {
     // TODO: set date to MM/DD/YYYY with no TIME
     date.innerHTML = formattedDate;
 
+    const row = document.createElement("tr");
     const startTime = document.createElement("td");
     const endTime = document.createElement("td");
     const hoursWorked = document.createElement("td");
-    const row = document.createElement("tr");
+    const confirm = document.createElement("td");
     date.innerHTML = baseDate;
 
     // add field inputs for start and end time
@@ -83,10 +84,24 @@ function addTimecardRows(job) {
     // calculate hours worked
     hoursWorked.innerHTML = '<input type="number" class="w-full border border-gray-300 rounded px-2 py-1" name="hours-worked" id="hours-worked">';
 
+    // add a buttun labeled "Confirm"
+    confirm.innerHTML = '<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Confirm</button>';
+
     row.appendChild(date);
     row.appendChild(startTime);
     row.appendChild(endTime);
     row.appendChild(hoursWorked);
+    row.appendChild(confirm);
     table.appendChild(row);
   }
 }
+
+//TODO: on Confirm /hide confirm button until edit
+
+// TODO: Add notes
+
+// TODO: Add Expenses
+
+// TODO: add calculate hours fuction (maybe in API instead)
+
+// TODO: add PATCH to update timecard entries
