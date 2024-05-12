@@ -67,6 +67,10 @@ function addTimecardRows(job) {
     const date = document.createElement("td");
     const formattedDate = new Date(rowDate).toLocaleDateString();
 
+    // set class for each row to allow padding and empty space bewtween each row
+
+    date.classList.add("py-2", "px-4");
+
     // TODO: set date to MM/DD/YYYY with no TIME
     date.innerHTML = formattedDate;
 
