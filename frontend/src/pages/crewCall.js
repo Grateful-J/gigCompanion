@@ -24,6 +24,14 @@ jobDropdown.addEventListener("change", () => {
       populateJobDetails(job);
       duration = job.duration;
       travelDays = job.travelDays;
+
+      // Clear existing <tr> elements
+      const timecardTable = document.getElementById("timesheet-table-body");
+      while (timecardTable.firstChild) {
+        timecardTable.removeChild(timecardTable.firstChild);
+      }
+
+      // Add timecard rows based on selected job
       addTimecardRows(job);
     });
   }
