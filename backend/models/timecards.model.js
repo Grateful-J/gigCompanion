@@ -40,6 +40,7 @@ const timecardSchema = new mongoose.Schema(
   }
 );
 
+// Function to calculate duration
 function calculateDuration(clockIn, clockOut) {
   const start = new Date(clockIn);
   const end = new Date(clockOut);
@@ -48,7 +49,24 @@ function calculateDuration(clockIn, clockOut) {
   return duration;
 }
 
-//
+// Pre-save hook to calculate duration
+timecardSchema.pre("save", function (next) {
+  const clockIn = this.clockIn;
+  const clockOut = this.clockOut;
+  const duration = calculateDuration(clockIn, clockOut);
+  this.duration = duration;
+  next();
+});
+
+// TODO: Find out if this will work with the nested showDayEntries model
+// pre-findOneAndUpdate hook to calculate duration
+timecardSchema.pre("findOneAndUpdate", function (next) {
+  const clockIn = this._update.clockIn;
+  const clockOut = this._update.clockOut;
+  const duration = calculateDuration(clockIn, clockOut);
+  this._update.duration = duration;
+  next();
+});
 
 const Timecard = mongoose.model("Timecard", timecardSchema);
 
