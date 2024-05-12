@@ -33,6 +33,7 @@ jobDropdown.addEventListener("change", () => {
 
       // Add timecard rows based on selected job
       addTimecardRows(job);
+      addTimecardFlex(job);
     });
   }
 });
@@ -128,6 +129,117 @@ function addTimecardRows(job) {
     row.appendChild(confirm);
     table.appendChild(row);
     console.log(`Row ${i + 1} added to table with ID: ${rowId}`);
+  }
+}
+
+// addTimecardFlex
+// Dynamically add timecard rows based on the job duration into a flexbox container
+function addTimecardFlex(job) {
+  // Assuming the container is a div with id="timesheet-flexbox"
+  const container = document.getElementById("timesheet-flexbox");
+
+  // Create the header row
+  const header = document.createElement("div");
+  header.classList.add(
+    "flex",
+    "flex-row",
+    "items-center",
+    "justify-between",
+    "text-gray-800",
+    "px-4",
+    "py-2",
+    "border-b",
+    "border-gray-400",
+    "font-bold",
+    "bg-gray-100"
+  );
+
+  // Add headers for each column
+  const headerDayOfWeek = document.createElement("div");
+  headerDayOfWeek.innerHTML = "Day of Week";
+  headerDayOfWeek.classList.add("flex-1", "text-center");
+
+  const headerDate = document.createElement("div");
+  headerDate.innerHTML = "Date";
+  headerDate.classList.add("flex-1", "text-center");
+
+  const headerStartTime = document.createElement("div");
+  headerStartTime.innerHTML = "Start Time";
+  headerStartTime.classList.add("flex-1", "text-center");
+
+  const headerEndTime = document.createElement("div");
+  headerEndTime.innerHTML = "End Time";
+  headerEndTime.classList.add("flex-1", "text-center");
+
+  const headerHoursWorked = document.createElement("div");
+  headerHoursWorked.innerHTML = "Hours Worked";
+  headerHoursWorked.classList.add("flex-1", "text-center");
+
+  const headerConfirm = document.createElement("div");
+  headerConfirm.innerHTML = "Confirm";
+  headerConfirm.classList.add("flex-1", "text-center");
+
+  // Append headers to the header row
+  header.appendChild(headerDayOfWeek);
+  header.appendChild(headerDate);
+  header.appendChild(headerStartTime);
+  header.appendChild(headerEndTime);
+  header.appendChild(headerHoursWorked);
+  header.appendChild(headerConfirm);
+
+  // Add the header row to the container
+  container.appendChild(header);
+
+  const baseDate = new Date(job.startDate);
+
+  for (let i = 0; i < job.duration; i++) {
+    const rowDate = baseDate.setDate(baseDate.getDate() + 1);
+    const initDate = new Date(rowDate);
+    const formattedDate = initDate.toISOString().split("T")[0];
+    console.log(formattedDate);
+
+    const row = document.createElement("div");
+    row.classList.add("flex", "flex-row", "items-center", "justify-between", "p-4", "border", "border-gray-300", "mb-2");
+
+    const dateDiv = document.createElement("div");
+    dateDiv.innerHTML = `<span class="block p-2">${formattedDate}</span>`;
+    dateDiv.classList.add("flex-1");
+
+    const jobId = job._id;
+    const hashDate = formattedDate.replace(/\//g, "-");
+    const rowNumber = i + 1;
+    const rowId = `${jobId}-${hashDate}-${rowNumber}`;
+    row.setAttribute("id", rowId);
+
+    const dayOfWeek = document.createElement("div");
+    dayOfWeek.innerHTML = `<p class="block p-2">${initDate.toLocaleDateString("en-US", { weekday: "long" })}</p>`;
+    dayOfWeek.classList.add("flex-1");
+
+    const startTime = document.createElement("div");
+    startTime.innerHTML = '<input type="time" class="w-full border border-gray-300 rounded px-2 py-1 text-gray-600" name="start-time">';
+    startTime.classList.add("flex-1");
+
+    const endTime = document.createElement("div");
+    endTime.innerHTML = '<input type="time" class="w-full border border-gray-300 rounded px-2 py-1 text-gray-600" name="end-time">';
+    endTime.classList.add("flex-1");
+
+    const hoursWorked = document.createElement("div");
+    hoursWorked.innerHTML = '<input type="number" class="w-full border border-gray-300 rounded px-2 py-1 text-gray-600" name="hours-worked">';
+    hoursWorked.classList.add("flex-1");
+
+    const confirm = document.createElement("div");
+    confirm.innerHTML = '<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Confirm</button>';
+    confirm.classList.add("flex-1");
+
+    row.appendChild(dayOfWeek);
+    row.appendChild(dateDiv);
+    row.appendChild(startTime);
+    row.appendChild(endTime);
+    row.appendChild(hoursWorked);
+    row.appendChild(confirm);
+
+    container.appendChild(row);
+    console.log(`Row ${i + 1} added to flexbox with ID: ${rowId}`);
   }
 }
 
