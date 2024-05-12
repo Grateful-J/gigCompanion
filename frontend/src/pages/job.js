@@ -306,3 +306,7 @@ document.querySelector("#previous-jobs-btn").addEventListener("click", async () 
 
   displayPreviousJobs(jobs);
 });
+
+// TODO: only fetch jobs that are not submitted or invoiced
+
+// TODO:

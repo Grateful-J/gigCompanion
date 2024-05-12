@@ -24,6 +24,14 @@ jobDropdown.addEventListener("change", () => {
       populateJobDetails(job);
       duration = job.duration;
       travelDays = job.travelDays;
+
+      // Clear existing <tr> elements
+      const timecardTable = document.getElementById("timesheet-table-body");
+      while (timecardTable.firstChild) {
+        timecardTable.removeChild(timecardTable.firstChild);
+      }
+
+      // Add timecard rows based on selected job
       addTimecardRows(job);
     });
   }
@@ -31,6 +39,13 @@ jobDropdown.addEventListener("change", () => {
 
 // Populate Job details with selected job
 function populateJobDetails(job) {
+  // Variables to Store Start & Stop Dates (formatted)
+  const initStartDate = new Date(job.startDate);
+  const initEndDate = new Date(job.endDate);
+  const formattedISOStart = initStartDate.toISOString().slice(0, 10);
+  const formattedISOStop = initEndDate.toISOString().slice(0, 10);
+
+  // Populate job details
   const jobName = document.getElementById("job-name");
   const startDate = document.getElementById("start-date");
   const endDate = document.getElementById("end-date");
@@ -42,8 +57,8 @@ function populateJobDetails(job) {
   const hoursOt = document.getElementById("hours-ot");
   const hoursDt = document.getElementById("hours-dt");
   jobName.textContent = job.jobName;
-  startDate.textContent = job.startDate;
-  endDate.textContent = job.endDate;
+  startDate.textContent = formattedISOStart;
+  endDate.textContent = formattedISOStop;
   client.textContent = job.client;
   rate.textContent = job.rate;
   location.textContent = job.location;
@@ -57,7 +72,6 @@ function populateJobDetails(job) {
 // DATE/ START TIME/ END TIME/ HOURS WORKED
 
 // Dynamically add timecard rows based on duration value on table id="timesheet-table"
-
 function addTimecardRows(job) {
   const table = document.getElementById("timesheet-table-body");
   const baseDate = new Date(job.startDate);
@@ -65,21 +79,36 @@ function addTimecardRows(job) {
     //dynamically add date based off of start date
     const rowDate = baseDate.setDate(baseDate.getDate() + 1);
     const date = document.createElement("td");
-    const formattedDate = new Date(rowDate).toLocaleDateString();
+    const initDate = new Date(rowDate);
+    const formattedDate = initDate.toISOString().split("T")[0];
+    console.log(formattedDate);
 
     // set class for each row to allow padding and empty space bewtween each row
 
-    date.classList.add("py-2", "px-4");
+    date.classList.add("p-8");
 
     // TODO: set date to MM/DD/YYYY with no TIME
     date.innerHTML = formattedDate;
 
+    // TODO: find library to make proper HASH of rowID
+    const jobId = job._id;
+    const hashDate = formattedDate.replace(/\//g, "-");
+    const rowNumber = i + 1;
+    const rowId = `${jobId}-${hashDate}-${rowNumber}`;
+
     const row = document.createElement("tr");
+    row.classList.add("border", "border-gray-300");
+    row.setAttribute("id", rowId);
+    const dayOfWeek = document.createElement("td");
     const startTime = document.createElement("td");
     const endTime = document.createElement("td");
     const hoursWorked = document.createElement("td");
     const confirm = document.createElement("td");
-    date.innerHTML = baseDate;
+
+    // displays the day of week veritcally
+    dayOfWeek.innerHTML = `<p class="flex flex-shrink -rotate-90 text-md -px-2">${initDate.toLocaleDateString("en-US", {
+      weekday: "long",
+    })}</p>`;
 
     // add field inputs for start and end time
     startTime.innerHTML = '<input type="time" class="w-full border border-gray-300 rounded px-2 py-1" name="start-time" id="start-time">';
@@ -91,12 +120,14 @@ function addTimecardRows(job) {
     // add a buttun labeled "Confirm"
     confirm.innerHTML = '<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Confirm</button>';
 
+    row.appendChild(dayOfWeek);
     row.appendChild(date);
     row.appendChild(startTime);
     row.appendChild(endTime);
     row.appendChild(hoursWorked);
     row.appendChild(confirm);
     table.appendChild(row);
+    console.log(`Row ${i + 1} added to table with ID: ${rowId}`);
   }
 }
 
