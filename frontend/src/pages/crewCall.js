@@ -34,9 +34,35 @@ jobDropdown.addEventListener("change", () => {
       // Add timecard rows based on selected job
       // addTimecardRows(job); legacy table code
       addTimecardFlex(job);
+
+      // Add global timecard if one does not exist
+      addGlobalTimecard();
     });
   }
 });
+
+// Function to add POST a new global timecard if one does not exist
+function addGlobalTimecard() {
+  fetch(`${apiBaseUrl}/api/timecards`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      job: jobDropdown.value,
+      startDate: new Date(),
+      endDate: new Date(),
+      duration: duration,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
 
 // Populate Job details with selected job
 function populateJobDetails(job) {
