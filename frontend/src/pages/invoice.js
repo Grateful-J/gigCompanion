@@ -51,3 +51,7 @@ document.getElementById("job-dropdown").addEventListener("change", function () {
     })
     .catch((error) => console.error("Error loading job details:", error));
 });
+
+//TODO: Look Into https://pdfkit.org/ to create PDFs for invoice
+//TODO: Look into puppeteer to generate invoice pdf https://developer.chrome.com/docs/puppeteer/get-started/
+//TODO: Add functionality to generate invoice

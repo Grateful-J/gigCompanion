@@ -31,8 +31,6 @@ jobDropdown.addEventListener("change", () => {
         timecardTable.removeChild(timecardTable.firstChild);
       }
 
-      // TODO: Figure out how to clear timecard flex on event
-
       // Add timecard rows based on selected job
       addTimecardRows(job);
       addTimecardFlex(job);
@@ -137,8 +135,11 @@ function addTimecardRows(job) {
 // addTimecardFlex
 // Dynamically add timecard rows based on the job duration into a flexbox container
 function addTimecardFlex(job) {
-  // Assuming the container is a div with id="timesheet-flexbox"
+  // Create the container
   const container = document.getElementById("timesheet-flexbox");
+
+  // Clear the container
+  container.innerHTML = "";
 
   // Create the header row
   const header = document.createElement("div");
