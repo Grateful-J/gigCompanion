@@ -32,7 +32,7 @@ jobDropdown.addEventListener("change", () => {
       }
 
       // Add timecard rows based on selected job
-      addTimecardRows(job);
+      // addTimecardRows(job); legacy table code
       addTimecardFlex(job);
     });
   }
@@ -72,7 +72,7 @@ function populateJobDetails(job) {
 // TIME CARD
 // DATE/ START TIME/ END TIME/ HOURS WORKED
 
-// Dynamically add timecard rows based on duration value on table id="timesheet-table"
+/* // Dynamically add timecard rows based on duration value on table id="timesheet-table"
 function addTimecardRows(job) {
   const table = document.getElementById("timesheet-table-body");
   const baseDate = new Date(job.startDate);
@@ -130,7 +130,7 @@ function addTimecardRows(job) {
     table.appendChild(row);
     console.log(`Row ${i + 1} added to table with ID: ${rowId}`);
   }
-}
+} */
 
 // addTimecardFlex
 // Dynamically add timecard rows based on the job duration into a flexbox container
