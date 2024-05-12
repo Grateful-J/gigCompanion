@@ -43,22 +43,44 @@ jobDropdown.addEventListener("change", () => {
 
 // Function to add POST a new global timecard if one does not exist
 function addGlobalTimecard(job) {
-  fetch(`${apiBaseUrl}/api/timecards`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      jobID: job._id,
-      description: job.jobName,
-      startDate: new Date(),
-      endDate: new Date(),
-      duration: duration,
-    }),
-  })
+  // fetch all timecards
+  fetch(`${apiBaseUrl}/api/timecards`)
     .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
+    .then((timecards) => {
+      // Filter timecards for global timecard
+      const globalTimecard = timecards.filter((timecard) => timecard.jobID === job._id);
+      console.log(`Timecard FOUND!: ${globalTimecard.length}`);
+
+      // Check if fetched timecard exists
+      if (globalTimecard.length <= 0) {
+        console.log(`Timecard NOT FOUND!: ${globalTimecard.length}`);
+        // POST new global timecard
+        fetch(`${apiBaseUrl}/api/timecards`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            jobID: job._id,
+            description: job.jobName,
+            startDate: new Date(),
+            endDate: new Date(),
+            duration: duration,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Success:", data);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+        return;
+      } else {
+        console.log(`Timecard exists already. Exiting now!: ${globalTimecard.length}`);
+        // TODO: PATCH existing global timecard
+        return;
+      }
     })
     .catch((error) => {
       console.error("Error:", error);
