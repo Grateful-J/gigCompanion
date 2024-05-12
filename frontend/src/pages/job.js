@@ -310,4 +310,4 @@ document.querySelector("#previous-jobs-btn").addEventListener("click", async () 
 // TODO: only fetch jobs that are not submitted or invoiced
 
 // TODO: add travel/work checkbox to edit
-//TODO: figure out how to calculate the travel/work sandwich days
+// TODO: figure out how to calculate the travel/work sandwich days

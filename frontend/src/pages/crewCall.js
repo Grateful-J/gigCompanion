@@ -31,6 +31,8 @@ jobDropdown.addEventListener("change", () => {
         timecardTable.removeChild(timecardTable.firstChild);
       }
 
+      // TODO: Figure out how to clear timecard flex on event
+
       // Add timecard rows based on selected job
       addTimecardRows(job);
       addTimecardFlex(job);
