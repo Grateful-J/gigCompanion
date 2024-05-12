@@ -34,6 +34,7 @@ function calculateDuration(startDate, endDate) {
   return duration;
 }
 
+//TODO: calculate travel days on travel/work or other outliers
 function calculateTravelDays(isLocal, duration) {
   // if not local, return 0 else calculate travel days
   // travel days = duration - 2 if duration >=2
