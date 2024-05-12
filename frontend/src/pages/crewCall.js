@@ -60,9 +60,10 @@ function populateJobDetails(job) {
 
 function addTimecardRows(job) {
   const table = document.getElementById("timesheet-table-body");
+  const baseDate = new Date(job.startDate);
   for (let i = 0; i < duration; i++) {
     //dynamically add date based off of start date
-    const baseDate = job.startDate; //new Date(job.startDate);
+    baseDate.setDate(baseDate.getDate() + 1);
 
     const date = document.createElement("td");
     const startTime = document.createElement("td");
