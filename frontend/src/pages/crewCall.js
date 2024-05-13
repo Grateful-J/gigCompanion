@@ -313,9 +313,17 @@ document.addEventListener("click", (event) => {
       console.log(`Start Time: ${startTime}`);
       console.log(`End Time: ${endTime}`);
       console.log(`--- ---- ---- ---- ---- ----`);
-      // Convert start and end time from HH:mm to Date objects
-      const startTimeValue = new Date(startTime);
-      const endTimeValue = new Date(endTime);
+      // Convert start and end time from HH:mm to Date
+      function toDateWithOutTimeZone(date) {
+        let tempTime = date.split(":");
+        let dt = new Date();
+        dt.setHours(tempTime[0]);
+        dt.setMinutes(tempTime[1]);
+        return dt;
+      }
+
+      const startTimeValue = toDateWithOutTimeZone(startTime);
+      const endTimeValue = toDateWithOutTimeZone(endTime);
       console.log(`Start Time: ${startTimeValue}`);
       console.log(`End Time: ${endTimeValue}`);
 
