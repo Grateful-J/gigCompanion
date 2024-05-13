@@ -10,6 +10,7 @@ let travelDays = 0;
 let isEditing = false;
 let editingTimecardID = "";
 let globalJob = {};
+let globalTimecardId = "";
 
 //checks if env is dev or prod
 if (import.meta.env.VITE_MODE === "dev") {
@@ -57,6 +58,8 @@ function addGlobalTimecard(job) {
       // Filter timecards for global timecard
       const globalTimecard = timecards.filter((timecard) => timecard.jobID === job._id);
       console.log(`Timecard FOUND!: ${globalTimecard.length}`);
+      globalTimecardId = globalTimecard[0]._id;
+      console.log(`Global Timecard ID: ${globalTimecardId}`);
 
       // Check if fetched timecard exists
       if (globalTimecard.length <= 0) {
@@ -250,24 +253,26 @@ function addTimecardFlex(job) {
 }
 
 // Function to PATCH showDayEntries based off of row ID
-function updateShowDayEntries(globalJob) {
+function updateShowDayEntries(globalJob, rowId) {
   const jobId = globalJob._id;
 
   // PATCH showDayEntries
-  fetch(`${apiBaseUrl}/api/jobs/${jobId}`, {
+  fetch(`${apiBaseUrl}/api/timecards/${jobId}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      showDayEntries: {
-        rowId: rowId,
-        date: new Date(),
-        //clockIn: Date,
-        breakTime: 0, // Filler for now
-        //clockOut: Date,
-        description: `This is a test description for row ${rowId}`,
-      },
+      showDayEntries: [
+        {
+          rowId: rowId,
+          date: new Date(),
+          //clockIn: Date,
+          breakTime: 0, // Filler for now
+          //clockOut: Date,
+          description: `This is a test description for row ${rowId}`,
+        },
+      ],
     }),
   })
     .then((response) => response.json())
@@ -309,7 +314,7 @@ document.addEventListener("click", (event) => {
     }
 
     // PATCH showDayEntries
-    //updateShowDayEntries(globalJob);
+    updateShowDayEntries(globalJob, rowId);
   }
 });
 //TODO: on Confirm /hide confirm button until edit
