@@ -7,6 +7,8 @@ fetchAndPopulateJobs();
 // Global Variables
 let duration = 0;
 let travelDays = 0;
+let isEditing = false;
+let editingTimecardID = "";
 
 //checks if env is dev or prod
 if (import.meta.env.VITE_MODE === "dev") {
@@ -87,6 +89,12 @@ function addGlobalTimecard(job) {
     });
 }
 
+// Function to submit a row entry
+function submitRowEntry(job) {
+  // POST new day entry to global timecard
+  const row = document.getElementById("timesheet-table-body");
+}
+
 // Populate Job details with selected job
 function populateJobDetails(job) {
   // Variables to Store Start & Stop Dates (formatted)
@@ -118,70 +126,7 @@ function populateJobDetails(job) {
   hoursDt.textContent = job.hoursDt;
 }
 
-// TIME CARD
-// DATE/ START TIME/ END TIME/ HOURS WORKED
-
-/* // Dynamically add timecard rows based on duration value on table id="timesheet-table"
-function addTimecardRows(job) {
-  const table = document.getElementById("timesheet-table-body");
-  const baseDate = new Date(job.startDate);
-  for (let i = 0; i < duration; i++) {
-    //dynamically add date based off of start date
-    const rowDate = baseDate.setDate(baseDate.getDate() + 1);
-    const date = document.createElement("td");
-    const initDate = new Date(rowDate);
-    const formattedDate = initDate.toISOString().split("T")[0];
-    console.log(formattedDate);
-
-    // set class for each row to allow padding and empty space bewtween each row
-
-    date.classList.add("p-8");
-
-    // TODO: set date to MM/DD/YYYY with no TIME
-    date.innerHTML = formattedDate;
-
-    // TODO: find library to make proper HASH of rowID
-    const jobId = job._id;
-    const hashDate = formattedDate.replace(/\//g, "-");
-    const rowNumber = i + 1;
-    const rowId = `${jobId}-${hashDate}-${rowNumber}`;
-
-    const row = document.createElement("tr");
-    row.classList.add("border", "border-gray-300");
-    row.setAttribute("id", rowId);
-    const dayOfWeek = document.createElement("td");
-    const startTime = document.createElement("td");
-    const endTime = document.createElement("td");
-    const hoursWorked = document.createElement("td");
-    const confirm = document.createElement("td");
-
-    // displays the day of week veritcally
-    dayOfWeek.innerHTML = `<p class="flex flex-shrink -rotate-90 text-md -px-2">${initDate.toLocaleDateString("en-US", {
-      weekday: "long",
-    })}</p>`;
-
-    // add field inputs for start and end time
-    startTime.innerHTML = '<input type="time" class="w-full border border-gray-300 rounded px-2 py-1" name="start-time" id="start-time">';
-    endTime.innerHTML = '<input type="time" class="w-full border border-gray-300 rounded px-2 py-1" name="end-time" id="end-time">';
-
-    // calculate hours worked
-    hoursWorked.innerHTML = '<input type="number" class="w-full border border-gray-300 rounded px-2 py-1" name="hours-worked" id="hours-worked">';
-
-    // add a buttun labeled "Confirm"
-    confirm.innerHTML = '<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Confirm</button>';
-
-    row.appendChild(dayOfWeek);
-    row.appendChild(date);
-    row.appendChild(startTime);
-    row.appendChild(endTime);
-    row.appendChild(hoursWorked);
-    row.appendChild(confirm);
-    table.appendChild(row);
-    console.log(`Row ${i + 1} added to table with ID: ${rowId}`);
-  }
-} */
-
-// addTimecardFlex
+// Function to addTimecard Flex container
 // Dynamically add timecard rows based on the job duration into a flexbox container
 function addTimecardFlex(job) {
   // Create the container
@@ -252,6 +197,7 @@ function addTimecardFlex(job) {
 
     const row = document.createElement("div");
     row.classList.add("flex", "flex-row", "items-center", "justify-between", "p-4", "border", "border-gray-300", "mb-2");
+    row.innerHTML = `<id="row-${i + 1}"></id>`;
 
     const dateDiv = document.createElement("div");
     dateDiv.innerHTML = `<span class="block p-2">${formattedDate}</span>`;
@@ -276,11 +222,13 @@ function addTimecardFlex(job) {
     endTime.classList.add("flex-1");
 
     const hoursWorked = document.createElement("div");
-    hoursWorked.innerHTML = '<input type="number" class="w-full border border-gray-300 rounded px-2 py-1 text-gray-600" name="hours-worked">';
+    hoursWorked.innerHTML = '<input type="number" class="w-full border border-gray-300 rounded px-2 py-1 text-gray-600" name="hours-worked">'; // Filler for now
+    // TODO: hours worked = dynamically calculated
     hoursWorked.classList.add("flex-1");
 
     const confirm = document.createElement("div");
-    confirm.innerHTML = '<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Confirm</button>';
+    confirm.innerHTML =
+      '<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="confirm-button" type="submit">Confirm</button>';
     confirm.classList.add("flex-1");
 
     row.appendChild(dayOfWeek);
@@ -316,3 +264,67 @@ function addTimecardFlex(job) {
 // TODO: Mobile: below that- timecard flex
 // TODO: Mobile: below that notes then expenses
 // TODO:
+
+/// storing for later in case i decide to bail on flexbox
+// TIME CARD
+// DATE/ START TIME/ END TIME/ HOURS WORKED
+
+/* // Dynamically add timecard rows based on duration value on table id="timesheet-table"
+function addTimecardRows(job) {
+  const table = document.getElementById("timesheet-table-body");
+  const baseDate = new Date(job.startDate);
+  for (let i = 0; i < duration; i++) {
+    //dynamically add date based off of start date
+    const rowDate = baseDate.setDate(baseDate.getDate() + 1);
+    const date = document.createElement("td");
+    const initDate = new Date(rowDate);
+    const formattedDate = initDate.toISOString().split("T")[0];
+    console.log(formattedDate);
+
+    // set class for each row to allow padding and empty space bewtween each row
+
+    date.classList.add("p-8");
+
+    // TODO: set date to MM/DD/YYYY with no TIME
+    date.innerHTML = formattedDate;
+
+    // TODO: find library to make proper HASH of rowID
+    const jobId = job._id;
+    const hashDate = formattedDate.replace(/\//g, "-");
+    const rowNumber = i + 1;
+    const rowId = `${jobId}-${hashDate}-${rowNumber}`;
+
+    const row = document.createElement("tr");
+    row.classList.add("border", "border-gray-300");
+    row.setAttribute("id", rowId);
+    const dayOfWeek = document.createElement("td");
+    const startTime = document.createElement("td");
+    const endTime = document.createElement("td");
+    const hoursWorked = document.createElement("td");
+    const confirm = document.createElement("td");
+
+    // displays the day of week veritcally
+    dayOfWeek.innerHTML = `<p class="flex flex-shrink -rotate-90 text-md -px-2">${initDate.toLocaleDateString("en-US", {
+      weekday: "long",
+    })}</p>`;
+
+    // add field inputs for start and end time
+    startTime.innerHTML = '<input type="time" class="w-full border border-gray-300 rounded px-2 py-1" name="start-time" id="start-time">';
+    endTime.innerHTML = '<input type="time" class="w-full border border-gray-300 rounded px-2 py-1" name="end-time" id="end-time">';
+
+    // calculate hours worked
+    hoursWorked.innerHTML = '<input type="number" class="w-full border border-gray-300 rounded px-2 py-1" name="hours-worked" id="hours-worked">';
+
+    // add a buttun labeled "Confirm"
+    confirm.innerHTML = '<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Confirm</button>';
+
+    row.appendChild(dayOfWeek);
+    row.appendChild(date);
+    row.appendChild(startTime);
+    row.appendChild(endTime);
+    row.appendChild(hoursWorked);
+    row.appendChild(confirm);
+    table.appendChild(row);
+    console.log(`Row ${i + 1} added to table with ID: ${rowId}`);
+  }
+} */
