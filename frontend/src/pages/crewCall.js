@@ -9,6 +9,7 @@ let duration = 0;
 let travelDays = 0;
 let isEditing = false;
 let editingTimecardID = "";
+let globalJob = {};
 
 //checks if env is dev or prod
 if (import.meta.env.VITE_MODE === "dev") {
@@ -39,6 +40,10 @@ jobDropdown.addEventListener("change", () => {
 
       // Add global timecard if one does not exist
       addGlobalTimecard(job);
+
+      // returns job
+      globalJob = job;
+      console.log(`Global Job: ${globalJob}`);
     });
   }
 });
@@ -243,6 +248,44 @@ function addTimecardFlex(job) {
   }
 }
 
+// Function to PATCH showDayEntries based off of row ID
+function updateShowDayEntries(globalJob) {
+  const jobId = globalJob._id;
+
+  // PATCH showDayEntries
+  fetch(`${apiBaseUrl}/api/jobs/${jobId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      showDayEntries: {
+        rowId: rowId,
+        date: new Date(),
+        clockIn: Date,
+        breakTime: 0, // Filler for now
+        clockOut: Date,
+        description: String,
+      },
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("ShowDayEntries updated successfully:", data);
+    })
+    .catch((error) => console.error("Error updating showDayEntries:", error));
+}
+
+// Event delegation for confirm button
+document.addEventListener("click", (event) => {
+  // Check if the clicked element or its parent has the 'confirm-button' id
+  if (event.target.id === "confirm-button" || event.target.closest("#confirm-button")) {
+    event.preventDefault();
+    // Find row id of parent div of the clicked button
+    const rowId = event.target.parentElement.parentElement.id;
+    console.log(`Row ID: ${rowId}`);
+  }
+});
 //TODO: on Confirm /hide confirm button until edit
 
 // TODO: Add notes
