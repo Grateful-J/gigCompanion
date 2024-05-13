@@ -221,6 +221,7 @@ function addTimecardFlex(job) {
     const startTime = document.createElement("div");
     startTime.innerHTML = '<input type="time" class="w-full border border-gray-300 rounded px-2 py-1 text-gray-600" name="start-time">';
     startTime.classList.add("flex-1");
+    startTime.setAttribute("id", `start-time-${rowId}`);
 
     const endTime = document.createElement("div");
     endTime.innerHTML = '<input type="time" class="w-full border border-gray-300 rounded px-2 py-1 text-gray-600" name="end-time">';
@@ -262,10 +263,10 @@ function updateShowDayEntries(globalJob) {
       showDayEntries: {
         rowId: rowId,
         date: new Date(),
-        clockIn: Date,
+        //clockIn: Date,
         breakTime: 0, // Filler for now
-        clockOut: Date,
-        description: String,
+        //clockOut: Date,
+        description: `This is a test description for row ${rowId}`,
       },
     }),
   })
@@ -276,6 +277,20 @@ function updateShowDayEntries(globalJob) {
     .catch((error) => console.error("Error updating showDayEntries:", error));
 }
 
+// Function to handle confirm button clicks and fetch times
+function handleConfirmClick(row) {
+  // Retrieve the start and end time inputs within the same row
+  const startTimeInput = row.querySelector('input[name="start-time"]');
+  const endTimeInput = row.querySelector('input[name="end-time"]');
+
+  // Fetch the values from these inputs
+  const startTimeValue = startTimeInput ? startTimeInput.value : "No start time";
+  const endTimeValue = endTimeInput ? endTimeInput.value : "No end time";
+
+  console.log("Start Time:", startTimeValue);
+  console.log("End Time:", endTimeValue);
+}
+
 // Event delegation for confirm button
 document.addEventListener("click", (event) => {
   // Check if the clicked element or its parent has the 'confirm-button' id
@@ -284,6 +299,17 @@ document.addEventListener("click", (event) => {
     // Find row id of parent div of the clicked button
     const rowId = event.target.parentElement.parentElement.id;
     console.log(`Row ID: ${rowId}`);
+
+    // Find the row by navigating up from the confirm button
+    const row = event.target.closest("div.flex-row");
+    if (row) {
+      handleConfirmClick(row);
+    } else {
+      console.log("Confirm button was clicked, but no row was found.");
+    }
+
+    // PATCH showDayEntries
+    //updateShowDayEntries(globalJob);
   }
 });
 //TODO: on Confirm /hide confirm button until edit
