@@ -49,21 +49,21 @@ jobDropdown.addEventListener("change", () => {
   }
 });
 
-// Function to add POST a new global timecard if one does not exist
 function addGlobalTimecard(job) {
   // fetch all timecards
   fetch(`${apiBaseUrl}/api/timecards`)
     .then((response) => response.json())
     .then((timecards) => {
-      // Filter timecards for global timecard
       const globalTimecard = timecards.filter((timecard) => timecard.jobID === job._id);
       console.log(`Timecard FOUND!: ${globalTimecard.length}`);
-      globalTimecardId = globalTimecard[0]._id;
-      console.log(`Global Timecard ID: ${globalTimecardId}`);
 
-      // Check if fetched timecard exists
-      if (globalTimecard.length <= 0) {
-        console.log(`Timecard NOT FOUND!: ${globalTimecard.length}`);
+      // Check if there is at least one matching timecard
+      if (globalTimecard.length > 0) {
+        // Accessing the _id property of the first matching timecard
+        globalTimecardId = globalTimecard[0]._id;
+        console.log(`Global Timecard ID: ${globalTimecardId}`);
+      } else {
+        console.log("Timecard NOT FOUND! Creating new timecard.");
         // POST new global timecard
         fetch(`${apiBaseUrl}/api/timecards`, {
           method: "POST",
@@ -75,21 +75,18 @@ function addGlobalTimecard(job) {
             description: job.jobName,
             startDate: new Date(),
             endDate: new Date(),
-            duration: duration,
+            //duration: job.duration,
           }),
         })
           .then((response) => response.json())
           .then((data) => {
             console.log("Success:", data);
+            globalTimecardId = data._id; // Ensures setting globalTimecardId to the correct property
+            console.log(`New Global Timecard ID: ${globalTimecardId}`);
           })
           .catch((error) => {
             console.error("Error:", error);
           });
-        return;
-      } else {
-        console.log(`Timecard exists already. Exiting now!: ${globalTimecard.length}`);
-        // TODO: PATCH existing global timecard
-        return;
       }
     })
     .catch((error) => {
@@ -253,26 +250,26 @@ function addTimecardFlex(job) {
 }
 
 // Function to PATCH showDayEntries based off of row ID
-function updateShowDayEntries(globalJob, rowId) {
-  const jobId = globalJob._id;
+function updateShowDayEntries(globalTimecardId, rowId, startTimeValue, endTimeValue) {
+  const timecardId = globalTimecardId;
+  console.log(`2nd Global debug: Timecard ID: ${timecardId}`);
 
   // PATCH showDayEntries
-  fetch(`${apiBaseUrl}/api/timecards/${jobId}`, {
+  fetch(`${apiBaseUrl}/api/timecards/${timecardId}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      showDayEntries: [
-        {
-          rowId: rowId,
-          date: new Date(),
-          //clockIn: Date,
-          breakTime: 0, // Filler for now
-          //clockOut: Date,
-          description: `This is a test description for row ${rowId}`,
-        },
-      ],
+      //jobId: jobId,
+      description: "This is a test description for row " + rowId,
+      showDayEntries: {
+        rowId: rowId,
+        date: new Date(),
+        clockIn: startTimeValue,
+        breakTime: 0, // Filler for now
+        clockOut: endTimeValue,
+      },
     }),
   })
     .then((response) => response.json())
@@ -309,12 +306,24 @@ document.addEventListener("click", (event) => {
     const row = event.target.closest("div.flex-row");
     if (row) {
       handleConfirmClick(row);
+
+      // Find Values of start and end time and return as string
+      const startTime = row.querySelector('input[name="start-time"]').value;
+      const endTime = row.querySelector('input[name="end-time"]').value;
+      console.log(`Start Time: ${startTime}`);
+      console.log(`End Time: ${endTime}`);
+      console.log(`--- ---- ---- ---- ---- ----`);
+      // Convert start and end time from HH:mm to Date objects
+      const startTimeValue = new Date(startTime);
+      const endTimeValue = new Date(endTime);
+      console.log(`Start Time: ${startTimeValue}`);
+      console.log(`End Time: ${endTimeValue}`);
+
+      // PATCH showDayEntries
+      updateShowDayEntries(globalTimecardId, rowId, startTimeValue, endTimeValue);
     } else {
       console.log("Confirm button was clicked, but no row was found.");
     }
-
-    // PATCH showDayEntries
-    updateShowDayEntries(globalJob, rowId);
   }
 });
 //TODO: on Confirm /hide confirm button until edit
