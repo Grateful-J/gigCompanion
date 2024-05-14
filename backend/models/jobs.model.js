@@ -82,14 +82,14 @@ function calculateWorkHours(clockIn, clockOut, breakTime) {
   let doubleTime = 0;
 
   if (hours <= 10) {
-    straightTime = hours;
+    straightTime = 10; // 10 hours minimum
   } else if (hours > 10 && hours <= 12) {
     straightTime = 10;
-    overTime = hours - 10;
+    overTime = hours - 10; // up to 2 hours overtime
   } else if (hours > 12) {
     straightTime = 10;
     overTime = 2;
-    doubleTime = hours - 12;
+    doubleTime = hours - 12; // anything after 12 hours is double time
   }
 
   return { hours, minutes, dailyDuration, straightTime, overTime, doubleTime };
