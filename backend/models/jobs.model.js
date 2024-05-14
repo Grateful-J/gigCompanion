@@ -94,25 +94,22 @@ function calculateWorkHours(clockIn, clockOut, breakTime) {
 
   return { hours, minutes, dailyDuration, straightTime, overTime, doubleTime };
 }
-
 function calculateFields(doc, update) {
-  // startDate and endDate must be handled precisely to reflect new values
   let startDate = update.startDate ? new Date(update.startDate) : new Date(doc.startDate);
   let endDate = update.endDate ? new Date(update.endDate) : new Date(doc.endDate);
 
   if (startDate && endDate) {
     let duration = calculateDuration(startDate, endDate);
     doc.duration = duration;
-    update.duration = duration; // Ensure updated document and update operation reflect this
+    update.duration = duration;
   }
 
-  // Use 'isLocal' from update or fallback to existing document value
   let isLocal = update.hasOwnProperty("isLocal") ? update.isLocal : doc.isLocal;
 
   if (typeof doc.duration === "number") {
     let travelDays = calculateTravelDays(isLocal, doc.duration);
     doc.travelDays = travelDays;
-    update.travelDays = travelDays; // Apply to both contexts
+    update.travelDays = travelDays;
   }
 
   if (update.location) {
@@ -136,35 +133,43 @@ function calculateTotalTimes(entries) {
   return { totalStraightTime, totalOverTime, totalDoubleTime };
 }
 
-// Pre-save hook: updates the 'duration' and 'travelDays' fields on "save"
 jobSchema.pre("save", function (next) {
   console.log("Pre-save: Starting to calculate fields for save operation.");
   calculateFields(this, this);
 
+  this.showDayEntries.forEach((entry) => {
+    const { clockIn, clockOut, breakTime } = entry;
+    const { dailyDuration, straightTime, overTime, doubleTime } = calculateWorkHours(clockIn, clockOut, breakTime);
+
+    entry.dailyDuration = dailyDuration;
+    entry.straightTime = straightTime;
+    entry.overTime = overTime;
+    entry.doubleTime = doubleTime;
+  });
+
+  const { totalStraightTime, totalOverTime, totalDoubleTime } = calculateTotalTimes(this.showDayEntries);
+
+  this.totalStraightTime = totalStraightTime;
+  this.totalOverTime = totalOverTime;
+  this.totalDoubleTime = totalDoubleTime;
+
+  next();
+});
+
+jobSchema.pre("findOneAndUpdate", function (next) {
+  console.log("Pre-findOneAndUpdate: Starting to calculate fields for update operation.");
+  const update = this.getUpdate();
+  calculateFields(this._update, update);
+
   if (update.showDayEntries) {
     update.showDayEntries.forEach((entry) => {
       const { clockIn, clockOut, breakTime } = entry;
-      const { hours, minutes, dailyDuration } = calculateWorkHours(clockIn, clockOut, breakTime);
-
-      let straightHours = 0;
-      let overHours = 0;
-      let doubleHours = 0;
-
-      if (hours <= 10) {
-        straightHours = hours;
-      } else if (hours > 10 && hours <= 12) {
-        straightHours = 10;
-        overHours = hours - 10;
-      } else if (hours > 12) {
-        straightHours = 10;
-        overHours = 2;
-        doubleHours = hours - 12;
-      }
+      const { dailyDuration, straightTime, overTime, doubleTime } = calculateWorkHours(clockIn, clockOut, breakTime);
 
       entry.dailyDuration = dailyDuration;
-      entry.straightTime = straightHours;
-      entry.overTime = overHours;
-      entry.doubleTime = doubleHours;
+      entry.straightTime = straightTime;
+      entry.overTime = overTime;
+      entry.doubleTime = doubleTime;
     });
 
     const { totalStraightTime, totalOverTime, totalDoubleTime } = calculateTotalTimes(update.showDayEntries);
