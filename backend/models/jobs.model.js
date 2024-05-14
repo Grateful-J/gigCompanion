@@ -155,28 +155,36 @@ jobSchema.pre("save", function (next) {
 
   next();
 });
-
 jobSchema.pre("findOneAndUpdate", function (next) {
   console.log("Pre-findOneAndUpdate: Starting to calculate fields for update operation.");
   const update = this.getUpdate();
-  calculateFields(this._update, update);
 
-  if (update.showDayEntries) {
-    update.showDayEntries.forEach((entry) => {
-      const { clockIn, clockOut, breakTime } = entry;
-      const { dailyDuration, straightTime, overTime, doubleTime } = calculateWorkHours(clockIn, clockOut, breakTime);
+  // Extract fields from the update object
+  const { showDayEntries, startDate, endDate, clockIn, clockOut, breakTime } = update;
 
-      entry.dailyDuration = dailyDuration;
-      entry.straightTime = straightTime;
-      entry.overTime = overTime;
-      entry.doubleTime = doubleTime;
-    });
+  // Check if the update involves calculation-related fields
+  const needsCalculation = showDayEntries || startDate || endDate || clockIn || clockOut || breakTime;
 
-    const { totalStraightTime, totalOverTime, totalDoubleTime } = calculateTotalTimes(update.showDayEntries);
+  if (needsCalculation) {
+    calculateFields(this._update, update);
 
-    update.totalStraightTime = totalStraightTime;
-    update.totalOverTime = totalOverTime;
-    update.totalDoubleTime = totalDoubleTime;
+    if (update.showDayEntries) {
+      update.showDayEntries.forEach((entry) => {
+        const { clockIn, clockOut, breakTime } = entry;
+        const { dailyDuration, straightTime, overTime, doubleTime } = calculateWorkHours(clockIn, clockOut, breakTime);
+
+        entry.dailyDuration = dailyDuration;
+        entry.straightTime = straightTime;
+        entry.overTime = overTime;
+        entry.doubleTime = doubleTime;
+      });
+
+      const { totalStraightTime, totalOverTime, totalDoubleTime } = calculateTotalTimes(update.showDayEntries);
+
+      update.totalStraightTime = totalStraightTime;
+      update.totalOverTime = totalOverTime;
+      update.totalDoubleTime = totalDoubleTime;
+    }
   }
 
   this.setUpdate(update);

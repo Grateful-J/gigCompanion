@@ -1,8 +1,9 @@
 let apiBaseUrl;
 import { loadNavbar } from "../components/navbar.js";
-import { fetchAndPopulateJobs, populateJobsDropdown, fetchJob } from "../util/jobService.js";
+import { fetchAndPopulateJobs, populateJobsDropdown, fetchNonSubmittedJobs, fetchJob } from "../util/jobService.js";
 loadNavbar();
-fetchAndPopulateJobs();
+//fetchAndPopulateJobs(); // Fetch all jobs original **Working**
+fetchNonSubmittedJobs();
 
 // Global Variables
 let duration = 0;

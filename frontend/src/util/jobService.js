@@ -16,6 +16,19 @@ async function fetchAndPopulateJobs() {
   }
 }
 
+// Fetch Jobs that have not been submitted
+export async function fetchNonSubmittedJobs() {
+  try {
+    const response = await fetch(`${apiBaseUrl}/api/jobs?isSubmitted=false`);
+    const jobs = await response.json();
+    populateJobsDropdown(jobs);
+    return jobs;
+  } catch (e) {
+    console.error("Failed to fetch jobs", e);
+    return [];
+  }
+}
+
 //Function to fetch single job
 export async function fetchJob(jobId) {
   try {
