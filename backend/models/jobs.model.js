@@ -56,7 +56,6 @@ function calculateTravelDays(duration, isLocal) {
     return 2;
   }
 }
-// Function to calculate total hours worked for each day
 function calculateWorkHours(clockIn, clockOut, breakTime) {
   // clockIn and clockOut are strings in 24 hour HH:MM format
   const [startHours, startMinutes] = clockIn.split(":").map(Number);
@@ -77,7 +76,23 @@ function calculateWorkHours(clockIn, clockOut, breakTime) {
 
   const dailyDuration = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
 
-  return { hours, minutes, dailyDuration };
+  // Calculate straight time, overtime, and double time
+  let straightTime = 0;
+  let overTime = 0;
+  let doubleTime = 0;
+
+  if (hours <= 10) {
+    straightTime = hours;
+  } else if (hours > 10 && hours <= 12) {
+    straightTime = 10;
+    overTime = hours - 10;
+  } else if (hours > 12) {
+    straightTime = 10;
+    overTime = 2;
+    doubleTime = hours - 12;
+  }
+
+  return { hours, minutes, dailyDuration, straightTime, overTime, doubleTime };
 }
 
 function calculateFields(doc, update) {
