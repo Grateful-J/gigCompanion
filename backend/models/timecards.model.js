@@ -4,9 +4,9 @@ const mongoose = require("mongoose");
 const showDayEntries = new mongoose.Schema({
   rowId: String,
   date: Date,
-  clockIn: Number,
+  clockIn: String,
   breakTime: Number,
-  clockOut: Number,
+  clockOut: String,
   description: String,
   totalHours: Number,
   totalMinutes: Number,
