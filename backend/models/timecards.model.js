@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 // Schema for showDayEntries
 const showDayEntries = new mongoose.Schema({
   rowId: String,
-  date: Date,
+  //date: Date, // TODO: new date is preventing the addToSet from working
   clockIn: String,
   breakTime: Number,
   clockOut: String,
