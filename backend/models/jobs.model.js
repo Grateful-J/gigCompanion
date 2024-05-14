@@ -8,9 +8,9 @@ const showDayEntriesSchema = new mongoose.Schema({
   breakTime: { type: Number, default: 0 }, // In minutes
   clockOut: String,
   description: String,
-  totalHours: Number,
-  totalMinutes: Number,
-  duration: String,
+  //totalHours: Number,
+  //totalMinutes: Number,
+  dailyDuration: String,
   isTravelSandwich: { type: Boolean, default: false }, // TODO: logic for sandwich days
   straightTime: Number,
   overTime: Number,
