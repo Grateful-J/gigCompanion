@@ -70,7 +70,7 @@ router.patch("/:id", async (req, res) => {
 
 // Update job show timesheets
 // PATCH a job to add or update showDayEntries
-router.patch("/jobs/daily/:id", async (req, res) => {
+router.patch("/daily/:id", async (req, res) => {
   const { rowId, clockIn, breakTime, clockOut, description } = req.body;
 
   try {

@@ -161,6 +161,7 @@ function addTimecardFlex(job) {
 
     // Check if there is an entry for the current date and prefill inputs if data exists
     const rowId = `${job._id}-${formattedDate}-${i + 1}`;
+    row.id = rowId;
     const entry = job.showDayEntries.find((entry) => entry.rowId === rowId);
     if (entry) {
       startTimeInput.value = entry.clockIn;
@@ -189,7 +190,7 @@ function addTimecardFlex(job) {
 function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue) {
   console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}`);
 
-  fetch(`${apiBaseUrl}/api/jobs/${jobId}/showDayEntries`, {
+  fetch(`${apiBaseUrl}/api/jobs/daily/${jobId}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
