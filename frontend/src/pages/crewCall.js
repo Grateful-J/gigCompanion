@@ -37,10 +37,11 @@ jobDropdown.addEventListener("change", () => {
 
       // Add timecard rows based on selected job
       // addTimecardRows(job); legacy table code
+
       addTimecardFlex(job);
 
       // Add global timecard if one does not exist
-      addGlobalTimecard(job);
+      fetchJobAndDisplayTimecards(selectedJobId);
 
       // returns job
       globalJob = job;
@@ -49,55 +50,14 @@ jobDropdown.addEventListener("change", () => {
   }
 });
 
-function addGlobalTimecard(job) {
-  // fetch all timecards
-  fetch(`${apiBaseUrl}/api/timecards`)
+function fetchJobAndDisplayTimecards(jobId) {
+  console.log(`Fetching Job: ${jobId}`);
+  fetch(`${apiBaseUrl}/api/jobs/${jobId}`)
     .then((response) => response.json())
-    .then((timecards) => {
-      const globalTimecard = timecards.filter((timecard) => timecard.jobID === job._id);
-      console.log(`Timecard FOUND!: ${globalTimecard.length}`);
-
-      // Check if there is at least one matching timecard
-      if (globalTimecard.length > 0) {
-        // Accessing the _id property of the first matching timecard
-        globalTimecardId = globalTimecard[0]._id;
-        console.log(`Global Timecard ID: ${globalTimecardId}`);
-      } else {
-        console.log("Timecard NOT FOUND! Creating new timecard.");
-        // POST new global timecard
-        fetch(`${apiBaseUrl}/api/timecards`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            jobID: job._id,
-            description: job.jobName,
-            startDate: new Date(),
-            endDate: new Date(),
-            //duration: job.duration,
-          }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("Success:", data);
-            globalTimecardId = data._id; // Ensures setting globalTimecardId to the correct property
-            console.log(`New Global Timecard ID: ${globalTimecardId}`);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-      }
+    .then((job) => {
+      addTimecardFlex(job);
     })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-}
-
-// Function to submit a row entry
-function submitRowEntry(job) {
-  // POST new day entry to global timecard
-  const row = document.getElementById("timesheet-table-body");
+    .catch((error) => console.error("Error fetching job:", error));
 }
 
 // Populate Job details with selected job
@@ -132,7 +92,7 @@ function populateJobDetails(job) {
 }
 
 // Function to addTimecard Flex container
-// Dynamically add timecard rows based on the job duration into a flexbox container
+// Dynamically add timecard rows based on the job's showDayEntries into a flexbox container
 function addTimecardFlex(job) {
   // Create the container
   const container = document.getElementById("timesheet-flexbox");
@@ -157,95 +117,69 @@ function addTimecardFlex(job) {
   );
 
   // Add headers for each column
-  const headerDayOfWeek = document.createElement("div");
-  headerDayOfWeek.innerHTML = "Day of Week";
-  headerDayOfWeek.classList.add("flex-1", "text-center");
-
-  const headerDate = document.createElement("div");
-  headerDate.innerHTML = "Date";
-  headerDate.classList.add("flex-1", "text-center");
-
-  const headerStartTime = document.createElement("div");
-  headerStartTime.innerHTML = "Start Time";
-  headerStartTime.classList.add("flex-1", "text-center");
-
-  const headerEndTime = document.createElement("div");
-  headerEndTime.innerHTML = "End Time";
-  headerEndTime.classList.add("flex-1", "text-center");
-
-  const headerHoursWorked = document.createElement("div");
-  headerHoursWorked.innerHTML = "Hours Worked";
-  headerHoursWorked.classList.add("flex-1", "text-center");
-
-  const headerConfirm = document.createElement("div");
-  headerConfirm.innerHTML = "Confirm";
-  headerConfirm.classList.add("flex-1", "text-center");
-
-  // Append headers to the header row
-  header.appendChild(headerDayOfWeek);
-  header.appendChild(headerDate);
-  header.appendChild(headerStartTime);
-  header.appendChild(headerEndTime);
-  header.appendChild(headerHoursWorked);
-  header.appendChild(headerConfirm);
+  const headers = ["Day of Week", "Date", "Start Time", "End Time", "Hours Worked", "Confirm"];
+  headers.forEach((headerText) => {
+    const headerDiv = document.createElement("div");
+    headerDiv.innerHTML = headerText;
+    headerDiv.classList.add("flex-1", "text-center");
+    header.appendChild(headerDiv);
+  });
 
   // Add the header row to the container
   container.appendChild(header);
 
+  // Generate rows based on the job's duration and start date
   const baseDate = new Date(job.startDate);
-
   for (let i = 0; i < job.duration; i++) {
-    const rowDate = baseDate.setDate(baseDate.getDate() + 1);
-    const initDate = new Date(rowDate);
-    const formattedDate = initDate.toISOString().split("T")[0];
-    console.log(formattedDate);
+    const currentDate = new Date(baseDate);
+    currentDate.setDate(baseDate.getDate() + i);
+    const formattedDate = currentDate.toISOString().split("T")[0];
 
     const row = document.createElement("div");
     row.classList.add("flex", "flex-row", "items-center", "justify-between", "p-4", "border", "border-gray-300", "mb-2");
-    row.innerHTML = `<id="row-${i + 1}"></id>`;
+
+    const dayOfWeek = document.createElement("div");
+    dayOfWeek.innerHTML = `<p class="block p-2">${currentDate.toLocaleDateString("en-US", { weekday: "long" })}</p>`;
+    dayOfWeek.classList.add("flex-1");
 
     const dateDiv = document.createElement("div");
     dateDiv.innerHTML = `<span class="block p-2">${formattedDate}</span>`;
     dateDiv.classList.add("flex-1");
 
-    const jobId = job._id;
-    const hashDate = formattedDate.replace(/\//g, "-");
-    const rowNumber = i + 1;
-    const rowId = `${jobId}-${hashDate}-${rowNumber}`;
-    row.setAttribute("id", rowId);
+    const startTimeInput = document.createElement("input");
+    startTimeInput.type = "time";
+    startTimeInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
 
-    const dayOfWeek = document.createElement("div");
-    dayOfWeek.innerHTML = `<p class="block p-2">${initDate.toLocaleDateString("en-US", { weekday: "long" })}</p>`;
-    dayOfWeek.classList.add("flex-1");
+    const endTimeInput = document.createElement("input");
+    endTimeInput.type = "time";
+    endTimeInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
 
-    const startTime = document.createElement("div");
-    startTime.innerHTML = '<input type="time" class="w-full border border-gray-300 rounded px-2 py-1 text-gray-600" name="start-time">';
-    startTime.classList.add("flex-1");
-    startTime.setAttribute("id", `start-time-${rowId}`);
+    const hoursWorkedInput = document.createElement("input");
+    hoursWorkedInput.type = "number";
+    hoursWorkedInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
 
-    const endTime = document.createElement("div");
-    endTime.innerHTML = '<input type="time" class="w-full border border-gray-300 rounded px-2 py-1 text-gray-600" name="end-time">';
-    endTime.classList.add("flex-1");
+    // Check if there is an entry for the current date and prefill inputs if data exists
+    const rowId = `${job._id}-${formattedDate}-${i + 1}`;
+    const entry = job.showDayEntries.find((entry) => entry.rowId === rowId);
+    if (entry) {
+      startTimeInput.value = entry.clockIn;
+      endTimeInput.value = entry.clockOut;
+      hoursWorkedInput.value = entry.duration; // Will eventually be calculated. current default is 0
+    }
 
-    const hoursWorked = document.createElement("div");
-    hoursWorked.innerHTML = '<input type="number" class="w-full border border-gray-300 rounded px-2 py-1 text-gray-600" name="hours-worked">'; // Filler for now
-    // TODO: hours worked = dynamically calculated
-    hoursWorked.classList.add("flex-1");
-
-    const confirm = document.createElement("div");
-    confirm.innerHTML =
-      '<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="confirm-button" type="submit">Confirm</button>';
-    confirm.classList.add("flex-1");
+    const confirmButton = document.createElement("button");
+    confirmButton.innerHTML = "Confirm";
+    confirmButton.classList.add("bg-blue-500", "hover:bg-blue-700", "text-white", "font-bold", "py-2", "px-4", "rounded");
+    confirmButton.setAttribute("type", "submit");
 
     row.appendChild(dayOfWeek);
     row.appendChild(dateDiv);
-    row.appendChild(startTime);
-    row.appendChild(endTime);
-    row.appendChild(hoursWorked);
-    row.appendChild(confirm);
+    row.appendChild(startTimeInput);
+    row.appendChild(endTimeInput);
+    row.appendChild(hoursWorkedInput);
+    row.appendChild(confirmButton);
 
     container.appendChild(row);
-    console.log(`Row ${i + 1} added to flexbox with ID: ${rowId}`);
   }
 }
 
