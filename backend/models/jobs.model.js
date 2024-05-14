@@ -8,8 +8,6 @@ const showDayEntriesSchema = new mongoose.Schema({
   breakTime: { type: Number, default: 0 }, // In minutes
   clockOut: String, // in 24 hour HH:MM format
   description: String,
-  //totalHours: Number,
-  //totalMinutes: Number,
   dailyDuration: String, // in total 24 hour HH:MM format
   isTravelSandwich: { type: Boolean, default: false }, // TODO: logic for sandwich days
   straightTime: Number,
@@ -51,34 +49,35 @@ function calculateDuration(startDate, endDate) {
   return duration;
 }
 
-// Function to calculate total hours worked for each day
-function calculateWorkHours(clockIn, clockOut, breakTime, dailyDuration) {
-  //clock In and clock Out are strings in 24 hour HH:MM format
-  const start = new Date(clockIn);
-  console.log(`Clock In: ${clockIn}`);
-  const end = new Date(clockOut);
-  console.log(`Clock Out: ${clockOut}`);
-  const breakDuration = breakTime * 60;
-  console.log(`Break Duration: ${breakDuration}`);
-  const duration = Math.ceil((end - start - breakDuration) / (1000 * 60 * 60)) + 1;
-  console.log("Calculated Work Hours:", duration);
-  dailyDuration = duration;
-  return dailyDuration || 0;
-}
-
-//TODO: calculate travel days on travel/work or other outliers
-function calculateTravelDays(isLocal, duration) {
-  // if not local, return 0 else calculate travel days
-  // travel days = duration - 2 if duration >=2
-  if (!isLocal) {
+function calculateTravelDays(duration, isLocal) {
+  if (isLocal) {
     return 0;
-  } else if (duration >= 2) {
-    return 2;
   } else {
-    return 0;
+    return 2;
   }
-  console.log("Calculated Travel Days:", travelDays);
-  return travelDays;
+}
+// Function to calculate total hours worked for each day
+function calculateWorkHours(clockIn, clockOut, breakTime) {
+  // clockIn and clockOut are strings in 24 hour HH:MM format
+  const [startHours, startMinutes] = clockIn.split(":").map(Number);
+  const [endHours, endMinutes] = clockOut.split(":").map(Number);
+
+  const start = new Date();
+  start.setHours(startHours, startMinutes, 0, 0);
+
+  const end = new Date();
+  end.setHours(endHours, endMinutes, 0, 0);
+
+  const breakDuration = breakTime * 60 * 1000; // Convert break time to milliseconds
+  const totalMilliseconds = end - start - breakDuration;
+  const totalMinutes = Math.max(totalMilliseconds / 1000 / 60, 0); // Ensure no negative duration
+
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  const dailyDuration = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+
+  return { hours, minutes, dailyDuration };
 }
 
 function calculateFields(doc, update) {
@@ -108,19 +107,58 @@ function calculateFields(doc, update) {
   }
 }
 
+function calculateTotalTimes(entries) {
+  let totalStraightTime = 0;
+  let totalOverTime = 0;
+  let totalDoubleTime = 0;
+
+  entries.forEach((entry) => {
+    totalStraightTime += entry.straightTime || 0;
+    totalOverTime += entry.overTime || 0;
+    totalDoubleTime += entry.doubleTime || 0;
+  });
+
+  return { totalStraightTime, totalOverTime, totalDoubleTime };
+}
+
 // Pre-save hook: updates the 'duration' and 'travelDays' fields on "save"
 jobSchema.pre("save", function (next) {
   console.log("Pre-save: Starting to calculate fields for save operation.");
   calculateFields(this, this);
-  calculateWorkHours(this.clockIn, this.clockOut, this.breakTime, this.dailyDuration);
-  next();
-});
 
-// Pre-findOneAndUpdate hook: Ensure _update and update are correctly referenced
-jobSchema.pre("findOneAndUpdate", function (next) {
-  console.log("Pre-findOneAndUpdate: Starting to calculate fields for update operation.");
-  const update = this.getUpdate();
-  calculateFields(this._update, update); // Ensure this._update and update are correctly referenced
+  if (update.showDayEntries) {
+    update.showDayEntries.forEach((entry) => {
+      const { clockIn, clockOut, breakTime } = entry;
+      const { hours, minutes, dailyDuration } = calculateWorkHours(clockIn, clockOut, breakTime);
+
+      let straightHours = 0;
+      let overHours = 0;
+      let doubleHours = 0;
+
+      if (hours <= 10) {
+        straightHours = hours;
+      } else if (hours > 10 && hours <= 12) {
+        straightHours = 10;
+        overHours = hours - 10;
+      } else if (hours > 12) {
+        straightHours = 10;
+        overHours = 2;
+        doubleHours = hours - 12;
+      }
+
+      entry.dailyDuration = dailyDuration;
+      entry.straightTime = straightHours;
+      entry.overTime = overHours;
+      entry.doubleTime = doubleHours;
+    });
+
+    const { totalStraightTime, totalOverTime, totalDoubleTime } = calculateTotalTimes(update.showDayEntries);
+
+    update.totalStraightTime = totalStraightTime;
+    update.totalOverTime = totalOverTime;
+    update.totalDoubleTime = totalDoubleTime;
+  }
+
   this.setUpdate(update);
   next();
 });
