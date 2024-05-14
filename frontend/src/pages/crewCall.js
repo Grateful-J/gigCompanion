@@ -255,14 +255,12 @@ function updateShowDayEntries(globalTimecardId, rowId, startTimeValue, endTimeVa
   console.log(`2nd Global debug: Timecard ID: ${timecardId}`);
 
   // PATCH showDayEntries
-  fetch(`${apiBaseUrl}/api/timecards/${timecardId}`, {
+  fetch(`${apiBaseUrl}/api/timecards/daily/${timecardId}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      //jobId: jobId,
-      description: "This is a test description for row " + rowId,
       showDayEntries: {
         rowId: rowId,
         date: new Date(),
