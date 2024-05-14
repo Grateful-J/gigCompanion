@@ -31,12 +31,6 @@ jobDropdown.addEventListener("change", () => {
       travelDays = job.travelDays;
       globalTimecardId = job._id;
 
-      // Clear existing <tr> elements
-      const timecardTable = document.getElementById("timesheet-table-body");
-      while (timecardTable.firstChild) {
-        timecardTable.removeChild(timecardTable.firstChild);
-      }
-
       // Add timecard rows based on selected job
       addTimecardFlex(job);
 
@@ -102,19 +96,7 @@ function addTimecardFlex(job) {
 
   // Create the header row
   const header = document.createElement("div");
-  header.classList.add(
-    "flex",
-    "flex-row",
-    "items-center",
-    "justify-between",
-    "text-gray-800",
-    "px-4",
-    "py-2",
-    "border-b",
-    "border-gray-400",
-    "font-bold",
-    "bg-gray-100"
-  );
+  header.classList.add("flex", "flex-row", "w-full", "justify-between", "text-gray-800", "border-b", "border-gray-400", "font-bold", "bg-gray-100");
 
   // Add headers for each column
   const headers = ["Day of Week", "Date", "Start Time", "End Time", "Hours Worked", "Confirm"];
@@ -136,7 +118,7 @@ function addTimecardFlex(job) {
     const formattedDate = currentDate.toISOString().split("T")[0];
 
     const row = document.createElement("div");
-    row.classList.add("flex", "flex-row", "items-center", "justify-between", "p-2", "border", "border-gray-300", "mb-2");
+    row.classList.add("flex", "flex-row", "items-baseline", "justify-center", "border", "border-gray-300");
 
     const dayOfWeek = document.createElement("div");
     dayOfWeek.innerHTML = `<p class="block p-2">${currentDate.toLocaleDateString("en-US", { weekday: "long" })}</p>`;
