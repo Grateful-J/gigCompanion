@@ -2,6 +2,8 @@ let apiBaseUrl;
 import { loadNavbar } from "../components/navbar.js";
 loadNavbar();
 
+let currentState = ""; //to store autofilled state for form logic (is RTW or not)
+
 // Google Maps API
 import { Loader } from "@googlemaps/js-api-loader";
 const gAPIKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -44,9 +46,9 @@ loader.importLibrary("places").then(async () => {
     let streetNumber = selectedPlace.address_components[0].long_name;
     let streetName = selectedPlace.address_components[1].short_name;
     let city = selectedPlace.address_components[3].short_name;
-    let state = selectedPlace.address_components[6].short_name;
-    let postalCode = selectedPlace.address_components[7].long_name;
-    let country = selectedPlace.address_components[5].long_name;
+    let state = selectedPlace.address_components[5].short_name;
+    let postalCode = selectedPlace.address_components[7].long_name || "";
+    let country = selectedPlace.address_components[6].long_name || "";
 
     currentState = state; //updates global variable for r2w logic
 
@@ -146,7 +148,7 @@ function clearJobForm() {
 async function submitNewJob() {
   const jobName = document.querySelector("#job-name").value;
   const client = document.querySelector("#client").value;
-  const location = document.querySelector("#location").value;
+  const location = currentState || document.querySelector("#location").value;
   const startDate = document.querySelector("#start-date").value;
   const endDate = document.querySelector("#end-date").value;
   const showCode = document.querySelector("#show-code").value;
