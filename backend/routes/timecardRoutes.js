@@ -51,8 +51,13 @@ router.patch("/:id", async (req, res) => {
 
 // PATCH a time card and $addToSet
 router.patch("/daily/:id", async (req, res) => {
+  console.log(req.body);
+
+  const { showDayEntries } = req.body;
+
+  console.log(showDayEntries);
   try {
-    const updatedTimecard = await Timecard.findByIdAndUpdate(req.params.id, { $addToSet: req.body }, { new: true });
+    const updatedTimecard = await Timecard.findByIdAndUpdate(req.params.id, { $addToSet: { showDayEntries: showDayEntries } }, { new: true });
     res.status(200).json(updatedTimecard);
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -313,14 +313,14 @@ document.addEventListener("click", (event) => {
       console.log(`--- ---- ---- ---- ---- ----`);
       // Convert start and end time from HH:mm to Date
 
-      // TODO: should these even be dates?
+      /*     // TODO: should these even be dates?
       function toDateWithOutTimeZone(date) {
         let tempTime = date.split(":");
         let dt = new Date();
         dt.setHours(tempTime[0]);
         dt.setMinutes(tempTime[1]);
         return dt;
-      }
+      } */
 
       const startTimeValue = toDateWithOutTimeZone(startTime);
       const endTimeValue = toDateWithOutTimeZone(endTime);

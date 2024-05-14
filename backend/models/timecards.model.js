@@ -1,26 +1,21 @@
 const mongoose = require("mongoose");
 
 // Schema for showDayEntries
-const showDayEntries = new mongoose.Schema(
-  {
-    rowId: String,
-    date: Date,
-    clockIn: Date,
-    breakTime: Number,
-    clockOut: Date,
-    description: String,
-    totalHours: Number,
-    totalMinutes: Number,
-    duration: String,
-    isSubmitted: { type: Boolean, default: false },
-    straightTime: Number,
-    overTime: Number,
-    doubleTime: Number,
-  },
-  {
-    timestamps: true,
-  }
-);
+const showDayEntries = new mongoose.Schema({
+  rowId: String,
+  date: Date,
+  clockIn: Number,
+  breakTime: Number,
+  clockOut: Number,
+  description: String,
+  totalHours: Number,
+  totalMinutes: Number,
+  duration: String,
+  isSubmitted: { type: Boolean, default: false },
+  straightTime: Number,
+  overTime: Number,
+  doubleTime: Number,
+});
 
 // Schema for Timecard
 const timecardSchema = new mongoose.Schema(
