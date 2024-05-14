@@ -135,7 +135,7 @@ function addTimecardFlex(job) {
     const formattedDate = currentDate.toISOString().split("T")[0];
 
     const row = document.createElement("div");
-    row.classList.add("flex", "flex-row", "items-center", "justify-between", "p-4", "border", "border-gray-300", "mb-2");
+    row.classList.add("flex", "flex-row", "items-center", "justify-between", "p-2", "border", "border-gray-300", "mb-2");
 
     const dayOfWeek = document.createElement("div");
     dayOfWeek.innerHTML = `<p class="block p-2">${currentDate.toLocaleDateString("en-US", { weekday: "long" })}</p>`;
