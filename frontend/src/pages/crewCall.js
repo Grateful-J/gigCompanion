@@ -28,6 +28,7 @@ jobDropdown.addEventListener("change", () => {
       populateJobDetails(job);
       duration = job.duration;
       travelDays = job.travelDays;
+      globalTimecardId = job._id;
 
       // Clear existing <tr> elements
       const timecardTable = document.getElementById("timesheet-table-body");
@@ -36,8 +37,6 @@ jobDropdown.addEventListener("change", () => {
       }
 
       // Add timecard rows based on selected job
-      // addTimecardRows(job); legacy table code
-
       addTimecardFlex(job);
 
       // Add global timecard if one does not exist
@@ -148,10 +147,12 @@ function addTimecardFlex(job) {
 
     const startTimeInput = document.createElement("input");
     startTimeInput.type = "time";
+    startTimeInput.name = "start-time";
     startTimeInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
 
     const endTimeInput = document.createElement("input");
     endTimeInput.type = "time";
+    endTimeInput.name = "end-time";
     endTimeInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
 
     const hoursWorkedInput = document.createElement("input");
@@ -171,6 +172,7 @@ function addTimecardFlex(job) {
     confirmButton.innerHTML = "Confirm";
     confirmButton.classList.add("bg-blue-500", "hover:bg-blue-700", "text-white", "font-bold", "py-2", "px-4", "rounded");
     confirmButton.setAttribute("type", "submit");
+    confirmButton.setAttribute("id", "confirm-button");
 
     row.appendChild(dayOfWeek);
     row.appendChild(dateDiv);
@@ -178,18 +180,16 @@ function addTimecardFlex(job) {
     row.appendChild(endTimeInput);
     row.appendChild(hoursWorkedInput);
     row.appendChild(confirmButton);
+    console.log("Row Add with ID:", rowId);
 
     container.appendChild(row);
   }
 }
+// Function to PATCH showDayEntries based on row ID
+function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue) {
+  console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}`);
 
-// Function to PATCH showDayEntries based off of row ID
-function updateShowDayEntries(globalTimecardId, rowId, startTimeValue, endTimeValue) {
-  const timecardId = globalTimecardId;
-  console.log(`2nd Global debug: Timecard ID: ${timecardId}`);
-
-  // PATCH showDayEntries
-  fetch(`${apiBaseUrl}/api/timecards/daily/${timecardId}`, {
+  fetch(`${apiBaseUrl}/api/jobs/${jobId}/showDayEntries`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -209,17 +209,24 @@ function updateShowDayEntries(globalTimecardId, rowId, startTimeValue, endTimeVa
 }
 
 // Function to handle confirm button clicks and fetch times
-function handleConfirmClick(row) {
+function handleConfirmClick(row, jobId) {
   // Retrieve the start and end time inputs within the same row
   const startTimeInput = row.querySelector('input[name="start-time"]');
   const endTimeInput = row.querySelector('input[name="end-time"]');
 
   // Fetch the values from these inputs
-  const startTimeValue = startTimeInput ? startTimeInput.value : "No start time";
-  const endTimeValue = endTimeInput ? endTimeInput.value : "No end time";
+  const startTimeValue = startTimeInput.value; //  startTimeInput.value : "No start time";
+  const endTimeValue = endTimeInput.value; //  endTimeInput.value : "No end time";
 
   console.log("Start Time:", startTimeValue);
   console.log("End Time:", endTimeValue);
+
+  // Find row id of parent div of the clicked button
+  const rowId = row.id;
+  console.log(`Row ID: ${rowId}`);
+
+  // PATCH showDayEntries
+  updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue);
 }
 
 // Event delegation for confirm button
@@ -227,46 +234,18 @@ document.addEventListener("click", (event) => {
   // Check if the clicked element or its parent has the 'confirm-button' id
   if (event.target.id === "confirm-button" || event.target.closest("#confirm-button")) {
     event.preventDefault();
-    // Find row id of parent div of the clicked button
-    const rowId = event.target.parentElement.parentElement.id;
-    console.log(`Row ID: ${rowId}`);
-
     // Find the row by navigating up from the confirm button
     const row = event.target.closest("div.flex-row");
     if (row) {
-      handleConfirmClick(row);
-
-      // Find Values of start and end time and return as string
-      const startTime = row.querySelector('input[name="start-time"]').value;
-      const endTime = row.querySelector('input[name="end-time"]').value;
-      console.log(`Start Time: ${startTime}`);
-      console.log(`End Time: ${endTime}`);
-      console.log(`--- ---- ---- ---- ---- ----`);
-      // Convert start and end time from HH:mm to Date
-
-      /*     // TODO: should these even be dates?
-      function toDateWithOutTimeZone(date) {
-        let tempTime = date.split(":");
-        let dt = new Date();
-        dt.setHours(tempTime[0]);
-        dt.setMinutes(tempTime[1]);
-        return dt;
-      } */
-
-      //const startTimeValue = toDateWithOutTimeZone(startTime); // TODO: should these even be dates?
-      //const endTimeValue = toDateWithOutTimeZone(endTime); // TODO: should these even be dates?
-      const startTimeValue = startTime;
-      const endTimeValue = endTime;
-      console.log(`Start Time: ${startTimeValue}`);
-      console.log(`End Time: ${endTimeValue}`);
-
-      // PATCH showDayEntries
-      updateShowDayEntries(globalTimecardId, rowId, startTimeValue, endTimeValue);
+      const jobId = globalTimecardId;
+      console.log(`now cicking Job ID: ${jobId}`);
+      handleConfirmClick(row, jobId);
     } else {
       console.log("Confirm button was clicked, but no row was found.");
     }
   }
 });
+
 //TODO: on Confirm /hide confirm button until edit
 
 // TODO: Add notes
