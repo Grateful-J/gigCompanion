@@ -16,6 +16,22 @@ async function fetchAndPopulateJobs() {
   }
 }
 
+// Fetch Jobs that have isSubmitted = false as a value
+export async function fetchNonSubmittedJobs() {
+  try {
+    const response = await fetch(`${apiBaseUrl}/api/jobs?isSubmitted=false`);
+    const jobs = await response.json();
+    //console.log(jobs);
+    const filteredJobs = jobs.filter((job) => job.isSubmitted === false);
+    //console.log(filteredJobs);
+    populateJobsDropdown(filteredJobs);
+    return jobs;
+  } catch (e) {
+    console.error("Failed to fetch jobs", e);
+    return []; //
+  }
+}
+
 //Function to fetch single job
 export async function fetchJob(jobId) {
   try {

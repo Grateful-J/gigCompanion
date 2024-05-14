@@ -1,12 +1,17 @@
 let apiBaseUrl;
 import { loadNavbar } from "../components/navbar.js";
-import { fetchAndPopulateJobs, populateJobsDropdown, fetchJob } from "../util/jobService.js";
+import { fetchAndPopulateJobs, populateJobsDropdown, fetchNonSubmittedJobs, fetchJob } from "../util/jobService.js";
 loadNavbar();
-fetchAndPopulateJobs();
+//fetchAndPopulateJobs(); // Fetch all jobs original **Working**
+fetchNonSubmittedJobs();
 
 // Global Variables
 let duration = 0;
 let travelDays = 0;
+let isEditing = false;
+let editingTimecardID = "";
+let globalJob = {};
+let globalTimecardId = "";
 
 //checks if env is dev or prod
 if (import.meta.env.VITE_MODE === "dev") {
@@ -24,6 +29,7 @@ jobDropdown.addEventListener("change", () => {
       populateJobDetails(job);
       duration = job.duration;
       travelDays = job.travelDays;
+      globalTimecardId = job._id;
 
       // Clear existing <tr> elements
       const timecardTable = document.getElementById("timesheet-table-body");
@@ -32,10 +38,27 @@ jobDropdown.addEventListener("change", () => {
       }
 
       // Add timecard rows based on selected job
-      addTimecardRows(job);
+      addTimecardFlex(job);
+
+      // Add global timecard if one does not exist
+      fetchJobAndDisplayTimecards(selectedJobId);
+
+      // returns job
+      globalJob = job;
+      //console.log(`Global Job: ${globalJob}`);
     });
   }
 });
+
+function fetchJobAndDisplayTimecards(jobId) {
+  //console.log(`Fetching Job: ${jobId}`);
+  fetch(`${apiBaseUrl}/api/jobs/${jobId}`)
+    .then((response) => response.json())
+    .then((job) => {
+      addTimecardFlex(job);
+    })
+    .catch((error) => console.error("Error fetching job:", error));
+}
 
 // Populate Job details with selected job
 function populateJobDetails(job) {
@@ -62,74 +85,168 @@ function populateJobDetails(job) {
   client.textContent = job.client;
   rate.textContent = job.rate;
   location.textContent = job.location;
-  jobCode.textContent = job.jobCode;
-  hoursSt.textContent = job.hoursSt;
-  hoursOt.textContent = job.hoursOt;
-  hoursDt.textContent = job.hoursDt;
+  jobCode.textContent = job.showCode;
+  hoursSt.textContent = job.totalStraightTime;
+  hoursOt.textContent = job.totalOverTime;
+  hoursDt.textContent = job.totalDoubleTime;
 }
 
-// TIME CARD
-// DATE/ START TIME/ END TIME/ HOURS WORKED
+// Function to addTimecard Flex container
+// Dynamically add timecard rows based on the job's showDayEntries into a flexbox container
+function addTimecardFlex(job) {
+  // Create the container
+  const container = document.getElementById("timesheet-flexbox");
 
-// Dynamically add timecard rows based on duration value on table id="timesheet-table"
-function addTimecardRows(job) {
-  const table = document.getElementById("timesheet-table-body");
+  // Clear the container
+  container.innerHTML = "";
+
+  // Create the header row
+  const header = document.createElement("div");
+  header.classList.add(
+    "flex",
+    "flex-row",
+    "items-center",
+    "justify-between",
+    "text-gray-800",
+    "px-4",
+    "py-2",
+    "border-b",
+    "border-gray-400",
+    "font-bold",
+    "bg-gray-100"
+  );
+
+  // Add headers for each column
+  const headers = ["Day of Week", "Date", "Start Time", "End Time", "Hours Worked", "Confirm"];
+  headers.forEach((headerText) => {
+    const headerDiv = document.createElement("div");
+    headerDiv.innerHTML = headerText;
+    headerDiv.classList.add("flex-1", "text-center");
+    header.appendChild(headerDiv);
+  });
+
+  // Add the header row to the container
+  container.appendChild(header);
+
+  // Generate rows based on the job's duration and start date
   const baseDate = new Date(job.startDate);
-  for (let i = 0; i < duration; i++) {
-    //dynamically add date based off of start date
-    const rowDate = baseDate.setDate(baseDate.getDate() + 1);
-    const date = document.createElement("td");
-    const initDate = new Date(rowDate);
-    const formattedDate = initDate.toISOString().split("T")[0];
-    console.log(formattedDate);
+  for (let i = 0; i < job.duration; i++) {
+    const currentDate = new Date(baseDate);
+    currentDate.setDate(baseDate.getDate() + i);
+    const formattedDate = currentDate.toISOString().split("T")[0];
 
-    // set class for each row to allow padding and empty space bewtween each row
+    const row = document.createElement("div");
+    row.classList.add("flex", "flex-row", "items-center", "justify-between", "p-2", "border", "border-gray-300", "mb-2");
 
-    date.classList.add("p-8");
+    const dayOfWeek = document.createElement("div");
+    dayOfWeek.innerHTML = `<p class="block p-2">${currentDate.toLocaleDateString("en-US", { weekday: "long" })}</p>`;
+    dayOfWeek.classList.add("flex-1");
 
-    // TODO: set date to MM/DD/YYYY with no TIME
-    date.innerHTML = formattedDate;
+    const dateDiv = document.createElement("div");
+    dateDiv.innerHTML = `<span class="block p-2">${formattedDate}</span>`;
+    dateDiv.classList.add("flex-1");
 
-    // TODO: find library to make proper HASH of rowID
-    const jobId = job._id;
-    const hashDate = formattedDate.replace(/\//g, "-");
-    const rowNumber = i + 1;
-    const rowId = `${jobId}-${hashDate}-${rowNumber}`;
+    const startTimeInput = document.createElement("input");
+    startTimeInput.type = "time";
+    startTimeInput.name = "start-time";
+    startTimeInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
 
-    const row = document.createElement("tr");
-    row.classList.add("border", "border-gray-300");
-    row.setAttribute("id", rowId);
-    const dayOfWeek = document.createElement("td");
-    const startTime = document.createElement("td");
-    const endTime = document.createElement("td");
-    const hoursWorked = document.createElement("td");
-    const confirm = document.createElement("td");
+    const endTimeInput = document.createElement("input");
+    endTimeInput.type = "time";
+    endTimeInput.name = "end-time";
+    endTimeInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
 
-    // displays the day of week veritcally
-    dayOfWeek.innerHTML = `<p class="flex flex-shrink -rotate-90 text-md -px-2">${initDate.toLocaleDateString("en-US", {
-      weekday: "long",
-    })}</p>`;
+    const hoursWorkedInput = document.createElement("div");
+    hoursWorkedInput.name = "hours-worked";
+    hoursWorkedInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
 
-    // add field inputs for start and end time
-    startTime.innerHTML = '<input type="time" class="w-full border border-gray-300 rounded px-2 py-1" name="start-time" id="start-time">';
-    endTime.innerHTML = '<input type="time" class="w-full border border-gray-300 rounded px-2 py-1" name="end-time" id="end-time">';
+    // Check if there is an entry for the current date and prefill inputs if data exists
+    const rowId = `${job._id}-${formattedDate}-${i + 1}`;
+    row.id = rowId;
+    const entry = job.showDayEntries.find((entry) => entry.rowId === rowId);
+    if (entry) {
+      startTimeInput.value = entry.clockIn;
+      endTimeInput.value = entry.clockOut;
+      hoursWorkedInput.innerHTML = `<span class="block p-2 bg-gray-100 rounded text-center">${entry.dailyDuration}</span>`; // Will eventually be calculated. current default is 0
+    }
 
-    // calculate hours worked
-    hoursWorked.innerHTML = '<input type="number" class="w-full border border-gray-300 rounded px-2 py-1" name="hours-worked" id="hours-worked">';
-
-    // add a buttun labeled "Confirm"
-    confirm.innerHTML = '<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Confirm</button>';
+    const confirmButton = document.createElement("button");
+    confirmButton.innerHTML = "Confirm";
+    confirmButton.classList.add("bg-blue-500", "hover:bg-blue-700", "text-white", "font-bold", "py-2", "px-4", "rounded");
+    confirmButton.setAttribute("type", "submit");
+    confirmButton.setAttribute("id", "confirm-button");
 
     row.appendChild(dayOfWeek);
-    row.appendChild(date);
-    row.appendChild(startTime);
-    row.appendChild(endTime);
-    row.appendChild(hoursWorked);
-    row.appendChild(confirm);
-    table.appendChild(row);
-    console.log(`Row ${i + 1} added to table with ID: ${rowId}`);
+    row.appendChild(dateDiv);
+    row.appendChild(startTimeInput);
+    row.appendChild(endTimeInput);
+    row.appendChild(hoursWorkedInput);
+    row.appendChild(confirmButton);
+    //console.log("Row Add with ID:", rowId);
+
+    container.appendChild(row);
   }
 }
+// Function to PATCH showDayEntries based on row ID
+function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue) {
+  console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}`);
+
+  fetch(`${apiBaseUrl}/api/jobs/daily/${jobId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      rowId: rowId,
+      clockIn: startTimeValue,
+      breakTime: 0, // Filler for now
+      clockOut: endTimeValue,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("ShowDayEntries updated successfully:", data);
+    })
+    .catch((error) => console.error("Error updating showDayEntries:", error));
+}
+
+// Function to handle confirm button clicks and fetch times
+function handleConfirmClick(row, jobId) {
+  // Retrieve the start and end time inputs within the same row
+  const startTimeInput = row.querySelector('input[name="start-time"]');
+  const endTimeInput = row.querySelector('input[name="end-time"]');
+
+  // Fetch the values from these inputs
+  const startTimeValue = startTimeInput.value; //  startTimeInput.value : "No start time";
+  const endTimeValue = endTimeInput.value; //  endTimeInput.value : "No end time";
+
+  //console.log("Start Time:", startTimeValue);
+  //console.log("End Time:", endTimeValue);
+
+  // Find row id of parent div of the clicked button
+  const rowId = row.id;
+  //console.log(`Row ID: ${rowId}`);
+
+  // PATCH showDayEntries
+  updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue);
+}
+
+// Event delegation for confirm button
+document.addEventListener("click", (event) => {
+  // Check if the clicked element or its parent has the 'confirm-button' id
+  if (event.target.id === "confirm-button" || event.target.closest("#confirm-button")) {
+    event.preventDefault();
+    // Find the row by navigating up from the confirm button
+    const row = event.target.closest("div.flex-row");
+    if (row) {
+      const jobId = globalTimecardId;
+      console.log(`now cicking Job ID: ${jobId}`);
+      handleConfirmClick(row, jobId);
+    } else {
+      console.log("Confirm button was clicked, but no row was found.");
+    }
+  }
+});
 
 //TODO: on Confirm /hide confirm button until edit
 
@@ -137,12 +254,12 @@ function addTimecardRows(job) {
 
 // TODO: Add Expenses
 
-// TODO: add calculate hours fuction (maybe in API instead)
-
-// TODO: add PATCH to update timecard entries
-
-// TODO: add POST to create timecard entries
-
 // TODO: add DELETE to delete timecard entries
 
 // TODO: add edit timecard entries
+
+// TODO: optimize for mobile
+// TODO: Mobile: Top view- just select job
+// TODO: Mobile: below that- timecard flex
+// TODO: Mobile: below that notes then expenses
+// TODO:

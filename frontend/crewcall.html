@@ -26,6 +26,7 @@
             <select
               id="job-dropdown"
               class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md bg-gray-700 text-white"
+              placeholder="Select a Job"
             >
               <!-- Options will be dynamically filled -->
             </select>
@@ -81,7 +82,7 @@
         </div>
 
         <!-- Middle Main content: Timesheet with dynamic table -->
-        <div class="flex flex-col w-1/2 border border-blue-500">
+        <div class="flex flex-col w-1/2 border border-blue-500 hidden">
           <table id="timesheet-table" class="table w-full border-b border-black text-gray-800 bg-gray-200">
             <thead>
               <tr class="border-b border-gray-300">
@@ -98,6 +99,9 @@
             </tbody>
           </table>
         </div>
+
+        <!-- Middle Flexbox: Timesheet dupe-->
+        <div id="timesheet-flexbox"></div>
 
         <!-- Right sidebar: Show Notes for selected Job -->
         <div class="flex flex-col w-1/4 border border-green-500 rounded-lg">

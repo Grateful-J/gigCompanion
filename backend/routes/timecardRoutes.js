@@ -49,6 +49,35 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
+// PATCH a time card and $addToSet
+router.patch("/daily/:id", async (req, res) => {
+  console.log(req.body);
+
+  const { rowId, clockIn, breakTime, clockOut } = req.body;
+
+  try {
+    const timecard = await Timecard.findById(req.params.id);
+
+    // Check if entry with the same rowId already exists
+    const entryExists = timecard.showDayEntries.some((entry) => entry.rowId === rowId);
+
+    if (entryExists) {
+      return res.status(400).json({ message: "Entry with this rowId already exists." });
+    }
+
+    // Add new entry if it does not exist
+    const updatedTimecard = await Timecard.findByIdAndUpdate(
+      req.params.id,
+      { $addToSet: { showDayEntries: { rowId, clockIn, breakTime, clockOut } } },
+      { new: true }
+    );
+
+    res.status(200).json(updatedTimecard);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // PATCH to mark timecard as submitted
 router.patch("/submit/:id", async (req, res) => {
   try {

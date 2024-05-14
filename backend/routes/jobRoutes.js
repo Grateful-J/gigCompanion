@@ -32,7 +32,7 @@ router.post("/", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-/* //old patch route
+//old patch route
 //PATCH jobs
 router.patch("/:id", async (req, res) => {
   try {
@@ -41,12 +41,12 @@ router.patch("/:id", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}); */
+});
 
 // new patch route that allows update to submitted fields
 // specifically duration and travel days pre.Save in mongoose
 
-// PATCH jobs
+/* // PATCH jobs
 router.patch("/:id", async (req, res) => {
   console.log("Received PATCH request for job:", req.params.id);
   try {
@@ -64,6 +64,32 @@ router.patch("/:id", async (req, res) => {
     res.status(200).json(updatedJob);
   } catch (error) {
     console.error("Error in PATCH job route:", error);
+    res.status(500).json({ message: error.message });
+  }
+}); */
+
+// Update job show timesheets
+// PATCH a job to add or update showDayEntries
+router.patch("/daily/:id", async (req, res) => {
+  const { rowId, clockIn, breakTime, clockOut, description } = req.body;
+
+  try {
+    const job = await Job.findById(req.params.id);
+
+    // Check if entry with the same rowId already exists
+    const entryIndex = job.showDayEntries.findIndex((entry) => entry.rowId === rowId);
+
+    if (entryIndex !== -1) {
+      // Update existing entry
+      job.showDayEntries[entryIndex] = { rowId, clockIn, breakTime, clockOut, description };
+    } else {
+      // Add new entry
+      job.showDayEntries.push({ rowId, clockIn, breakTime, clockOut, description });
+    }
+
+    const updatedJob = await job.save();
+    res.status(200).json(updatedJob);
+  } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
