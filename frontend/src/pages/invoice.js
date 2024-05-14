@@ -52,6 +52,13 @@ document.getElementById("job-dropdown").addEventListener("change", function () {
     .catch((error) => console.error("Error loading job details:", error));
 });
 
+// TODO: Function to load job hours sumamry for invoice
+function loadJobHoursSummary(selectedJobId) {
+  // while loop for duration to add timecard rows
+}
+
+// TODO: Function to populate timesheet-table-body with job hours
+
 //TODO: Look Into https://pdfkit.org/ to create PDFs for invoice
 //TODO: Look into puppeteer to generate invoice pdf https://developer.chrome.com/docs/puppeteer/get-started/
 //TODO: Add functionality to generate invoice
