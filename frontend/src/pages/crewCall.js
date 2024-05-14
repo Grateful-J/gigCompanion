@@ -155,8 +155,8 @@ function addTimecardFlex(job) {
     endTimeInput.name = "end-time";
     endTimeInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
 
-    const hoursWorkedInput = document.createElement("input");
-    hoursWorkedInput.type = "number";
+    const hoursWorkedInput = document.createElement("div");
+    hoursWorkedInput.name = "hours-worked";
     hoursWorkedInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
 
     // Check if there is an entry for the current date and prefill inputs if data exists
@@ -166,7 +166,7 @@ function addTimecardFlex(job) {
     if (entry) {
       startTimeInput.value = entry.clockIn;
       endTimeInput.value = entry.clockOut;
-      hoursWorkedInput.value = entry.duration; // Will eventually be calculated. current default is 0
+      hoursWorkedInput.innerHTML = `<span class="block p-2 bg-gray-100 rounded text-center">${entry.dailyDuration}</span>`; // Will eventually be calculated. current default is 0
     }
 
     const confirmButton = document.createElement("button");
