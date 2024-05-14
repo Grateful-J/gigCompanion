@@ -45,9 +45,9 @@ document.getElementById("job-dropdown").addEventListener("change", function () {
       document.getElementById("rate").textContent = "$" + job.rate;
       document.getElementById("location").textContent = job.location;
       document.getElementById("job-code").textContent = job.showCode || "N/A";
-      document.getElementById("hours-st").textContent = job.straightTime || "N/A";
-      document.getElementById("hours-ot").textContent = job.overTime || "N/A";
-      document.getElementById("hours-dt").textContent = job.doubleTime || "N/A";
+      document.getElementById("hours-st").textContent = job.totalStraightTime || "N/A";
+      document.getElementById("hours-ot").textContent = job.totalOvertime || "N/A";
+      document.getElementById("hours-dt").textContent = job.totalDoubleTime || "N/A";
     })
     .catch((error) => console.error("Error loading job details:", error));
 });
