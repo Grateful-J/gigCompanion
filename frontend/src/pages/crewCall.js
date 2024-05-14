@@ -253,12 +253,6 @@ document.addEventListener("click", (event) => {
 
 // TODO: Add Expenses
 
-// TODO: add calculate hours fuction (maybe in API instead)
-
-// TODO: add PATCH to update timecard entries
-
-// TODO: add POST to create timecard entries
-
 // TODO: add DELETE to delete timecard entries
 
 // TODO: add edit timecard entries
