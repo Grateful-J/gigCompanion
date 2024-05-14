@@ -4,13 +4,13 @@ const rtwStates = require("../utils/rtwStates");
 // Schema for showDayEntries
 const showDayEntriesSchema = new mongoose.Schema({
   rowId: String,
-  clockIn: String,
+  clockIn: String, // in 24 hour HH:MM format
   breakTime: { type: Number, default: 0 }, // In minutes
-  clockOut: String,
+  clockOut: String, // in 24 hour HH:MM format
   description: String,
   //totalHours: Number,
   //totalMinutes: Number,
-  dailyDuration: String,
+  dailyDuration: String, // in total 24 hour HH:MM format
   isTravelSandwich: { type: Boolean, default: false }, // TODO: logic for sandwich days
   straightTime: Number,
   overTime: Number,
@@ -49,6 +49,21 @@ function calculateDuration(startDate, endDate) {
   const duration = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
   console.log("Calculated Duration:", duration);
   return duration;
+}
+
+// Function to calculate total hours worked for each day
+function calculateWorkHours(clockIn, clockOut, breakTime, dailyDuration) {
+  //clock In and clock Out are strings in 24 hour HH:MM format
+  const start = new Date(clockIn);
+  console.log(`Clock In: ${clockIn}`);
+  const end = new Date(clockOut);
+  console.log(`Clock Out: ${clockOut}`);
+  const breakDuration = breakTime * 60;
+  console.log(`Break Duration: ${breakDuration}`);
+  const duration = Math.ceil((end - start - breakDuration) / (1000 * 60 * 60)) + 1;
+  console.log("Calculated Work Hours:", duration);
+  dailyDuration = duration;
+  return dailyDuration || 0;
 }
 
 //TODO: calculate travel days on travel/work or other outliers
@@ -97,6 +112,7 @@ function calculateFields(doc, update) {
 jobSchema.pre("save", function (next) {
   console.log("Pre-save: Starting to calculate fields for save operation.");
   calculateFields(this, this);
+  calculateWorkHours(this.clockIn, this.clockOut, this.breakTime, this.dailyDuration);
   next();
 });
 
