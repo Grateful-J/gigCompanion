@@ -322,8 +322,10 @@ document.addEventListener("click", (event) => {
         return dt;
       } */
 
-      const startTimeValue = toDateWithOutTimeZone(startTime);
-      const endTimeValue = toDateWithOutTimeZone(endTime);
+      //const startTimeValue = toDateWithOutTimeZone(startTime); // TODO: should these even be dates?
+      //const endTimeValue = toDateWithOutTimeZone(endTime); // TODO: should these even be dates?
+      const startTimeValue = startTime;
+      const endTimeValue = endTime;
       console.log(`Start Time: ${startTimeValue}`);
       console.log(`End Time: ${endTimeValue}`);
 
