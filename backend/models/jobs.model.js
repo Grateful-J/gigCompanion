@@ -5,13 +5,13 @@ const rtwStates = require("../utils/rtwStates");
 const showDayEntriesSchema = new mongoose.Schema({
   rowId: String,
   clockIn: String,
-  breakTime: Number,
+  breakTime: Number, // In minutes
   clockOut: String,
   description: String,
   totalHours: Number,
   totalMinutes: Number,
   duration: String,
-  isSubmitted: { type: Boolean, default: false },
+  isTravelSandwich: { type: Boolean, default: false }, // TODO: logic for sandwich days
   straightTime: Number,
   overTime: Number,
   doubleTime: Number,
@@ -31,11 +31,12 @@ const jobSchema = new mongoose.Schema(
     isFreelance: { type: Boolean, default: false },
     rate: { type: Number, default: 650 },
     isLocal: { type: Boolean, default: false },
-    totalStraightTime: Number,
-    totalOverTime: Number,
-    totalDoubleTime: Number,
+    totalStraightTime: Number, // TODO: calculate total straight time in hours
+    totalOverTime: Number, // TODO: calculate total over time in hours
+    totalDoubleTime: Number, // TODO: calculate total double time in hours
     isSubmitted: { type: Boolean, default: false },
     isInvoiced: { type: Boolean, default: false },
+    showDayEntries: [showDayEntriesSchema], // Add showDayEntries to Job schema
   },
   {
     timestamps: true,

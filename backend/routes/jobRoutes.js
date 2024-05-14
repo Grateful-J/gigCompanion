@@ -68,6 +68,32 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
+// Update job show timesheets
+// PATCH a job to add or update showDayEntries
+router.patch("/jobs/daily/:id", async (req, res) => {
+  const { rowId, clockIn, breakTime, clockOut, description } = req.body;
+
+  try {
+    const job = await Job.findById(req.params.id);
+
+    // Check if entry with the same rowId already exists
+    const entryIndex = job.showDayEntries.findIndex((entry) => entry.rowId === rowId);
+
+    if (entryIndex !== -1) {
+      // Update existing entry
+      job.showDayEntries[entryIndex] = { rowId, clockIn, breakTime, clockOut, description };
+    } else {
+      // Add new entry
+      job.showDayEntries.push({ rowId, clockIn, breakTime, clockOut, description });
+    }
+
+    const updatedJob = await job.save();
+    res.status(200).json(updatedJob);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 //DELETE job
 router.delete("/:id", async (req, res) => {
   try {
