@@ -85,9 +85,9 @@ function populateJobDetails(job) {
   rate.textContent = job.rate;
   location.textContent = job.location;
   jobCode.textContent = job.jobCode;
-  hoursSt.textContent = job.hoursSt;
-  hoursOt.textContent = job.hoursOt;
-  hoursDt.textContent = job.hoursDt;
+  hoursSt.textContent = job.totalStraightTime;
+  hoursOt.textContent = job.totalOverTime;
+  hoursDt.textContent = job.totalDoubleTime;
 }
 
 // Function to addTimecard Flex container
