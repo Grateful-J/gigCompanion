@@ -2,6 +2,16 @@ let apiBaseUrl;
 import { loadNavbar } from "../components/navbar.js";
 loadNavbar();
 
+// Google Maps API
+import { Loader } from "@googlemaps/js-api-loader";
+const gAPIKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+const loader = new Loader({
+  apiKey: gAPIKey,
+  version: "weekly",
+  libraries: ["places"],
+  language: "en",
+});
+
 //checks if env is dev or prod
 if (import.meta.env.VITE_MODE === "dev") {
   apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
