@@ -1,6 +1,22 @@
 const mongoose = require("mongoose");
 const rtwStates = require("../utils/rtwStates");
 
+// Schema for showDayEntries
+const showDayEntriesSchema = new mongoose.Schema({
+  rowId: String,
+  clockIn: String,
+  breakTime: Number,
+  clockOut: String,
+  description: String,
+  totalHours: Number,
+  totalMinutes: Number,
+  duration: String,
+  isSubmitted: { type: Boolean, default: false },
+  straightTime: Number,
+  overTime: Number,
+  doubleTime: Number,
+});
+
 const jobSchema = new mongoose.Schema(
   {
     jobName: String,
@@ -15,9 +31,9 @@ const jobSchema = new mongoose.Schema(
     isFreelance: { type: Boolean, default: false },
     rate: { type: Number, default: 650 },
     isLocal: { type: Boolean, default: false },
-    straightTime: Number,
-    overTime: Number,
-    doubleTime: Number,
+    totalStraightTime: Number,
+    totalOverTime: Number,
+    totalDoubleTime: Number,
     isSubmitted: { type: Boolean, default: false },
     isInvoiced: { type: Boolean, default: false },
   },
