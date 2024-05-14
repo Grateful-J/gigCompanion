@@ -45,13 +45,13 @@ jobDropdown.addEventListener("change", () => {
 
       // returns job
       globalJob = job;
-      console.log(`Global Job: ${globalJob}`);
+      //console.log(`Global Job: ${globalJob}`);
     });
   }
 });
 
 function fetchJobAndDisplayTimecards(jobId) {
-  console.log(`Fetching Job: ${jobId}`);
+  //console.log(`Fetching Job: ${jobId}`);
   fetch(`${apiBaseUrl}/api/jobs/${jobId}`)
     .then((response) => response.json())
     .then((job) => {
@@ -182,7 +182,7 @@ function addTimecardFlex(job) {
     row.appendChild(endTimeInput);
     row.appendChild(hoursWorkedInput);
     row.appendChild(confirmButton);
-    console.log("Row Add with ID:", rowId);
+    //console.log("Row Add with ID:", rowId);
 
     container.appendChild(row);
   }
@@ -220,12 +220,12 @@ function handleConfirmClick(row, jobId) {
   const startTimeValue = startTimeInput.value; //  startTimeInput.value : "No start time";
   const endTimeValue = endTimeInput.value; //  endTimeInput.value : "No end time";
 
-  console.log("Start Time:", startTimeValue);
-  console.log("End Time:", endTimeValue);
+  //console.log("Start Time:", startTimeValue);
+  //console.log("End Time:", endTimeValue);
 
   // Find row id of parent div of the clicked button
   const rowId = row.id;
-  console.log(`Row ID: ${rowId}`);
+  //console.log(`Row ID: ${rowId}`);
 
   // PATCH showDayEntries
   updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue);
