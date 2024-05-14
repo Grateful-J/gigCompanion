@@ -84,7 +84,7 @@ function populateJobDetails(job) {
   client.textContent = job.client;
   rate.textContent = job.rate;
   location.textContent = job.location;
-  jobCode.textContent = job.jobCode;
+  jobCode.textContent = job.showCode;
   hoursSt.textContent = job.totalStraightTime;
   hoursOt.textContent = job.totalOverTime;
   hoursDt.textContent = job.totalDoubleTime;
