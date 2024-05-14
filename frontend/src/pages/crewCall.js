@@ -261,13 +261,10 @@ function updateShowDayEntries(globalTimecardId, rowId, startTimeValue, endTimeVa
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      showDayEntries: {
-        rowId: rowId,
-        //date: new Date(),
-        clockIn: startTimeValue,
-        breakTime: 0, // Filler for now
-        clockOut: endTimeValue,
-      },
+      rowId: rowId,
+      clockIn: startTimeValue,
+      breakTime: 0, // Filler for now
+      clockOut: endTimeValue,
     }),
   })
     .then((response) => response.json())
