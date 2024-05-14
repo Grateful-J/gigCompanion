@@ -263,7 +263,7 @@ function updateShowDayEntries(globalTimecardId, rowId, startTimeValue, endTimeVa
     body: JSON.stringify({
       showDayEntries: {
         rowId: rowId,
-        date: new Date(),
+        //date: new Date(),
         clockIn: startTimeValue,
         breakTime: 0, // Filler for now
         clockOut: endTimeValue,
