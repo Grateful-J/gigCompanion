@@ -62,6 +62,10 @@ function populateJobDetails(job) {
   const formattedISOStart = initStartDate.toISOString().slice(0, 10);
   const formattedISOStop = initEndDate.toISOString().slice(0, 10);
 
+  // Convert formattedISO to readable dates (format: mm/dd/yyyy)
+  const readableStartDate = formattedISOStart.slice(5, 7) + "/" + formattedISOStart.slice(8, 10) + "/" + formattedISOStart.slice(0, 4);
+  const readableEndDate = formattedISOStop.slice(5, 7) + "/" + formattedISOStop.slice(8, 10) + "/" + formattedISOStop.slice(0, 4);
+
   // Populate job details
   const jobName = document.getElementById("job-name");
   const startDate = document.getElementById("start-date");
@@ -74,8 +78,8 @@ function populateJobDetails(job) {
   const hoursOt = document.getElementById("hours-ot");
   const hoursDt = document.getElementById("hours-dt");
   jobName.textContent = job.jobName;
-  startDate.textContent = formattedISOStart;
-  endDate.textContent = formattedISOStop;
+  startDate.textContent = readableStartDate;
+  endDate.textContent = readableEndDate;
   client.textContent = job.client;
   rate.textContent = job.rate;
   location.textContent = job.location;
@@ -103,7 +107,7 @@ function addTimecardFlex(job) {
   headers.forEach((headerText) => {
     const headerDiv = document.createElement("div");
     headerDiv.innerHTML = headerText;
-    const formattedHeaderText = headerText.toLowerCase().replace(" ", "-"); // Replaces spaces with hyphens and all to lower
+    const formattedHeaderText = headerText.toLowerCase().replace(" ", "-") + "-header"; // Replaces spaces with hyphens and all to lower
     headerDiv.classList.add("flex-1", "text-center");
     headerDiv.setAttribute("id", formattedHeaderText);
     header.appendChild(headerDiv);
