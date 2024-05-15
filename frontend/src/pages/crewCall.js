@@ -103,7 +103,9 @@ function addTimecardFlex(job) {
   headers.forEach((headerText) => {
     const headerDiv = document.createElement("div");
     headerDiv.innerHTML = headerText;
+    const formattedHeaderText = headerText.toLowerCase().replace(" ", "-"); // Replaces spaces with hyphens and all to lower
     headerDiv.classList.add("flex-1", "text-center");
+    headerDiv.setAttribute("id", formattedHeaderText);
     header.appendChild(headerDiv);
   });
 
@@ -123,7 +125,18 @@ function addTimecardFlex(job) {
     const formattedDate = currentDate.toISOString().split("T")[0];
 
     const row = document.createElement("div");
-    row.classList.add("flex", "flex-row", "w-full", "items-baseline", "justify-between", "border", "border-gray-300", "self-center", "rouded");
+    row.classList.add(
+      "flex",
+      "flex-row",
+      "w-full",
+      "items-baseline",
+      "justify-between",
+      "border",
+      "border-gray-300",
+      "self-center",
+      "rouded",
+      "space-x-2"
+    );
 
     const dayOfWeek = document.createElement("div");
     dayOfWeek.innerHTML = `<p class="block p-2">${currentDate.toLocaleDateString("en-US", { weekday: "long" })}</p>`;
@@ -137,18 +150,56 @@ function addTimecardFlex(job) {
     startTimeInput.type = "time";
     startTimeInput.name = "start-time";
     startTimeInput.step = "900"; // 15 minutes
-    startTimeInput.classList.add("border", "border-gray-300", "rounded", "px-1", "py-1", "text-gray-600", "flex-1");
+    startTimeInput.classList.add(
+      "border",
+      "border-gray-300",
+      "rounded",
+      "px-1",
+      "py-1",
+      "text-gray-600",
+      "flex-1",
+      "max-w-36",
+      "min-h-10",
+      "text-balance"
+    );
 
     const endTimeInput = document.createElement("input");
     endTimeInput.type = "time";
     endTimeInput.name = "end-time";
     endTimeInput.step = "900"; // 15 minutes
-    endTimeInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-1", "py-1", "text-gray-600", "flex-1");
+    endTimeInput.classList.add(
+      "w-full",
+      "border",
+      "border-gray-300",
+      "rounded",
+      "px-1",
+      "py-1",
+      "text-gray-600",
+      "flex-1",
+      "max-w-36",
+      "min-h-10",
+      "text-balance"
+    );
 
     const hoursWorkedInput = document.createElement("div");
     hoursWorkedInput.name = "hours-worked";
-    hoursWorkedInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
-    hoursWorkedInput.innerHTML = `<span class="block p-2 bg-gray-100 rounded text-center">0</span>`;
+    hoursWorkedInput.classList.add(
+      "w-full",
+      "border",
+      "border-gray-300",
+      "rounded",
+      "px-2",
+      "py-1",
+      "text-gray-600",
+      "flex-1",
+      "max-w-14",
+      "block",
+      "p-2",
+      "bg-gray-100",
+      "rounded",
+      "text-center"
+    );
+    hoursWorkedInput.innerHTML = `<span class="">0</span>`;
 
     if ((job.travelDays > 0 && i === 0) || (job.travelDays > 0 && i === job.duration - 1)) {
       row.classList.add("bg-gray-600");
@@ -167,12 +218,12 @@ function addTimecardFlex(job) {
     if (entry) {
       startTimeInput.value = entry.clockIn;
       endTimeInput.value = entry.clockOut;
-      hoursWorkedInput.innerHTML = `<span class="block p-2 bg-gray-100 rounded text-center">${entry.dailyDuration}</span>`; // Will eventually be calculated. current default is 0
+      hoursWorkedInput.innerHTML = `<span>${entry.dailyDuration}</span>`; // Will eventually be calculated. current default is 0
     }
 
     const confirmButton = document.createElement("button");
     confirmButton.innerHTML = "Confirm";
-    confirmButton.classList.add("bg-blue-500", "hover:bg-blue-700", "text-white", "font-bold", "py-2", "px-4", "rounded");
+    confirmButton.classList.add("bg-blue-500", "hover:bg-blue-700", "text-white", "font-bold", "py-2", "px-4", "rounded-md");
     confirmButton.setAttribute("type", "submit");
     confirmButton.setAttribute("id", "confirm-button");
 
