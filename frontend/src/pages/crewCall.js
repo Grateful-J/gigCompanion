@@ -131,16 +131,20 @@ function addTimecardFlex(job) {
     const startTimeInput = document.createElement("input");
     startTimeInput.type = "time";
     startTimeInput.name = "start-time";
+    startTimeInput.step = 900; // 15 minutes
     startTimeInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
 
     const endTimeInput = document.createElement("input");
     endTimeInput.type = "time";
     endTimeInput.name = "end-time";
+    endTimeInput.step = 900; // 15 minutes
     endTimeInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
 
     const hoursWorkedInput = document.createElement("div");
     hoursWorkedInput.name = "hours-worked";
     hoursWorkedInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
+
+    //TODO: figure out why .step isnt working with the seconds
 
     // Check if there is an entry for the current date and prefill inputs if data exists
     const rowId = `${job._id}-${formattedDate}-${i + 1}`;
