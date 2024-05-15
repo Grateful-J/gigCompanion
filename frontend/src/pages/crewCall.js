@@ -322,6 +322,44 @@ document.getElementById("add-expense-btn").addEventListener("click", function ()
 
 // TODO: Add notes
 
+// TODO: NOTES API Routes
+
+// Function to POST a new note to jobs
+function createNote(id) {
+  const noteDate = new Date();
+  const noteDescription = document.querySelector("#note-description").value;
+  const note = document.querySelector("#note-content").value;
+  const photo = document.querySelector("#note-photo").value || "";
+
+  const notes = {
+    noteDate: noteDate,
+    noteDescription: noteDescription,
+    note: note,
+    photo: photo,
+  };
+
+  fetch(`${apiBaseUrl}/api/jobs/notes/${id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(notes),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+// event listener for save note button
+document.getElementById("save-note-btn").addEventListener("click", function () {
+  const id = globalTimecardId;
+  createNote(id);
+});
+
 // TODO: Add Expenses
 
 // TODO: add DELETE to delete timecard entries

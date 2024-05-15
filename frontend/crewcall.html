@@ -18,9 +18,9 @@
       <h1 class="text-3xl font-bold mb-6 text-center">Crew Call: Show Site Organizer</h1>
 
       <!-- Div that contains a left side bar, a right side bar, and the timcard centered in the div-->
-      <div id="app" class="flex flex-row space-x-1 border border-white rounded justify-start">
+      <div id="app" class="flex flex-row space-x-1 border border-white rounded justify-start p-4">
         <!-- Left sidebar: Jobs list with dynamic dropdown -->
-        <div class="flex flex-col border border-white rounded-lg">
+        <div class="flex flex-col border border-white rounded-lg grow shrink">
           <div class="mb-6">
             <label for="job-dropdown" class="block text-lg font-medium text-gray-300">Select a Job:</label>
             <select
@@ -32,7 +32,7 @@
             </select>
           </div>
           <!-- Job Details -->
-          <div id="job-details" class="mt-6 w-full max-w-lg bg-gray-700 p-4 rounded-lg shadow-lg">
+          <div id="job-details" class="mt-6 w-full max-w-fit bg-gray-700 p-4 rounded-lg shadow-lg">
             <h2 class="text-xl font-semibold mb-4">Job Details</h2>
             <table class="table-auto w-full">
               <tbody>
@@ -83,7 +83,7 @@
 
         <!-- Middle Flexbox: Timesheet with dynamic table-->
         <!-- TODO: Make this stretch to fill the container  with some padding and centered-->
-        <div id="timesheet-flexbox" class="flex flex-col w-3/4 border border-green-500 rounded-lg p-4"></div>
+        <div id="timesheet-flexbox" class="flex flex-col w-3/4 border border-green-500 rounded-lg p-4 shrink grow"></div>
 
         <!-- Right sidebar: Show Notes for selected Job / TODO: Hidden until selected  -->
         <!-- TODO: Hidden until selected  -->
@@ -92,11 +92,14 @@
             <h3 class="text-xl font-semibold">Add Note</h3>
             <div id="notes-form-container" class="p-4 flex justify-between">
               <form id="note-form">
+                <input type="text" id="note-description" placeholder="Title" class="text-gray-800 w-full m-1" />
                 <textarea id="note-content" placeholder="Write your note..." class="text-gray-800 min-h-24 w-full m-1"></textarea>
                 <label class="hidden" for="note-photo">Upload Photo</label>
                 <input type="file" id="note-photo" accept="image/*" class="border rounded w-full border-white p-2 m-1" />
 
-                <button type="submit" class="btn btn-primary rounded bg-blue-500 hover:bg-green-600 w-full p-2 m-1">Save Note</button>
+                <button type="submit" id="save-note-btn" class="btn btn-primary rounded bg-blue-500 hover:bg-green-600 w-full p-2 m-1">
+                  Save Note
+                </button>
               </form>
             </div>
 

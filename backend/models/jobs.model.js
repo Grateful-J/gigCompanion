@@ -26,6 +26,7 @@ const expensesSchema = new mongoose.Schema({
 // Schema for notes
 const notesSchema = new mongoose.Schema({
   noteDate: Date,
+  noteDescription: String,
   note: String,
   photo: String, // TODO: Add photo upload or link to URL or GDrive API
 });
