@@ -15,6 +15,21 @@ const showDayEntriesSchema = new mongoose.Schema({
   doubleTime: Number,
 });
 
+// Schema for Expenses
+const expensesSchema = new mongoose.Schema({
+  expenseDate: Date,
+  amount: Number,
+  expenseDescription: String,
+  category: String,
+});
+
+// Schema for notes
+const notesSchema = new mongoose.Schema({
+  noteDate: Date,
+  note: String,
+  photo: String, // TODO: Add photo upload or link to URL or GDrive API
+});
+
 const jobSchema = new mongoose.Schema(
   {
     jobName: String,
@@ -35,6 +50,8 @@ const jobSchema = new mongoose.Schema(
     isSubmitted: { type: Boolean, default: false },
     isInvoiced: { type: Boolean, default: false },
     showDayEntries: [showDayEntriesSchema], // Add showDayEntries to Job schema
+    expenses: [expensesSchema],
+    notes: [notesSchema],
   },
   {
     timestamps: true,
