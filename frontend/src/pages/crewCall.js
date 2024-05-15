@@ -234,6 +234,14 @@ document.addEventListener("click", (event) => {
   }
 });
 
+// TODO: add expensse model to jobs
+
+//Event listener for add expense button
+document.getElementById("add-expense-btn").addEventListener("click", function () {
+  console.log("Add expense button clicked");
+  window.location.href = "addExpense.html";
+});
+
 //TODO: on Confirm /hide confirm button until edit
 
 // TODO: Add notes
