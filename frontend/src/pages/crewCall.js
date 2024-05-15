@@ -125,9 +125,6 @@ function addTimecardFlex(job) {
     const row = document.createElement("div");
     row.classList.add("flex", "flex-row", "w-full", "items-baseline", "justify-between", "border", "border-gray-300", "self-center", "rouded");
 
-    const travelDayDiv = document.createElement("div");
-    travelDayDiv.classList.add("flex-1", "hidden");
-
     const dayOfWeek = document.createElement("div");
     dayOfWeek.innerHTML = `<p class="block p-2">${currentDate.toLocaleDateString("en-US", { weekday: "long" })}</p>`;
     dayOfWeek.classList.add("flex-1");
@@ -151,9 +148,12 @@ function addTimecardFlex(job) {
     const hoursWorkedInput = document.createElement("div");
     hoursWorkedInput.name = "hours-worked";
     hoursWorkedInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
+    hoursWorkedInput.innerHTML = `<span class="block p-2 bg-gray-100 rounded text-center">0</span>`;
 
     if ((job.travelDays > 0 && i === 0) || (job.travelDays > 0 && i === job.duration - 1)) {
-      row.classList.add("bg-green-800");
+      row.classList.add("bg-gray-600");
+      startTimeInput.value = "06:00";
+      endTimeInput.value = "16:00";
     }
 
     //TODO: figure out why .step isnt working with the seconds
