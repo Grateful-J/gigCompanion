@@ -110,6 +110,11 @@ function addTimecardFlex(job) {
   // Add the header row to the container
   container.appendChild(header);
 
+  let travelDays = job.travelDays;
+  console.log(`travelDays: ${travelDays}`);
+  //travelDays = job.travelDays;
+  //const durationIndex = job.duration - 1;
+
   // Generate rows based on the job's duration and start date
   const baseDate = new Date(job.startDate);
   for (let i = 0; i < job.duration; i++) {
@@ -118,7 +123,10 @@ function addTimecardFlex(job) {
     const formattedDate = currentDate.toISOString().split("T")[0];
 
     const row = document.createElement("div");
-    row.classList.add("flex", "flex-row", "items-baseline", "justify-center", "border", "border-gray-300");
+    row.classList.add("flex", "flex-row", "w-full", "items-baseline", "justify-between", "border", "border-gray-300", "self-center", "rouded");
+
+    const travelDayDiv = document.createElement("div");
+    travelDayDiv.classList.add("flex-1", "hidden");
 
     const dayOfWeek = document.createElement("div");
     dayOfWeek.innerHTML = `<p class="block p-2">${currentDate.toLocaleDateString("en-US", { weekday: "long" })}</p>`;
@@ -131,20 +139,26 @@ function addTimecardFlex(job) {
     const startTimeInput = document.createElement("input");
     startTimeInput.type = "time";
     startTimeInput.name = "start-time";
-    startTimeInput.step = 900; // 15 minutes
-    startTimeInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
+    startTimeInput.step = "900"; // 15 minutes
+    startTimeInput.classList.add("border", "border-gray-300", "rounded", "px-1", "py-1", "text-gray-600", "flex-1");
 
     const endTimeInput = document.createElement("input");
     endTimeInput.type = "time";
     endTimeInput.name = "end-time";
-    endTimeInput.step = 900; // 15 minutes
-    endTimeInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
+    endTimeInput.step = "900"; // 15 minutes
+    endTimeInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-1", "py-1", "text-gray-600", "flex-1");
 
     const hoursWorkedInput = document.createElement("div");
     hoursWorkedInput.name = "hours-worked";
     hoursWorkedInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
 
+    if ((job.travelDays > 0 && i === 0) || (job.travelDays > 0 && i === job.duration - 1)) {
+      row.classList.add("bg-green-800");
+    }
+
     //TODO: figure out why .step isnt working with the seconds
+
+    // TODO: if travelDays is not 0, show travel time and set hours worked to 10 for i[0] && length-1
 
     // Check if there is an entry for the current date and prefill inputs if data exists
     const rowId = `${job._id}-${formattedDate}-${i + 1}`;
@@ -228,6 +242,9 @@ document.addEventListener("click", (event) => {
       const jobId = globalTimecardId;
       console.log(`now cicking Job ID: ${jobId}`);
       handleConfirmClick(row, jobId);
+
+      // await and reload timecarentries
+      fetchAndPopulateJobs(jobId);
     } else {
       console.log("Confirm button was clicked, but no row was found.");
     }
