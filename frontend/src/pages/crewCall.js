@@ -126,7 +126,11 @@ function addTimecardFlex(job) {
   for (let i = 0; i < job.duration; i++) {
     const currentDate = new Date(baseDate);
     currentDate.setDate(baseDate.getDate() + i);
-    const formattedDate = currentDate.toISOString().split("T")[0];
+    let formattedDate = currentDate.toISOString().split("T")[0]; // Format: yyyy-mm-dd
+
+    // Format date to mm/dd/yyyy
+    const formattedDateParts = formattedDate.split("-");
+    formattedDate = formattedDateParts[1] + "/" + formattedDateParts[2] + "/" + formattedDateParts[0];
 
     const row = document.createElement("div");
     row.classList.add(
