@@ -67,10 +67,12 @@ function calculateDuration(startDate, endDate) {
 }
 
 function calculateTravelDays(duration, isLocal) {
-  if (isLocal) {
-    return 0;
+  if (isLocal === true) {
+    travelDays = 0;
+    return travelDays;
   } else {
-    return 2;
+    travelDays = 2;
+    return travelDays;
   }
 }
 function calculateWorkHours(clockIn, clockOut, breakTime) {
