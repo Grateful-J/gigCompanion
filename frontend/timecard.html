@@ -6,55 +6,67 @@
     <title>Timecard</title>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body class="bg-gray-800 min-h-screen flex flex-col text-gray-200">
+  <body class="bg-gray-800 text-gray-200 flex flex-col min-h-screen">
     <!-- Navbar Placeholder -->
-    <nav id="navbar-placeholder" class="bg-gray-700 w-full py-4 px-8 text-lg">
+    <nav id="navbar-placeholder" class="bg-gray-700 w-full py-4 px-8 text-sm lg:text-lg">
       <span>Navbar</span>
     </nav>
-    <div id="app" class="max-w-4xl mx-auto p-4">
-      <h1 class="text-3xl font-bold text-white mb-4">Timecard</h1>
+    <div id="app" class="flex flex-col mx-4 my-6 lg:mx-0 lg:my-0">
+      <h1 class="text-3xl font-bold text-white mb-4 text-center lg:text-left">Timecard</h1>
 
-      <div id="timecards" class="bg-white p-4 rounded-lg shadow-md">
-        <h3 class="text-lg text-gray-700 font-semibold mb-2">Task Description</h3>
-        <input
-          type="text"
-          id="description"
-          class="w-full px-4 py-2 border text-gray-500 border-gray-300 rounded-lg focus:outline-none"
-          placeholder="Describe the task"
-        />
-        <div id="clock-controls" class="hidden">
-          <div class="flex col-2 gap-4 items-center justify-center p-4">
-            <input
-              type="time"
-              id="clock-in-input"
-              class="w-full px-4 py-2 border text-gray-500 border-gray-300 rounded-lg focus:outline-none"
-              placeholder="Clock In Time"
-            />
-            <button id="clock-in-button" class="block w-full mt-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none">
-              Clock In
-            </button>
-            <input
-              type="time"
-              id="clock-out-input"
-              class="w-full px-4 py-2 text-gray-700 border border-gray-300 rounded-lg focus:outline-none"
-              placeholder="Clock out Time"
-            />
-            <button id="clock-out-button" class="block w-full mt-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none">
-              Clock Out
-            </button>
+      <div id="timecards" class="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:space-x-4">
+        <div class="flex flex-col w-full lg:w-1/3">
+          <h3 class="text-lg text-gray-700 font-semibold mb-2">Task Description</h3>
+          <input
+            type="text"
+            id="description"
+            class="w-full px-4 py-2 border text-gray-500 border-gray-300 rounded-lg focus:outline-none"
+            placeholder="Describe the task"
+          />
+          <button id="create-task-button" class="block w-full mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">
+            Create Task
+          </button>
+        </div>
+
+        <div id="clock-controls" class="hidden flex flex-col w-full lg:w-2/3 space-y-4 lg:space-y-0 lg:flex-row lg:space-x-4">
+          <div class="flex flex-col lg:flex-row gap-4 items-center justify-center p-4 w-full">
+            <div class="flex flex-col w-full lg:w-1/3">
+              <label for="clock-in-input" class="sr-only">Clock In Time</label>
+              <input
+                type="time"
+                id="clock-in-input"
+                class="w-full px-4 py-2 border text-gray-500 border-gray-300 rounded-lg focus:outline-none"
+                placeholder="Clock In Time"
+              />
+              <button
+                id="clock-in-button"
+                class="block w-full mt-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none"
+              >
+                Clock In
+              </button>
+            </div>
+            <div class="flex flex-col w-full lg:w-1/3">
+              <label for="clock-out-input" class="sr-only">Clock Out Time</label>
+              <input
+                type="time"
+                id="clock-out-input"
+                class="w-full px-4 py-2 border text-gray-700 border-gray-300 rounded-lg focus:outline-none"
+                placeholder="Clock out Time"
+              />
+              <button id="clock-out-button" class="block w-full mt-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none">
+                Clock Out
+              </button>
+            </div>
           </div>
         </div>
-        <button id="create-task-button" class="block w-full mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">
-          Create Task
-        </button>
       </div>
 
-      <div id="info-container" class="flex flex-col sm:flex-row justify-around items-center p-4 text-2xl mb-8">
-        <h3 class="text-2xl font-semibold mt-8 mb-2">Summary</h3>
-        <div>
+      <div id="info-container" class="flex flex-col sm:flex-row justify-around items-center p-4 text-2xl mb-8 space-y-4 sm:space-y-0">
+        <h3 class="text-2xl font-semibold mt-8 mb-2 sm:mt-0">Summary</h3>
+        <div class="text-center sm:text-left">
           <h4>Total Duration: <span id="total-duration"></span></h4>
-          <h4>Total Hours:<span id="total-hours"></span></h4>
-          <h4>Total Minutes:<span id="total-minutes"></span></h4>
+          <h4>Total Hours: <span id="total-hours"></span></h4>
+          <h4>Total Minutes: <span id="total-minutes"></span></h4>
         </div>
       </div>
 
@@ -76,13 +88,17 @@
           </tbody>
         </table>
       </div>
-      <button id="submit-tasks" class="block w-full mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none">
-        Submit Tasks
-      </button>
-      <button id="previous-submissions" class="block w-full mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">
-        Previous Submissions
-      </button>
+
+      <div class="flex flex-col space-y-4 mt-4">
+        <button id="submit-tasks" class="block w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none">
+          Submit Tasks
+        </button>
+        <button id="previous-submissions" class="block w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">
+          Previous Submissions
+        </button>
+      </div>
     </div>
+
     <div>
       <!-- Hidden element for storing the currently edited timecard ID -->
       <input type="hidden" id="edited-timecard-id" value="" />
