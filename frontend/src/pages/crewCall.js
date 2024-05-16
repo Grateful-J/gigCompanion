@@ -135,15 +135,19 @@ function addTimecardFlex(job) {
     const row = document.createElement("div");
     row.classList.add(
       "flex",
-      "flex-row",
+      "flex-col",
+      "lg:flex-row",
       "w-full",
       "items-baseline",
       "justify-between",
       "border",
       "border-gray-300",
       "self-center",
-      "rouded",
-      "space-x-2"
+      "rounded",
+      "space-y-2",
+      "lg:space-y-0",
+      "lg:space-x-2",
+      "p-2"
     );
 
     const dayOfWeek = document.createElement("div");
@@ -202,9 +206,7 @@ function addTimecardFlex(job) {
       "flex-1",
       "max-w-14",
       "block",
-      "p-2",
       "bg-gray-100",
-      "rounded",
       "text-center"
     );
     hoursWorkedInput.innerHTML = `<span class="">0</span>`;
@@ -231,7 +233,18 @@ function addTimecardFlex(job) {
 
     const confirmButton = document.createElement("button");
     confirmButton.innerHTML = "Confirm";
-    confirmButton.classList.add("bg-blue-500", "hover:bg-blue-700", "text-white", "font-bold", "py-2", "px-4", "rounded-md");
+    confirmButton.classList.add(
+      "bg-blue-500",
+      "hover:bg-green-700",
+      "text-white",
+      "font-bold",
+      "py-1",
+      "px-2",
+      "rounded",
+      "w-full",
+      "lg:w-auto",
+      "flex-1"
+    );
     confirmButton.setAttribute("type", "submit");
     confirmButton.setAttribute("id", "confirm-button");
 
