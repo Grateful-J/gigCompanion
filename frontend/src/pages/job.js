@@ -261,7 +261,7 @@ async function updateJob(id) {
   const showCode = document.querySelector("#show-code").value;
   const rate = document.querySelector("#rate").value;
   const isFreelance = document.querySelector("#is-freelance").value;
-  const isLocal = document.querySelector("#is-local").value;
+  const isLocal = document.querySelector("#is-local").value === "true"; // Convert to boolean to allow for true/false on API call
   const job = {
     jobName,
     client,

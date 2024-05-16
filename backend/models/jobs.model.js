@@ -67,15 +67,16 @@ function calculateDuration(startDate, endDate) {
   return duration;
 }
 
-function calculateTravelDays(duration, isLocal) {
+function calculateTravelDays(isLocal) {
   if (isLocal === true) {
-    travelDays = 0;
-    return travelDays;
+    console.log("Local Job: 0 Days");
+    return 0;
   } else {
-    travelDays = 2;
-    return travelDays;
+    console.log("Non-Local Job: 2 Days");
+    return 2;
   }
 }
+
 function calculateWorkHours(clockIn, clockOut, breakTime) {
   // clockIn and clockOut are strings in 24 hour HH:MM format
   const [startHours, startMinutes] = clockIn.split(":").map(Number);
@@ -127,7 +128,7 @@ function calculateFields(doc, update) {
   let isLocal = update.hasOwnProperty("isLocal") ? update.isLocal : doc.isLocal;
 
   if (typeof doc.duration === "number") {
-    let travelDays = calculateTravelDays(isLocal, doc.duration);
+    let travelDays = calculateTravelDays(isLocal);
     doc.travelDays = travelDays;
     update.travelDays = travelDays;
   }
@@ -180,10 +181,10 @@ jobSchema.pre("findOneAndUpdate", function (next) {
   const update = this.getUpdate();
 
   // Extract fields from the update object
-  const { showDayEntries, startDate, endDate, clockIn, clockOut, breakTime } = update;
+  const { showDayEntries, startDate, endDate, clockIn, clockOut, breakTime, isLocal } = update;
 
   // Check if the update involves calculation-related fields
-  const needsCalculation = showDayEntries || startDate || endDate || clockIn || clockOut || breakTime;
+  const needsCalculation = showDayEntries || startDate || endDate || clockIn || clockOut || breakTime || isLocal;
 
   if (needsCalculation) {
     calculateFields(this._update, update);
@@ -205,9 +206,22 @@ jobSchema.pre("findOneAndUpdate", function (next) {
       update.totalOverTime = totalOverTime;
       update.totalDoubleTime = totalDoubleTime;
     }
+
+    if (update.location) {
+      const isRTW = rtwStates.includes(update.location);
+      update.isRTW = isRTW;
+    }
+
+    // Calculate travel days
+    const travelDays = calculateTravelDays(update.isLocal);
+    update.travelDays = travelDays;
+
+    // Set the update object to the calculated fields
+    this.setUpdate(update);
+  } else {
+    console.log("Pre-findOneAndUpdate: No fields need calculation. Skipping calculation.");
   }
 
-  this.setUpdate(update);
   next();
 });
 
