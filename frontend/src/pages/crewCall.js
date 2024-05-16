@@ -379,7 +379,8 @@ function showPreviousNotes(id) {
       notes.forEach((note) => {
         const noteDiv = document.createElement("div");
         const noteLi = document.createElement("li");
-        noteLi.textContent = note.noteDescription;
+        const notePhotoSlug = note.photo ? ` - ${note.photo}` : ""; // Add the note description and photo to the li if there is any
+        noteLi.textContent = note.noteDescription + " - " + note.note + notePhotoSlug;
         noteDiv.appendChild(noteLi);
         noteList.appendChild(noteDiv);
       });
