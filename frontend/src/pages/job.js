@@ -357,7 +357,7 @@ function displayPreviousJobs(jobs) {
 
 // event listener to display previous jobs
 document.querySelector("#previous-jobs-btn").addEventListener("click", async () => {
-  const response = await fetch(`${url}/jobs`);
+  const response = await fetch(`${apiBaseUrl}/api/jobs`);
   const jobs = await response.json();
   console.log(`Loading Previous Jobs: ${jobs}`);
 
