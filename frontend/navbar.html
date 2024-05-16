@@ -1,15 +1,51 @@
 <!-- navbar.html -->
-<div id="navbar" class="flex justify-between p-0 m-0">
-  <a href="/">Home</a>
-  <a href="/timecard">Quick Task</a>
-  <a href="/job">Jobs</a>
-  <a href="/crewcall">Crew Call</a>
-  <a href="/invoice">Invoice</a>
-  <a href="/location">R2W </a>
-  <a href="/profile">Profile</a>
-  <a href="/admin" class="hidden">Admin</a>
-  <a href="/FAQ">FAQ</a>
-  <a href="/login">Login</a>
-  <a href="/signup">Signup</a>
-  <a href="/logout">Logout</a>
-</div>
+<nav class="bg-gray-700 p-4">
+  <div class="container mx-auto flex justify-between items-center">
+    <div class="flex items-center space-x-2">
+      <img src="/giglogo.png" alt="Gig Companion Logo" class="w-16 h-16 rounded-full" />
+      <a href="/" class="text-white text-2xl">Gig Companion</a>
+    </div>
+    <div class="block lg:hidden">
+      <button id="navbar-toggle" title="a" class="text-white focus:outline-none">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="hidden lg:flex space-x-4" id="navbar-menu">
+      <a href="/" class="text-white">Home</a>
+      <a href="/timecard" class="text-white">Quick Task</a>
+      <a href="/job" class="text-white">Jobs</a>
+      <a href="/crewcall" class="text-white">Crew Call</a>
+      <a href="/invoice" class="text-white">Invoice</a>
+      <a href="/location" class="text-white">R2W</a>
+      <a href="/profile" class="text-white">Profile</a>
+      <a href="/admin" class="text-white hidden">Admin</a>
+      <a href="/FAQ" class="text-white">FAQ</a>
+      <a href="/login" class="text-white">Login</a>
+      <a href="/signup" class="text-white">Signup</a>
+      <a href="/logout" class="text-white">Logout</a>
+    </div>
+  </div>
+  <div class="lg:hidden hidden" id="mobile-menu">
+    <a href="/" class="block text-white px-2 py-1">Home</a>
+    <a href="/timecard" class="block text-white px-2 py-1">Quick Task</a>
+    <a href="/job" class="block text-white px-2 py-1">Jobs</a>
+    <a href="/crewcall" class="block text-white px-2 py-1">Crew Call</a>
+    <a href="/invoice" class="block text-white px-2 py-1">Invoice</a>
+    <a href="/location" class="block text-white px-2 py-1">R2W</a>
+    <a href="/profile" class="block text-white px-2 py-1">Profile</a>
+    <a href="/admin" class="block text-white hidden">Admin</a>
+    <a href="/FAQ" class="block text-white px-2 py-1">FAQ</a>
+    <a href="/login" class="block text-white px-2 py-1">Login</a>
+    <a href="/signup" class="block text-white px-2 py-1">Signup</a>
+    <a href="/logout" class="block text-white px-2 py-1">Logout</a>
+  </div>
+</nav>
+
+<script>
+  document.getElementById("navbar-toggle").addEventListener("click", function () {
+    var menu = document.getElementById("mobile-menu");
+    menu.classList.toggle("hidden");
+  });
+</script>
