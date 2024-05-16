@@ -101,7 +101,7 @@ function addTimecardFlex(job) {
   container.appendChild(header);
 
   let travelDays = job.travelDays;
-  console.log(`travelDays: ${travelDays}`);
+  //console.log(`travelDays: ${travelDays}`);
   //travelDays = job.travelDays;
   //const durationIndex = job.duration - 1;
 
@@ -245,7 +245,7 @@ function addTimecardFlex(job) {
 }
 // Function to PATCH showDayEntries based on row ID
 function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue) {
-  console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}`);
+  //console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}`);
 
   fetch(`${apiBaseUrl}/api/jobs/daily/${jobId}`, {
     method: "PATCH",
@@ -261,7 +261,7 @@ function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue) {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log("ShowDayEntries updated successfully:", data);
+      //console.log("ShowDayEntries updated successfully:", data);
     })
     .catch((error) => console.error("Error updating showDayEntries:", error));
 }
@@ -318,7 +318,8 @@ function createNote(id) {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      //console.log(data);
+      fetchNotes(id);
     })
     .catch((error) => {
       console.error(error);
@@ -335,7 +336,7 @@ function showPreviousNotes(id) {
   fetch(`${apiBaseUrl}/api/jobs/notes/${id}`)
     .then((response) => response.json())
     .then((data) => {
-      console.log("Previous Notes:", data);
+      //console.log("Previous Notes:", data);
       const notes = data;
       const noteList = document.getElementById("submitted-notes-container");
 
@@ -362,7 +363,7 @@ function fetchExpenses(job) {
   fetch(`${apiBaseUrl}/api/jobs/expenses/${job._id}`)
     .then((response) => response.json())
     .then((data) => {
-      console.log("Expenses:", data);
+      //console.log("Expenses:", data);
       const expenses = data;
       populateExpensesList(expenses);
     })
@@ -377,8 +378,7 @@ function createExpense(globalTimecardId) {
   const expenseDate = document.querySelector("#expense-date").value;
   const description = document.querySelector("#expense-description").value;
   const amount = document.querySelector("#expense-amount").value;
-  //const category = document.querySelector("#expense-category").value || "";
-  const category = "Other";
+  const category = document.querySelector("#expense-category").value || "";
 
   fetch(`${apiBaseUrl}/api/jobs/expenses/${jobId}`, {
     method: "PATCH",
@@ -394,7 +394,9 @@ function createExpense(globalTimecardId) {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log("Expense created successfully:", data);
+      //console.log(data);
+      fetchExpenses(jobId);
+      document.querySelector("#expense-form").reset();
     })
     .catch((error) => console.error("Error creating expense:", error));
 }
@@ -502,7 +504,7 @@ document.addEventListener("click", (event) => {
     const row = event.target.closest("div.flex-row");
     if (row) {
       const jobId = globalTimecardId;
-      console.log(`now cicking Job ID: ${jobId}`);
+      //console.log(`now cicking Job ID: ${jobId}`);
       handleConfirmClick(row, jobId);
 
       // await and reload timecarentries
@@ -527,7 +529,7 @@ document.getElementById("previous-notes-btn").addEventListener("click", function
 
 //Event listener for add expense button
 document.getElementById("add-expense-btn").addEventListener("click", function () {
-  console.log("Add expense button clicked");
+  //console.log("Add expense button clicked");
   //fetchExpenses(); // Temp test for functionality
   createExpense(globalTimecardId);
 });
