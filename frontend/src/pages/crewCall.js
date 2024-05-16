@@ -303,7 +303,7 @@ function handleConfirmClick(row, jobId) {
   updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue);
 }
 
-// Event delegation for confirm button
+// Event delegation for confirm button for nested timecards
 document.addEventListener("click", (event) => {
   // Check if the clicked element or its parent has the 'confirm-button' id
   if (event.target.id === "confirm-button" || event.target.closest("#confirm-button")) {
@@ -321,14 +321,6 @@ document.addEventListener("click", (event) => {
       console.log("Confirm button was clicked, but no row was found.");
     }
   }
-});
-
-// TODO: add expensse model to jobs
-
-//Event listener for add expense button
-document.getElementById("add-expense-btn").addEventListener("click", function () {
-  console.log("Add expense button clicked");
-  window.location.href = "addExpense.html";
 });
 
 //TODO: on Confirm /hide confirm button until edit
@@ -411,6 +403,12 @@ document.getElementById("previous-notes-btn").addEventListener("click", function
 
 // TODO: Add Expenses
 
+// TODO: add expensse model to jobs
+
+//Event listener for add expense button
+document.getElementById("add-expense-btn").addEventListener("click", function () {
+  console.log("Add expense button clicked");
+});
 // TODO: add DELETE to delete timecard entries
 
 // TODO: add edit timecard entries
