@@ -534,6 +534,12 @@ document.getElementById("add-expense-btn").addEventListener("click", function ()
   createExpense(globalTimecardId);
 });
 
+// Event listener for edit expense button
+document.getElementById("edit-expense-btn").addEventListener("click", function () {
+  //console.log("Edit expense button clicked");
+  editExpense(globalTimecardId);
+});
+
 // TODO: add DELETE to delete timecard entries
 
 // TODO: add edit timecard entries
