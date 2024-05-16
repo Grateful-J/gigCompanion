@@ -364,7 +364,7 @@ function fetchExpenses(job) {
     .then((data) => {
       console.log("Expenses:", data);
       const expenses = data;
-      //displayExpenses(expenses);
+      populateExpensesList(expenses);
     })
     .catch((error) => {
       console.error("Error fetching expenses:", error);
@@ -397,6 +397,66 @@ function createExpense(globalTimecardId) {
       console.log("Expense created successfully:", data);
     })
     .catch((error) => console.error("Error creating expense:", error));
+}
+
+function populateExpensesList(expenses) {
+  const expensesList = document.getElementById("expenses-list");
+  expensesList.innerHTML = "";
+  expenses.forEach((expense) => {
+    // Creates parent "row" div
+    const expenseDivRow = document.createElement("div");
+    expenseDivRow.classList.add(
+      "flex",
+      "flex-col",
+      "lg:flex-row",
+      "justify-between",
+      "border-b",
+      "border-gray-300",
+      "py-2",
+      "space-y-2",
+      "lg:space-y-0",
+      "lg:space-x-4"
+    );
+    expensesList.appendChild(expenseDivRow);
+
+    // Expense date
+    const expenseDateDiv = document.createElement("div");
+    const expenseDate = new Date(expense.expenseDate).toLocaleDateString();
+    expenseDateDiv.textContent = expenseDate;
+    expenseDateDiv.classList.add("flex-1", "text-center", "lg:text-left", "px-2");
+    expenseDivRow.appendChild(expenseDateDiv);
+
+    // Expense amount
+    const expenseAmountDiv = document.createElement("div");
+    expenseAmountDiv.textContent = `$${expense.amount.toFixed(2)}`;
+    expenseAmountDiv.classList.add("flex-1", "text-center", "lg:text-left", "px-2");
+    expenseDivRow.appendChild(expenseAmountDiv);
+
+    // Expense description
+    const expenseDescriptionDiv = document.createElement("div");
+    expenseDescriptionDiv.textContent = expense.expenseDescription;
+    expenseDescriptionDiv.classList.add("flex-1", "text-center", "lg:text-left", "px-2");
+    expenseDivRow.appendChild(expenseDescriptionDiv);
+
+    // Expense category
+    const expenseCategoryDiv = document.createElement("div");
+    expenseCategoryDiv.textContent = expense.category;
+    expenseCategoryDiv.classList.add("flex-1", "text-center", "lg:text-left", "px-2");
+    expenseDivRow.appendChild(expenseCategoryDiv);
+
+    // Actions (e.g., edit and delete buttons)
+    const actionsDiv = document.createElement("div");
+    actionsDiv.classList.add("flex-1", "text-center", "lg:text-left", "px-2");
+    const editButton = document.createElement("button");
+    editButton.textContent = "Edit";
+    editButton.classList.add("bg-blue-500", "hover:bg-blue-700", "text-white", "font-bold", "py-1", "px-2", "rounded");
+    actionsDiv.appendChild(editButton);
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.classList.add("bg-red-500", "hover:bg-red-700", "text-white", "font-bold", "py-1", "px-2", "rounded", "ml-2");
+    actionsDiv.appendChild(deleteButton);
+    expenseDivRow.appendChild(actionsDiv);
+  });
 }
 
 // !Event Listeners //
