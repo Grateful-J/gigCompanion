@@ -124,7 +124,8 @@
             type="date"
             id="expense-date"
             class="mb-2 p-2 rounded bg-gray-800 border border-gray-600 text-white"
-            placeholder="Date (YYYY-MM-DD)"
+            onfocus="(this.type='date')"
+            placeholder="MM/DD/YYYY"
             required
           />
           <input
@@ -142,7 +143,7 @@
             placeholder="Description"
             required
           />
-          <!--TODO: Add category dropdown-->
+          <!-- TODO: Add category dropdown-->
           <!-- TODO: Make it Dynamic- maybe user generated categories per User?-->
           <input
             type="text"

@@ -419,6 +419,13 @@ function populateExpensesList(expenses) {
     );
     expensesList.appendChild(expenseDivRow);
 
+    // Hidden div for expense ID
+    const expenseIdDiv = document.createElement("div");
+    expenseIdDiv.textContent = expense._id;
+    expenseIdDiv.classList.add("hidden");
+    expenseIdDiv.setAttribute("id", `expense-${expense._id}`);
+    expenseDivRow.appendChild(expenseIdDiv);
+
     // Expense date
     const expenseDateDiv = document.createElement("div");
     const expenseDate = new Date(expense.expenseDate).toLocaleDateString();
