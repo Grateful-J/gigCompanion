@@ -21,7 +21,7 @@ if (import.meta.env.VITE_MODE === "dev") {
   apiBaseUrl = import.meta.env.VITE_API_BASE_URL_PROD;
 }
 
-// Left Column: Job Dropdown //
+// !Left Column: Job Dropdown //
 // !--------------------------------------------------------- //
 // Function: Fetch Job and Display Timecards
 function fetchJobAndDisplayTimecards(jobId) {
@@ -30,6 +30,7 @@ function fetchJobAndDisplayTimecards(jobId) {
     .then((response) => response.json())
     .then((job) => {
       addTimecardFlex(job);
+      fetchExpenses(job);
     })
     .catch((error) => console.error("Error fetching job:", error));
 }
@@ -69,7 +70,7 @@ function populateJobDetails(job) {
   hoursDt.textContent = job.totalDoubleTime;
 }
 
-// Middle Column: Timecard
+// !Middle Column: Timecard
 // !--------------------------------------------------------- //
 
 // Function to Display the Timecard Flex container and populate it with timecard rows
@@ -286,7 +287,7 @@ function handleConfirmClick(row, jobId) {
   updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue);
 }
 
-// Right Column: Notes //
+// !Right Column: Notes //
 // !--------------------------------------------------------- //
 
 // Function to POST a new note to jobs
@@ -353,8 +354,53 @@ function showPreviousNotes(id) {
     });
 }
 
+// !Bottom Div: Expenses //
+// !----------------------------------------------------------- //
+
+// Function to fetch & display expenses
+function fetchExpenses(job) {
+  fetch(`${apiBaseUrl}/api/jobs/expenses/${job._id}`)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Expenses:", data);
+      const expenses = data;
+      //displayExpenses(expenses);
+    })
+    .catch((error) => {
+      console.error("Error fetching expenses:", error);
+    });
+}
+
+// Function to PATCH a new expense
+function createExpense(globalTimecardId) {
+  const jobId = globalTimecardId;
+  const expenseDate = document.querySelector("#expense-date").value;
+  const description = document.querySelector("#expense-description").value;
+  const amount = document.querySelector("#expense-amount").value;
+  //const category = document.querySelector("#expense-category").value || "";
+  const category = "Other";
+
+  fetch(`${apiBaseUrl}/api/jobs/expenses/${jobId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      expenseDate: expenseDate,
+      expenseDescription: description,
+      amount: amount,
+      category: category,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Expense created successfully:", data);
+    })
+    .catch((error) => console.error("Error creating expense:", error));
+}
+
 // !Event Listeners //
-// -----------------------------------------------------------
+// !----------------------------------------------------------- //
 
 // Event listener for job dropdown
 const jobDropdown = document.getElementById("job-dropdown");
@@ -415,6 +461,8 @@ document.getElementById("previous-notes-btn").addEventListener("click", function
 //Event listener for add expense button
 document.getElementById("add-expense-btn").addEventListener("click", function () {
   console.log("Add expense button clicked");
+  //fetchExpenses(); // Temp test for functionality
+  createExpense(globalTimecardId);
 });
 
 // TODO: add DELETE to delete timecard entries

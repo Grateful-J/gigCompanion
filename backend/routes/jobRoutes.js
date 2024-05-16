@@ -168,9 +168,10 @@ router.get("/expenses", async (req, res) => {
 
 // PATCH expenses
 router.patch("/expenses/:id", async (req, res) => {
+  const { expenseDate, amount, expenseDescriptions, category } = req.body;
   try {
     const job = await Job.findById(req.params.id);
-    job.expenses.push(req.body);
+    job.expenses.push({ expenseDate, amount, expenseDescriptions, category });
     const updatedJob = await job.save();
     res.status(200).json(updatedJob);
   } catch (error) {
