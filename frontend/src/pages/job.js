@@ -4,6 +4,9 @@ loadNavbar();
 
 let currentState = ""; //to store autofilled state for form logic (is RTW or not)
 
+//TODO: on page load only fetch non-submitted jobs
+// TODO: work on previously submitted jobs
+
 // Google Maps API
 import { Loader } from "@googlemaps/js-api-loader";
 const gAPIKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -357,7 +360,7 @@ function displayPreviousJobs(jobs) {
 
 // event listener to display previous jobs
 document.querySelector("#previous-jobs-btn").addEventListener("click", async () => {
-  const response = await fetch(`${url}/jobs`);
+  const response = await fetch(`${apiBaseUrl}/api/jobs`);
   const jobs = await response.json();
   console.log(`Loading Previous Jobs: ${jobs}`);
 
