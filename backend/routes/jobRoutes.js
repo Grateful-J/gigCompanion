@@ -118,3 +118,13 @@ router.patch("/notes/:id", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+//Fetch notes
+router.get("/notes/:id", async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.id);
+    res.status(200).json(job.notes);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});

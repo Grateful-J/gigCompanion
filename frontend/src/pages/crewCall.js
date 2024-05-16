@@ -363,29 +363,29 @@ document.getElementById("save-note-btn").addEventListener("click", function () {
 
 // Function shows previous notes and lists each note as a li in a div
 function showPreviousNotes(id) {
-  //makes note div visible
-  document.getElementById("submitted-notes-container").style.display = "block";
+  //makes notes-list div visible
+  const notesList = document.getElementById("notes-list");
+  notesList.style.display = "block";
 
   // fetch previous notes
   fetch(`${apiBaseUrl}/api/jobs/notes/${id}`)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
-    })
-    .then(() => {
-      // Populate list of notes each note as a li in a div
-      const submittedNotesContainer = document.getElementById("submitted-notes-container");
+      console.log("Previous Notes:", data);
+      const notes = data;
+      const noteList = document.getElementById("submitted-notes-container");
 
-      data.forEach((note) => {
+      // Create a new div element with a li for each note
+      notes.forEach((note) => {
         const noteDiv = document.createElement("div");
         const noteLi = document.createElement("li");
-        noteLi.textContent = note.note;
+        noteLi.textContent = note.noteDescription;
         noteDiv.appendChild(noteLi);
-        submittedNotesContainer.appendChild(noteDiv);
+        noteList.appendChild(noteDiv);
       });
     })
     .catch((error) => {
-      console.error(error);
+      console.error("Error fetching previous notes:", error);
     });
 }
 
