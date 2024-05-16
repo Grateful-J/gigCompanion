@@ -104,7 +104,8 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-module.exports = router;
+// NOTES ROUTES
+// ---------------------------------------------------------
 
 // PATCH a new note in job/notes/:id
 router.patch("/notes/:id", async (req, res) => {
@@ -128,3 +129,53 @@ router.get("/notes/:id", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+// Delete a note
+router.delete("/notes/:id", async (req, res) => {
+  const { noteId } = req.body;
+  try {
+    const job = await Job.findById(req.params.id);
+    job.notes = job.notes.filter((note) => note._id !== noteId);
+    const updatedJob = await job.save();
+    res.status(200).json(updatedJob);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// EXPENSES ROUTES
+// ---------------------------------------------------------
+
+// GET single Expense
+router.get("/expenses/:id", async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.id);
+    res.status(200).json(job.expenses);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Fetch Expenses
+router.get("/expenses", async (req, res) => {
+  try {
+    const expenses = await Expense.find();
+    res.status(200).json(expenses);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// PATCH expenses
+router.patch("/expenses/:id", async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.id);
+    job.expenses.push(req.body);
+    const updatedJob = await job.save();
+    res.status(200).json(updatedJob);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+module.exports = router;
