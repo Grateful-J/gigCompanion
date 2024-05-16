@@ -12,6 +12,7 @@
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="./src/pages/index.js"></script>
   </head>
   <body class="bg-gray-800 text-gray-200 flex flex-col min-h-screen">
     <!-- Navbar Placeholder -->
@@ -83,19 +84,5 @@
         </div>
       </div>
     </footer>
-
-    <script type="module">
-      function loadNavbar() {
-        fetch("navbar.html")
-          .then((response) => response.text())
-          .then((html) => {
-            document.getElementById("navbar-placeholder").innerHTML = html;
-          });
-      }
-
-      window.onload = function () {
-        loadNavbar();
-      };
-    </script>
   </body>
 </html>
