@@ -45,12 +45,19 @@ document.getElementById("job-dropdown").addEventListener("change", function () {
       document.getElementById("rate").textContent = "$" + job.rate;
       document.getElementById("location").textContent = job.location;
       document.getElementById("job-code").textContent = job.showCode || "N/A";
-      document.getElementById("hours-st").textContent = job.straightTime || "N/A";
-      document.getElementById("hours-ot").textContent = job.overTime || "N/A";
-      document.getElementById("hours-dt").textContent = job.doubleTime || "N/A";
+      document.getElementById("hours-st").textContent = job.totalStraightTime || "N/A";
+      document.getElementById("hours-ot").textContent = job.totalOvertime || "N/A";
+      document.getElementById("hours-dt").textContent = job.totalDoubleTime || "N/A";
     })
     .catch((error) => console.error("Error loading job details:", error));
 });
+
+// TODO: Function to load job hours sumamry for invoice
+function loadJobHoursSummary(selectedJobId) {
+  // while loop for duration to add timecard rows
+}
+
+// TODO: Function to populate timesheet-table-body with job hours
 
 //TODO: Look Into https://pdfkit.org/ to create PDFs for invoice
 //TODO: Look into puppeteer to generate invoice pdf https://developer.chrome.com/docs/puppeteer/get-started/

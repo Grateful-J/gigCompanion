@@ -148,7 +148,7 @@ function clearJobForm() {
 async function submitNewJob() {
   const jobName = document.querySelector("#job-name").value;
   const client = document.querySelector("#client").value;
-  const location = currentState || document.querySelector("#location").value;
+  const location = currentState || document.querySelector("#location-input").value;
   const startDate = document.querySelector("#start-date").value;
   const endDate = document.querySelector("#end-date").value;
   const showCode = document.querySelector("#show-code").value;
@@ -228,7 +228,7 @@ async function editJob(id) {
     // Set values in edit form
     document.querySelector("#job-name").value = job.jobName;
     document.querySelector("#client").value = job.client;
-    document.querySelector("#location").value = job.location;
+    document.querySelector("#location-input").value = job.location;
     document.querySelector("#start-date").value = isoFormattedStartDate;
     document.querySelector("#end-date").value = isoFormattedEndDate;
     document.querySelector("#show-code").value = job.showCode;
@@ -244,7 +244,7 @@ async function editJob(id) {
   // Add event listener to submit button
   submitBtn.addEventListener("click", () => {
     updateJob(id);
-    resetForm();
+    //resetForm();
   });
 
   // clear job variable
@@ -255,13 +255,13 @@ async function editJob(id) {
 async function updateJob(id) {
   const jobName = document.querySelector("#job-name").value;
   const client = document.querySelector("#client").value;
-  const location = document.querySelector("#location").value;
+  const location = currentState || document.querySelector("#location-input").value;
   const startDate = document.querySelector("#start-date").value;
   const endDate = document.querySelector("#end-date").value;
   const showCode = document.querySelector("#show-code").value;
   const rate = document.querySelector("#rate").value;
   const isFreelance = document.querySelector("#is-freelance").value;
-  const isLocal = document.querySelector("#is-local").value;
+  const isLocal = document.querySelector("#is-local").value === "true"; // Convert to boolean to allow for true/false on API call
   const job = {
     jobName,
     client,

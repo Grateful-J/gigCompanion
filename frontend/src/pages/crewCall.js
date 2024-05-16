@@ -31,12 +31,6 @@ jobDropdown.addEventListener("change", () => {
       travelDays = job.travelDays;
       globalTimecardId = job._id;
 
-      // Clear existing <tr> elements
-      const timecardTable = document.getElementById("timesheet-table-body");
-      while (timecardTable.firstChild) {
-        timecardTable.removeChild(timecardTable.firstChild);
-      }
-
       // Add timecard rows based on selected job
       addTimecardFlex(job);
 
@@ -68,6 +62,10 @@ function populateJobDetails(job) {
   const formattedISOStart = initStartDate.toISOString().slice(0, 10);
   const formattedISOStop = initEndDate.toISOString().slice(0, 10);
 
+  // Convert formattedISO to readable dates (format: mm/dd/yyyy)
+  const readableStartDate = formattedISOStart.slice(5, 7) + "/" + formattedISOStart.slice(8, 10) + "/" + formattedISOStart.slice(0, 4);
+  const readableEndDate = formattedISOStop.slice(5, 7) + "/" + formattedISOStop.slice(8, 10) + "/" + formattedISOStop.slice(0, 4);
+
   // Populate job details
   const jobName = document.getElementById("job-name");
   const startDate = document.getElementById("start-date");
@@ -80,8 +78,8 @@ function populateJobDetails(job) {
   const hoursOt = document.getElementById("hours-ot");
   const hoursDt = document.getElementById("hours-dt");
   jobName.textContent = job.jobName;
-  startDate.textContent = formattedISOStart;
-  endDate.textContent = formattedISOStop;
+  startDate.textContent = readableStartDate;
+  endDate.textContent = readableEndDate;
   client.textContent = job.client;
   rate.textContent = job.rate;
   location.textContent = job.location;
@@ -102,41 +100,51 @@ function addTimecardFlex(job) {
 
   // Create the header row
   const header = document.createElement("div");
-  header.classList.add(
-    "flex",
-    "flex-row",
-    "items-center",
-    "justify-between",
-    "text-gray-800",
-    "px-4",
-    "py-2",
-    "border-b",
-    "border-gray-400",
-    "font-bold",
-    "bg-gray-100"
-  );
+  header.classList.add("flex", "flex-row", "w-full", "justify-between", "text-gray-800", "border-b", "border-gray-400", "font-bold", "bg-gray-100");
 
   // Add headers for each column
   const headers = ["Day of Week", "Date", "Start Time", "End Time", "Hours Worked", "Confirm"];
   headers.forEach((headerText) => {
     const headerDiv = document.createElement("div");
     headerDiv.innerHTML = headerText;
+    const formattedHeaderText = headerText.toLowerCase().replace(" ", "-") + "-header"; // Replaces spaces with hyphens and all to lower
     headerDiv.classList.add("flex-1", "text-center");
+    headerDiv.setAttribute("id", formattedHeaderText);
     header.appendChild(headerDiv);
   });
 
   // Add the header row to the container
   container.appendChild(header);
 
+  let travelDays = job.travelDays;
+  console.log(`travelDays: ${travelDays}`);
+  //travelDays = job.travelDays;
+  //const durationIndex = job.duration - 1;
+
   // Generate rows based on the job's duration and start date
   const baseDate = new Date(job.startDate);
   for (let i = 0; i < job.duration; i++) {
     const currentDate = new Date(baseDate);
     currentDate.setDate(baseDate.getDate() + i);
-    const formattedDate = currentDate.toISOString().split("T")[0];
+    let formattedDate = currentDate.toISOString().split("T")[0]; // Format: yyyy-mm-dd
+
+    // Format date to mm/dd/yyyy
+    const formattedDateParts = formattedDate.split("-");
+    formattedDate = formattedDateParts[1] + "/" + formattedDateParts[2] + "/" + formattedDateParts[0];
 
     const row = document.createElement("div");
-    row.classList.add("flex", "flex-row", "items-center", "justify-between", "p-2", "border", "border-gray-300", "mb-2");
+    row.classList.add(
+      "flex",
+      "flex-row",
+      "w-full",
+      "items-baseline",
+      "justify-between",
+      "border",
+      "border-gray-300",
+      "self-center",
+      "rouded",
+      "space-x-2"
+    );
 
     const dayOfWeek = document.createElement("div");
     dayOfWeek.innerHTML = `<p class="block p-2">${currentDate.toLocaleDateString("en-US", { weekday: "long" })}</p>`;
@@ -149,16 +157,67 @@ function addTimecardFlex(job) {
     const startTimeInput = document.createElement("input");
     startTimeInput.type = "time";
     startTimeInput.name = "start-time";
-    startTimeInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
+    startTimeInput.step = "900"; // 15 minutes
+    startTimeInput.classList.add(
+      "border",
+      "border-gray-300",
+      "rounded",
+      "px-1",
+      "py-1",
+      "text-gray-600",
+      "flex-1",
+      "max-w-36",
+      "min-h-10",
+      "text-balance"
+    );
 
     const endTimeInput = document.createElement("input");
     endTimeInput.type = "time";
     endTimeInput.name = "end-time";
-    endTimeInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
+    endTimeInput.step = "900"; // 15 minutes
+    endTimeInput.classList.add(
+      "w-full",
+      "border",
+      "border-gray-300",
+      "rounded",
+      "px-1",
+      "py-1",
+      "text-gray-600",
+      "flex-1",
+      "max-w-36",
+      "min-h-10",
+      "text-balance"
+    );
 
     const hoursWorkedInput = document.createElement("div");
     hoursWorkedInput.name = "hours-worked";
-    hoursWorkedInput.classList.add("w-full", "border", "border-gray-300", "rounded", "px-2", "py-1", "text-gray-600", "flex-1");
+    hoursWorkedInput.classList.add(
+      "w-full",
+      "border",
+      "border-gray-300",
+      "rounded",
+      "px-2",
+      "py-1",
+      "text-gray-600",
+      "flex-1",
+      "max-w-14",
+      "block",
+      "p-2",
+      "bg-gray-100",
+      "rounded",
+      "text-center"
+    );
+    hoursWorkedInput.innerHTML = `<span class="">0</span>`;
+
+    if ((job.travelDays > 0 && i === 0) || (job.travelDays > 0 && i === job.duration - 1)) {
+      row.classList.add("bg-gray-600");
+      startTimeInput.value = "06:00";
+      endTimeInput.value = "16:00";
+    }
+
+    //TODO: figure out why .step isnt working with the seconds
+
+    // TODO: if travelDays is not 0, show travel time and set hours worked to 10 for i[0] && length-1
 
     // Check if there is an entry for the current date and prefill inputs if data exists
     const rowId = `${job._id}-${formattedDate}-${i + 1}`;
@@ -167,12 +226,12 @@ function addTimecardFlex(job) {
     if (entry) {
       startTimeInput.value = entry.clockIn;
       endTimeInput.value = entry.clockOut;
-      hoursWorkedInput.innerHTML = `<span class="block p-2 bg-gray-100 rounded text-center">${entry.dailyDuration}</span>`; // Will eventually be calculated. current default is 0
+      hoursWorkedInput.innerHTML = `<span>${entry.dailyDuration}</span>`; // Will eventually be calculated. current default is 0
     }
 
     const confirmButton = document.createElement("button");
     confirmButton.innerHTML = "Confirm";
-    confirmButton.classList.add("bg-blue-500", "hover:bg-blue-700", "text-white", "font-bold", "py-2", "px-4", "rounded");
+    confirmButton.classList.add("bg-blue-500", "hover:bg-blue-700", "text-white", "font-bold", "py-2", "px-4", "rounded-md");
     confirmButton.setAttribute("type", "submit");
     confirmButton.setAttribute("id", "confirm-button");
 
@@ -242,15 +301,100 @@ document.addEventListener("click", (event) => {
       const jobId = globalTimecardId;
       console.log(`now cicking Job ID: ${jobId}`);
       handleConfirmClick(row, jobId);
+
+      // await and reload timecarentries
+      fetchAndPopulateJobs(jobId);
     } else {
       console.log("Confirm button was clicked, but no row was found.");
     }
   }
 });
 
+// TODO: add expensse model to jobs
+
+//Event listener for add expense button
+document.getElementById("add-expense-btn").addEventListener("click", function () {
+  console.log("Add expense button clicked");
+  window.location.href = "addExpense.html";
+});
+
 //TODO: on Confirm /hide confirm button until edit
 
-// TODO: Add notes
+// Function to POST a new note to jobs
+function createNote(id) {
+  const noteDate = new Date();
+  const noteDescription = document.querySelector("#note-description").value;
+  const note = document.querySelector("#note-content").value;
+  const photo = document.querySelector("#note-photo").value || "";
+
+  const notes = {
+    noteDate: noteDate,
+    noteDescription: noteDescription,
+    note: note,
+    photo: photo,
+  };
+
+  fetch(`${apiBaseUrl}/api/jobs/notes/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      noteDate: noteDate,
+      noteDescription: noteDescription,
+      note: note,
+      photo: photo,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+// event listener for save note button
+document.getElementById("save-note-btn").addEventListener("click", function () {
+  const id = globalTimecardId;
+  createNote(id);
+});
+
+// Function shows previous notes and lists each note as a li in a div
+function showPreviousNotes(id) {
+  //makes notes-list div visible
+  const notesList = document.getElementById("notes-list");
+  notesList.style.display = "block";
+
+  // fetch previous notes
+  fetch(`${apiBaseUrl}/api/jobs/notes/${id}`)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Previous Notes:", data);
+      const notes = data;
+      const noteList = document.getElementById("submitted-notes-container");
+
+      // Create a new div element with a li for each note
+      notes.forEach((note) => {
+        const noteDiv = document.createElement("div");
+        const noteLi = document.createElement("li");
+        const notePhotoSlug = note.photo ? ` - ${note.photo}` : ""; // Add the note description and photo to the li if there is any
+        noteLi.textContent = note.noteDescription + " - " + note.note + notePhotoSlug;
+        noteDiv.appendChild(noteLi);
+        noteList.appendChild(noteDiv);
+      });
+    })
+    .catch((error) => {
+      console.error("Error fetching previous notes:", error);
+    });
+}
+
+// event listener for previous notes button
+document.getElementById("previous-notes-btn").addEventListener("click", function () {
+  const id = globalTimecardId;
+  showPreviousNotes(id);
+});
 
 // TODO: Add Expenses
 
