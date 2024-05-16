@@ -106,12 +106,12 @@ router.delete("/:id", async (req, res) => {
 
 module.exports = router;
 
-// POST a new note in job
-router.post("/notes/:id", async (req, res) => {
-  const { note } = req.body;
+// PATCH a new note in job/notes/:id
+router.patch("/notes/:id", async (req, res) => {
+  const { note, noteDescription, noteDate, photo } = req.body;
   try {
     const job = await Job.findById(req.params.id);
-    job.notes.push(note);
+    job.notes.push({ note, noteDescription, noteDate, photo });
     const updatedJob = await job.save();
     res.status(200).json(updatedJob);
   } catch (error) {

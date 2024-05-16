@@ -339,11 +339,16 @@ function createNote(id) {
   };
 
   fetch(`${apiBaseUrl}/api/jobs/notes/${id}`, {
-    method: "POST",
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(notes),
+    body: JSON.stringify({
+      noteDate: noteDate,
+      noteDescription: noteDescription,
+      note: note,
+      photo: photo,
+    }),
   })
     .then((response) => response.json())
     .then((data) => {
