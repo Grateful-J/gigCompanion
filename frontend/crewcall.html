@@ -142,6 +142,15 @@
             placeholder="Description"
             required
           />
+          <!--TODO: Add category dropdown-->
+          <!-- TODO: Make it Dynamic- maybe user generated categories per User?-->
+          <input
+            type="text"
+            id="expense-category"
+            class="mb-2 p-2 rounded bg-gray-800 border border-gray-600 text-white"
+            placeholder="Category"
+            required
+          />
           <button type="submit" id="add-expense-btn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
             Add Expense
           </button>
@@ -151,7 +160,7 @@
             <div class="w-1/4 py-2 px-4">Date</div>
             <div class="w-1/4 py-2 px-4">Amount</div>
             <div class="w-1/4 py-2 px-4">Description</div>
-            <div class="w-1/4 py-2 px-4">Category</div>
+            <div class="w-1/4 py-2 px-4">Cat</div>
             <div class="w-1/4 py-2 px-4">Actions</div>
           </div>
           <div id="expenses-list"></div>
