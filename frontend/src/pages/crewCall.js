@@ -11,39 +11,19 @@ let travelDays = 0;
 let isEditing = false;
 let editingTimecardID = "";
 let globalJob = {};
-let globalTimecardId = "";
+//TODO: No more global time card > stored in jobs
+let globalTimecardId = ""; // Used to store selected jobId from dropdown
 
-//checks if env is dev or prod
+// For Dev purposes: check which environment is being used
 if (import.meta.env.VITE_MODE === "dev") {
   apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 } else {
   apiBaseUrl = import.meta.env.VITE_API_BASE_URL_PROD;
 }
 
-// Event listener for job dropdown
-const jobDropdown = document.getElementById("job-dropdown");
-jobDropdown.addEventListener("change", () => {
-  const selectedJobId = jobDropdown.value;
-  if (selectedJobId) {
-    fetchJob(selectedJobId).then((job) => {
-      populateJobDetails(job);
-      duration = job.duration;
-      travelDays = job.travelDays;
-      globalTimecardId = job._id;
-
-      // Add timecard rows based on selected job
-      addTimecardFlex(job);
-
-      // Add global timecard if one does not exist
-      fetchJobAndDisplayTimecards(selectedJobId);
-
-      // returns job
-      globalJob = job;
-      //console.log(`Global Job: ${globalJob}`);
-    });
-  }
-});
-
+// Left Column: Job Dropdown //
+// !--------------------------------------------------------- //
+// Function: Fetch Job and Display Timecards
 function fetchJobAndDisplayTimecards(jobId) {
   //console.log(`Fetching Job: ${jobId}`);
   fetch(`${apiBaseUrl}/api/jobs/${jobId}`)
@@ -54,7 +34,7 @@ function fetchJobAndDisplayTimecards(jobId) {
     .catch((error) => console.error("Error fetching job:", error));
 }
 
-// Populate Job details with selected job
+// Function: Populate Job details with selected job
 function populateJobDetails(job) {
   // Variables to Store Start & Stop Dates (formatted)
   const initStartDate = new Date(job.startDate);
@@ -89,7 +69,10 @@ function populateJobDetails(job) {
   hoursDt.textContent = job.totalDoubleTime;
 }
 
-// Function to addTimecard Flex container
+// Middle Column: Timecard
+// !--------------------------------------------------------- //
+
+// Function to Display the Timecard Flex container and populate it with timecard rows
 // Dynamically add timecard rows based on the job's showDayEntries into a flexbox container
 function addTimecardFlex(job) {
   // Create the container
@@ -303,27 +286,8 @@ function handleConfirmClick(row, jobId) {
   updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue);
 }
 
-// Event delegation for confirm button for nested timecards
-document.addEventListener("click", (event) => {
-  // Check if the clicked element or its parent has the 'confirm-button' id
-  if (event.target.id === "confirm-button" || event.target.closest("#confirm-button")) {
-    event.preventDefault();
-    // Find the row by navigating up from the confirm button
-    const row = event.target.closest("div.flex-row");
-    if (row) {
-      const jobId = globalTimecardId;
-      console.log(`now cicking Job ID: ${jobId}`);
-      handleConfirmClick(row, jobId);
-
-      // await and reload timecarentries
-      fetchAndPopulateJobs(jobId);
-    } else {
-      console.log("Confirm button was clicked, but no row was found.");
-    }
-  }
-});
-
-//TODO: on Confirm /hide confirm button until edit
+// Right Column: Notes //
+// !--------------------------------------------------------- //
 
 // Function to POST a new note to jobs
 function createNote(id) {
@@ -360,12 +324,6 @@ function createNote(id) {
     });
 }
 
-// event listener for save note button
-document.getElementById("save-note-btn").addEventListener("click", function () {
-  const id = globalTimecardId;
-  createNote(id);
-});
-
 // Function shows previous notes and lists each note as a li in a div
 function showPreviousNotes(id) {
   //makes notes-list div visible
@@ -395,20 +353,74 @@ function showPreviousNotes(id) {
     });
 }
 
+// !Event Listeners //
+// -----------------------------------------------------------
+
+// Event listener for job dropdown
+const jobDropdown = document.getElementById("job-dropdown");
+jobDropdown.addEventListener("change", () => {
+  const selectedJobId = jobDropdown.value;
+  if (selectedJobId) {
+    fetchJob(selectedJobId).then((job) => {
+      populateJobDetails(job);
+      duration = job.duration;
+      travelDays = job.travelDays;
+      globalTimecardId = job._id;
+
+      // Add timecard rows based on selected job
+      addTimecardFlex(job);
+
+      // Add global timecard if one does not exist
+      fetchJobAndDisplayTimecards(selectedJobId);
+
+      // returns job
+      globalJob = job;
+      //console.log(`Global Job: ${globalJob}`);
+    });
+  }
+});
+
+// Event delegation for "Confirm"  button for nested timecards
+document.addEventListener("click", (event) => {
+  // Check if the clicked element or its parent has the 'confirm-button' id
+  if (event.target.id === "confirm-button" || event.target.closest("#confirm-button")) {
+    event.preventDefault();
+    // Find the row by navigating up from the confirm button
+    const row = event.target.closest("div.flex-row");
+    if (row) {
+      const jobId = globalTimecardId;
+      console.log(`now cicking Job ID: ${jobId}`);
+      handleConfirmClick(row, jobId);
+
+      // await and reload timecarentries
+      fetchAndPopulateJobs(jobId);
+    } else {
+      console.log("Confirm button was clicked, but no row was found.");
+    }
+  }
+});
+
+// event listener for save note button
+document.getElementById("save-note-btn").addEventListener("click", function () {
+  const id = globalTimecardId;
+  createNote(id);
+});
+
 // event listener for previous notes button
 document.getElementById("previous-notes-btn").addEventListener("click", function () {
   const id = globalTimecardId;
   showPreviousNotes(id);
 });
 
-// TODO: Add Expenses
-
-// TODO: add expensse model to jobs
-
 //Event listener for add expense button
 document.getElementById("add-expense-btn").addEventListener("click", function () {
   console.log("Add expense button clicked");
 });
+
+// TODO: Add Expenses
+
+// TODO: add expensse model to jobs
+
 // TODO: add DELETE to delete timecard entries
 
 // TODO: add edit timecard entries
@@ -418,3 +430,5 @@ document.getElementById("add-expense-btn").addEventListener("click", function ()
 // TODO: Mobile: below that- timecard flex
 // TODO: Mobile: below that notes then expenses
 // TODO:
+
+//TODO: on Confirm /hide confirm button until edit
