@@ -320,10 +320,6 @@ document.getElementById("add-expense-btn").addEventListener("click", function ()
 
 //TODO: on Confirm /hide confirm button until edit
 
-// TODO: Add notes
-
-// TODO: NOTES API Routes
-
 // Function to POST a new note to jobs
 function createNote(id) {
   const noteDate = new Date();
@@ -363,6 +359,40 @@ function createNote(id) {
 document.getElementById("save-note-btn").addEventListener("click", function () {
   const id = globalTimecardId;
   createNote(id);
+});
+
+// Function shows previous notes and lists each note as a li in a div
+function showPreviousNotes(id) {
+  //makes note div visible
+  document.getElementById("submitted-notes-container").style.display = "block";
+
+  // fetch previous notes
+  fetch(`${apiBaseUrl}/api/jobs/notes/${id}`)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .then(() => {
+      // Populate list of notes each note as a li in a div
+      const submittedNotesContainer = document.getElementById("submitted-notes-container");
+
+      data.forEach((note) => {
+        const noteDiv = document.createElement("div");
+        const noteLi = document.createElement("li");
+        noteLi.textContent = note.note;
+        noteDiv.appendChild(noteLi);
+        submittedNotesContainer.appendChild(noteDiv);
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+// event listener for previous notes button
+document.getElementById("previous-notes-btn").addEventListener("click", function () {
+  const id = globalTimecardId;
+  showPreviousNotes(id);
 });
 
 // TODO: Add Expenses
