@@ -417,18 +417,8 @@ document.getElementById("add-expense-btn").addEventListener("click", function ()
   console.log("Add expense button clicked");
 });
 
-// TODO: Add Expenses
-
-// TODO: add expensse model to jobs
-
 // TODO: add DELETE to delete timecard entries
 
 // TODO: add edit timecard entries
-
-// TODO: optimize for mobile
-// TODO: Mobile: Top view- just select job
-// TODO: Mobile: below that- timecard flex
-// TODO: Mobile: below that notes then expenses
-// TODO:
 
 //TODO: on Confirm /hide confirm button until edit
