@@ -474,16 +474,35 @@ function populateExpensesList(expenses) {
 // Function to edit an expense
 // pulls expense ID from hidden div
 function editExpense(expenseId) {
-  const expenseDiv = document.getElementById(`expense-${expenseId}`);
-  const expenseDate = expenseDiv.querySelector(".expense-date").textContent;
-  const expenseAmount = expenseDiv.querySelector(".expense-amount").textContent;
-  const expenseDescription = expenseDiv.querySelector(".expense-description").textContent;
-  const expenseCategory = expenseDiv.querySelector(".expense-category").textContent;
-  document.getElementById("expense-date").value = expenseDate;
-  document.getElementById("expense-amount").value = expenseAmount;
-  document.getElementById("expense-description").value = expenseDescription;
-  document.getElementById("expense-category").value = expenseCategory;
-  document.getElementById("expense-id").value = expenseId;
+  //Fetch job and search for expense with matching ID
+  fetch(`${apiBaseUrl}/api/jobs/${globalTimecardId}`)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      const expense = data.expenses.find((expense) => expense._id === expenseId);
+      if (expense) {
+        populateForm(expense);
+      }
+    })
+    .catch((error) => console.error("Error fetching expenses:", error));
+
+  // Populate form with expense data
+  function populateForm({ _id, expenseDate, expenseDescription, amount, category }) {
+    //const expenseIdInput = document.getElementById("expense-id");
+    const expenseDateInput = document.getElementById("expense-date");
+    const expenseDescriptionInput = document.getElementById("expense-description");
+    const expenseAmountInput = document.getElementById("expense-amount");
+    const expenseCategoryInput = document.getElementById("expense-category");
+
+    //expenseIdInput.value = _id;
+
+    // Format date to YYYY-MM-DD
+    const formattedExpenseDate = new Date(expenseDate).toISOString().slice(0, 10);
+    expenseDateInput.value = formattedExpenseDate;
+    expenseDescriptionInput.value = expenseDescription;
+    expenseAmountInput.value = amount;
+    expenseCategoryInput.value = category;
+  }
 }
 
 // !Event Listeners //
@@ -561,7 +580,7 @@ document.addEventListener("click", (event) => {
     if (row) {
       const expenseId = row.getAttribute("data-expense-id");
       console.log(`Editing expense ID: ${expenseId}`);
-      //editExpense(expenseId);
+      editExpense(expenseId);
     } else {
       console.log("Edit button was clicked, but no row was found.");
     }
