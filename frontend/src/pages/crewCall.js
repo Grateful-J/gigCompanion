@@ -419,13 +419,14 @@ function populateExpensesList(expenses) {
       "lg:space-y-0",
       "lg:space-x-4"
     );
+    expenseDivRow.setAttribute("data-expense-id", expense._id); // Setting the data-expense-id attribute
     expensesList.appendChild(expenseDivRow);
 
     // Hidden div for expense ID
     const expenseIdDiv = document.createElement("div");
     expenseIdDiv.textContent = expense._id;
     expenseIdDiv.classList.add("hidden");
-    expenseIdDiv.setAttribute("id", `expense-${expense._id}`);
+    expenseIdDiv.setAttribute("id", `expense-id-${expense._id}`);
     expenseDivRow.appendChild(expenseIdDiv);
 
     // Expense date
@@ -456,9 +457,11 @@ function populateExpensesList(expenses) {
     // Actions (e.g., edit and delete buttons)
     const actionsDiv = document.createElement("div");
     actionsDiv.classList.add("flex-1", "text-center", "lg:text-left", "px-2");
+    actionsDiv.setAttribute("id", "actions-container");
     const editButton = document.createElement("button");
     editButton.textContent = "Edit";
     editButton.classList.add("bg-blue-500", "hover:bg-blue-700", "text-white", "font-bold", "py-1", "px-2", "rounded");
+    editButton.setAttribute("id", "edit-expense-btn");
     actionsDiv.appendChild(editButton);
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "Delete";
@@ -466,6 +469,21 @@ function populateExpensesList(expenses) {
     actionsDiv.appendChild(deleteButton);
     expenseDivRow.appendChild(actionsDiv);
   });
+}
+
+// Function to edit an expense
+// pulls expense ID from hidden div
+function editExpense(expenseId) {
+  const expenseDiv = document.getElementById(`expense-${expenseId}`);
+  const expenseDate = expenseDiv.querySelector(".expense-date").textContent;
+  const expenseAmount = expenseDiv.querySelector(".expense-amount").textContent;
+  const expenseDescription = expenseDiv.querySelector(".expense-description").textContent;
+  const expenseCategory = expenseDiv.querySelector(".expense-category").textContent;
+  document.getElementById("expense-date").value = expenseDate;
+  document.getElementById("expense-amount").value = expenseAmount;
+  document.getElementById("expense-description").value = expenseDescription;
+  document.getElementById("expense-category").value = expenseCategory;
+  document.getElementById("expense-id").value = expenseId;
 }
 
 // !Event Listeners //
@@ -534,10 +552,20 @@ document.getElementById("add-expense-btn").addEventListener("click", function ()
   createExpense(globalTimecardId);
 });
 
-// Event listener for edit expense button
-document.getElementById("edit-expense-btn").addEventListener("click", function () {
-  //console.log("Edit expense button clicked");
-  editExpense(globalTimecardId);
+// Event delegation for edit button for nested expenses
+document.addEventListener("click", (event) => {
+  if (event.target.id === "edit-expense-btn" || event.target.closest("#edit-expense-btn")) {
+    event.preventDefault();
+    // Find the row by navigating up from the edit button
+    const row = event.target.closest("div.flex-col.lg\\:flex-row"); // Ensure matching class
+    if (row) {
+      const expenseId = row.getAttribute("data-expense-id");
+      console.log(`Editing expense ID: ${expenseId}`);
+      //editExpense(expenseId);
+    } else {
+      console.log("Edit button was clicked, but no row was found.");
+    }
+  }
 });
 
 // TODO: add DELETE to delete timecard entries
