@@ -372,15 +372,20 @@ function fetchExpenses(job) {
     });
 }
 
-// Function to PATCH a new expense
+// Function to PATCH a new or existing expense by passing JobId and optionally ExpenseId
+let globalExpenseId = "";
 function createExpense(globalTimecardId) {
   const jobId = globalTimecardId;
+  const expenseId = globalExpenseId; // Pulls the id from the hidden input element
+
   const expenseDate = document.querySelector("#expense-date").value;
   const description = document.querySelector("#expense-description").value;
   const amount = document.querySelector("#expense-amount").value;
   const category = document.querySelector("#expense-category").value || "";
 
-  fetch(`${apiBaseUrl}/api/jobs/expenses/${jobId}`, {
+  const url = expenseId ? `${apiBaseUrl}/api/jobs/expenses/${jobId}/${expenseId}` : `${apiBaseUrl}/api/jobs/expenses/${jobId}`;
+
+  fetch(url, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -394,11 +399,11 @@ function createExpense(globalTimecardId) {
   })
     .then((response) => response.json())
     .then((data) => {
-      //console.log(data);
       fetchExpenses(jobId);
       document.querySelector("#expense-form").reset();
+      //document.querySelector("#expense-id").value = ""; // Clear the hidden input after submitting
     })
-    .catch((error) => console.error("Error creating expense:", error));
+    .catch((error) => console.error("Error creating/updating expense:", error));
 }
 
 function populateExpensesList(expenses) {
@@ -472,13 +477,11 @@ function populateExpensesList(expenses) {
 }
 
 // Function to edit an expense
-// pulls expense ID from hidden div
 function editExpense(expenseId) {
-  //Fetch job and search for expense with matching ID
+  // Fetch job and search for expense with matching ID
   fetch(`${apiBaseUrl}/api/jobs/${globalTimecardId}`)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       const expense = data.expenses.find((expense) => expense._id === expenseId);
       if (expense) {
         populateForm(expense);
@@ -488,20 +491,11 @@ function editExpense(expenseId) {
 
   // Populate form with expense data
   function populateForm({ _id, expenseDate, expenseDescription, amount, category }) {
-    //const expenseIdInput = document.getElementById("expense-id");
-    const expenseDateInput = document.getElementById("expense-date");
-    const expenseDescriptionInput = document.getElementById("expense-description");
-    const expenseAmountInput = document.getElementById("expense-amount");
-    const expenseCategoryInput = document.getElementById("expense-category");
-
-    //expenseIdInput.value = _id;
-
-    // Format date to YYYY-MM-DD
-    const formattedExpenseDate = new Date(expenseDate).toISOString().slice(0, 10);
-    expenseDateInput.value = formattedExpenseDate;
-    expenseDescriptionInput.value = expenseDescription;
-    expenseAmountInput.value = amount;
-    expenseCategoryInput.value = category;
+    //document.querySelector("#expense-id").value = _id; // Set hidden input value to expenseId
+    document.querySelector("#expense-date").value = new Date(expenseDate).toISOString().slice(0, 10); // Format date to YYYY-MM-DD
+    document.querySelector("#expense-description").value = expenseDescription;
+    document.querySelector("#expense-amount").value = amount;
+    document.querySelector("#expense-category").value = category;
   }
 }
 
@@ -580,6 +574,7 @@ document.addEventListener("click", (event) => {
     if (row) {
       const expenseId = row.getAttribute("data-expense-id");
       console.log(`Editing expense ID: ${expenseId}`);
+      globalExpenseId = expenseId;
       editExpense(expenseId);
     } else {
       console.log("Edit button was clicked, but no row was found.");
