@@ -203,6 +203,23 @@ router.patch("/expenses/:jobId/:expenseId", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 
+  // DELETE expenses by sending jobId and expenseId
+  router.delete("/expenses/:jobId/:expenseId", async (req, res) => {
+    try {
+      const job = await Job.findById(req.params.jobId);
+      const expense = job.expenses.id(req.params.expenseId);
+      if (expense) {
+        expense.remove();
+        const updatedJob = await job.save();
+        res.status(200).json(updatedJob);
+      } else {
+        res.status(404).json({ message: "Expense not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   /*   // if expense doesnt exists and jobId is valid push new expense
   if (req.params.jobId && req.params.expenseId) {
     const { expenseDate, amount, expenseDescription, category } = req.body;
