@@ -367,6 +367,10 @@ function fetchExpenses(job) {
       //console.log("Expenses:", data);
       const expenses = data;
       populateExpensesList(expenses);
+
+      // Make expenses list visible
+      const expensesList = document.getElementById("expenses-container");
+      expensesList.style.display = "block";
     })
     .catch((error) => {
       console.error("Error fetching expenses:", error);
