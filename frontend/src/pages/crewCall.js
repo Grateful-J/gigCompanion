@@ -11,6 +11,7 @@ let travelDays = 0;
 let isEditing = false;
 let editingTimecardID = "";
 let globalJob = {};
+let globalExpenseId = "";
 //TODO: No more global time card > stored in jobs
 let globalTimecardId = ""; // Used to store selected jobId from dropdown
 
@@ -373,7 +374,7 @@ function fetchExpenses(job) {
 }
 
 // Function to PATCH a new or existing expense by passing JobId and optionally ExpenseId
-let globalExpenseId = "";
+
 function createExpense(globalTimecardId) {
   const jobId = globalTimecardId;
   const expenseId = globalExpenseId;
@@ -407,6 +408,7 @@ function createExpense(globalTimecardId) {
     .catch((error) => console.error("Error creating/updating expense:", error));
 }
 
+// Function to populate expenses list
 function populateExpensesList(expenses) {
   const expensesList = document.getElementById("expenses-list");
   expensesList.innerHTML = "";
@@ -476,6 +478,19 @@ function populateExpensesList(expenses) {
     expenseDivRow.appendChild(actionsDiv);
   });
 }
+// Helper function to Toggles Add button to Add or Update
+function toggleAddButton() {
+  const addExpenseBtn = document.getElementById("add-expense-btn");
+  if (addExpenseBtn.textContent === "Add") {
+    addExpenseBtn.textContent = "Update";
+    addExpenseBtn.classList.remove("bg-green-500", "hover:bg-green-700");
+    addExpenseBtn.classList.add("bg-blue-500", "hover:bg-blue-700");
+  } else {
+    addExpenseBtn.textContent = "Add";
+    addExpenseBtn.classList.remove("bg-blue-500", "hover:bg-blue-700");
+    addExpenseBtn.classList.add("bg-green-500", "hover:bg-green-700");
+  }
+}
 
 // Function to edit an expense
 function editExpense(expenseId) {
@@ -486,6 +501,13 @@ function editExpense(expenseId) {
       const expense = data.expenses.find((expense) => expense._id === expenseId);
       if (expense) {
         populateForm(expense);
+        toggleAddButton();
+
+        // update Add button to Update
+        const addExpenseBtn = document.getElementById("add-expense-btn");
+        addExpenseBtn.textContent = "Update";
+        addExpenseBtn.classList.remove("bg-green-500", "hover:bg-green-700");
+        addExpenseBtn.classList.add("bg-blue-500", "hover:bg-blue-700");
       }
     })
     .catch((error) => console.error("Error fetching expenses:", error));
