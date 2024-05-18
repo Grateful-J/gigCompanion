@@ -166,7 +166,7 @@ router.get("/expenses", async (req, res) => {
   }
 });
 
-/* // PATCH new expenses by ending jobId
+// PATCH new expenses by ending jobId
 router.patch("/expenses/:id", async (req, res) => {
   const { expenseDate, amount, expenseDescription, category } = req.body;
   try {
@@ -177,7 +177,7 @@ router.patch("/expenses/:id", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}); */
+});
 
 // PATCH expenses by sending jobId and expenseId
 router.patch("/expenses/:jobId/:expenseId", async (req, res) => {
@@ -194,7 +194,6 @@ router.patch("/expenses/:jobId/:expenseId", async (req, res) => {
       expense.amount = amount;
       expense.expenseDescription = expenseDescription;
       expense.category = category;
-
       const updatedJob = await job.save();
       res.status(200).json(updatedJob);
     } else {
@@ -203,6 +202,19 @@ router.patch("/expenses/:jobId/:expenseId", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+
+  /*   // if expense doesnt exists and jobId is valid push new expense
+  if (req.params.jobId && req.params.expenseId) {
+    const { expenseDate, amount, expenseDescription, category } = req.body;
+    try {
+      const job = await Job.findById(req.params.jobId);
+      job.expenses.push({ expenseDate, amount, expenseDescription, category });
+      const updatedJob = await job.save();
+      res.status(200).json(updatedJob);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  } */
 });
 
 module.exports = router;

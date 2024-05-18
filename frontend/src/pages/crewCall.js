@@ -376,14 +376,15 @@ function fetchExpenses(job) {
 let globalExpenseId = "";
 function createExpense(globalTimecardId) {
   const jobId = globalTimecardId;
-  const expenseId = globalExpenseId; // Pulls the id from the hidden input element
-
+  const expenseId = globalExpenseId;
   const expenseDate = document.querySelector("#expense-date").value;
   const description = document.querySelector("#expense-description").value;
   const amount = document.querySelector("#expense-amount").value;
   const category = document.querySelector("#expense-category").value || "";
 
-  const url = expenseId ? `${apiBaseUrl}/api/jobs/expenses/${jobId}/${expenseId}` : `${apiBaseUrl}/api/jobs/expenses/${jobId}`;
+  // If expenseId is not empty patch expense, else add expense
+
+  const url = expenseId != "" ? `${apiBaseUrl}/api/jobs/expenses/${jobId}/${expenseId}` : `${apiBaseUrl}/api/jobs/expenses/${jobId}`;
 
   fetch(url, {
     method: "PATCH",
