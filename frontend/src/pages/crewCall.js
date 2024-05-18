@@ -22,6 +22,11 @@ if (import.meta.env.VITE_MODE === "dev") {
   apiBaseUrl = import.meta.env.VITE_API_BASE_URL_PROD;
 }
 
+// Helper Function for adding commas to numbers
+function numberWithCommas(num) {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 // !Left Column: Job Dropdown //
 // !--------------------------------------------------------- //
 // Function: Fetch Job and Display Timecards
@@ -63,7 +68,7 @@ function populateJobDetails(job) {
   startDate.textContent = readableStartDate;
   endDate.textContent = readableEndDate;
   client.textContent = job.client;
-  rate.textContent = job.rate;
+  rate.textContent = "$" + job.rate;
   location.textContent = job.location;
   jobCode.textContent = job.showCode;
   hoursSt.textContent = job.totalStraightTime;
@@ -450,7 +455,9 @@ function populateExpensesList(expenses) {
 
     // Expense amount
     const expenseAmountDiv = document.createElement("div");
-    expenseAmountDiv.textContent = `$${expense.amount.toFixed(2)}`;
+    const exFloat = expense.amount.toFixed(2); // Round to 2 decimal places
+    const exComma = numberWithCommas(exFloat); // Add commas to number
+    expenseAmountDiv.textContent = `$${exComma}`;
     expenseAmountDiv.classList.add("flex-1", "text-center", "lg:text-left", "px-2");
     expenseDivRow.appendChild(expenseAmountDiv);
 
