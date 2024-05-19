@@ -88,6 +88,13 @@ function calculateWorkHours(clockIn, clockOut, breakTime) {
   const end = new Date();
   end.setHours(endHours, endMinutes, 0, 0);
 
+  // If end hours roll past midnight append remaining to current endHours
+  if (end.getHours() < start.getHours()) {
+    end.setHours(end.getHours() + 24);
+  }
+
+  console.log(`End Hours: ${end}`);
+
   const breakDuration = breakTime * 60 * 1000; // Convert break time to milliseconds
   const totalMilliseconds = end - start - breakDuration;
   const totalMinutes = Math.max(totalMilliseconds / 1000 / 60, 0); // Ensure no negative duration
