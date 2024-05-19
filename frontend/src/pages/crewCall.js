@@ -485,6 +485,7 @@ function populateExpensesList(expenses) {
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "Delete";
     deleteButton.classList.add("bg-red-500", "hover:bg-red-700", "text-white", "font-bold", "py-1", "px-2", "rounded", "ml-2");
+    deleteButton.setAttribute("id", "delete-expense-btn");
     actionsDiv.appendChild(deleteButton);
     expenseDivRow.appendChild(actionsDiv);
   });
@@ -531,6 +532,34 @@ function editExpense(expenseId) {
     document.querySelector("#expense-amount").value = amount;
     document.querySelector("#expense-category").value = category;
   }
+}
+
+// Function to delete an expense after alert confirmation
+function deleteExpense(expenseId) {
+  // Fetch job and search for expense with matching ID
+  fetch(`${apiBaseUrl}/api/jobs/${globalTimecardId}`)
+    .then((response) => response.json())
+    .then((data) => {
+      const expense = data.expenses.find((expense) => expense._id === expenseId);
+      if (expense) {
+        // Show alert confirmation
+        if (confirm("Are you sure you want to delete this expense?")) {
+          // Delete expense
+          console.log("Expense deleted:", expense);
+          const expenseId = expense._id;
+          fetch(`${apiBaseUrl}/api/jobs/expenses/${globalTimecardId}/${expenseId}`, {
+            method: "DELETE",
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Expense deleted:", data);
+              fetchJobAndDisplayTimecards(globalTimecardId);
+            })
+            .catch((error) => console.error("Error deleting expense:", error));
+        }
+      }
+    })
+    .catch((error) => console.error("Error fetching expenses:", error));
 }
 
 // !Event Listeners //
@@ -612,6 +641,22 @@ document.addEventListener("click", (event) => {
       editExpense(expenseId);
     } else {
       console.log("Edit button was clicked, but no row was found.");
+    }
+  }
+});
+
+// Event delegation for delete button for nested expenses
+document.addEventListener("click", (event) => {
+  if (event.target.id === "delete-expense-btn" || event.target.closest("#delete-expense-btn")) {
+    event.preventDefault();
+    // Find the row by navigating up from the delete button
+    const row = event.target.closest("div.flex-col.lg\\:flex-row"); // Ensure matching class
+    if (row) {
+      const expenseId = row.getAttribute("data-expense-id");
+      console.log(`Deleting expense ID: ${expenseId}`);
+      deleteExpense(expenseId);
+    } else {
+      console.log("Delete button was clicked, but no row was found.");
     }
   }
 });

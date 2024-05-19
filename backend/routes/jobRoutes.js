@@ -22,6 +22,36 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// DELETE expenses by sending jobId and expenseId
+router.delete("/expenses/:jobId/:expenseId", async (req, res) => {
+  try {
+    // Find the job by its id
+    const job = await Job.findById(req.params.jobId);
+
+    // Remove the expense from the job
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+
+    // Find the expense by its id
+    const expense = job.expenses.id(req.params.expenseId);
+    if (!expense) {
+      return res.status(404).json({ message: "Expense not found" });
+    }
+    console.log("Expense found:", expense);
+    if (expense) {
+      // Remove the expense from the job
+      job.expenses.remove(expense._id);
+      const updatedJob = await job.save();
+      res.status(200).json(updatedJob);
+    } else {
+      res.status(404).json({ message: "Expense not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 //POST new job
 router.post("/", async (req, res) => {
   const newJob = new Job(req.body);
@@ -89,16 +119,6 @@ router.patch("/daily/:id", async (req, res) => {
 
     const updatedJob = await job.save();
     res.status(200).json(updatedJob);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-//DELETE job
-router.delete("/:id", async (req, res) => {
-  try {
-    const deletedJob = await Job.findByIdAndDelete(req.params.id);
-    res.status(200).json(deletedJob);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -202,23 +222,6 @@ router.patch("/expenses/:jobId/:expenseId", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-
-  // DELETE expenses by sending jobId and expenseId
-  router.delete("/expenses/:jobId/:expenseId", async (req, res) => {
-    try {
-      const job = await Job.findById(req.params.jobId);
-      const expense = job.expenses.id(req.params.expenseId);
-      if (expense) {
-        expense.remove();
-        const updatedJob = await job.save();
-        res.status(200).json(updatedJob);
-      } else {
-        res.status(404).json({ message: "Expense not found" });
-      }
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  });
 
   /*   // if expense doesnt exists and jobId is valid push new expense
   if (req.params.jobId && req.params.expenseId) {
