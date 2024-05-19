@@ -13,6 +13,10 @@ const showDayEntriesSchema = new mongoose.Schema({
   straightTime: Number,
   overTime: Number,
   doubleTime: Number,
+  dailyRate: Number, // pulled from rate for now
+  straightPay: Number, // daily rate * straight time
+  overPay: Number, // daily rate * over time
+  doublePay: Number,
 });
 
 // Schema for Expenses

@@ -52,9 +52,12 @@ document.getElementById("job-dropdown").addEventListener("change", function () {
     .catch((error) => console.error("Error loading job details:", error));
 });
 
+// Function to
+
 // TODO: Function to load job hours sumamry for invoice
 function loadJobHoursSummary(selectedJobId) {
-  // while loop for duration to add timecard rows
+  // while loop for duration to add timecard rows based off of duration
+  //
 }
 
 // TODO: Function to populate timesheet-table-body with job hours
