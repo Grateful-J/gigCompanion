@@ -12,6 +12,7 @@ const locationRoutes = require("./routes/locationRoutes");
 const timeCardRoutes = require("./routes/timecardRoutes");
 const userRoutes = require("./routes/userRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
+const noteRoutes = require("./routes/noteRoutes");
 const { adminAuth, userAuth } = require("./utils/auth");
 
 // Express app
@@ -50,6 +51,7 @@ app.use("/api/timecards", timeCardRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", userRoutes);
 app.use("/api/jobs/expenses", expenseRoutes);
+app.use("/api/jobs/notes", noteRoutes);
 
 // Database connection
 mongoose
