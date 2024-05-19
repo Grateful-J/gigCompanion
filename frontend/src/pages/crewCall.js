@@ -267,7 +267,7 @@ function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue) {
   })
     .then((response) => response.json())
     .then((data) => {
-      //console.log("ShowDayEntries updated successfully:", data);
+      console.log("ShowDayEntries updated successfully:", data);
     })
     .catch((error) => console.error("Error updating showDayEntries:", error));
 }
@@ -594,8 +594,9 @@ document.addEventListener("click", (event) => {
   // Check if the clicked element or its parent has the 'confirm-button' id
   if (event.target.id === "confirm-button" || event.target.closest("#confirm-button")) {
     event.preventDefault();
+    //console.log(`confirm button clicked ${event.target.id}`);
     // Find the row by navigating up from the confirm button
-    const row = event.target.closest("div.flex-row");
+    const row = event.target.closest("div.flex-col.lg\\:flex-row");
     if (row) {
       const jobId = globalTimecardId;
       //console.log(`now cicking Job ID: ${jobId}`);
