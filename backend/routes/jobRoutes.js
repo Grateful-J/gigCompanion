@@ -22,36 +22,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// DELETE expenses by sending jobId and expenseId
-router.delete("/expenses/:jobId/:expenseId", async (req, res) => {
-  try {
-    // Find the job by its id
-    const job = await Job.findById(req.params.jobId);
-
-    // Remove the expense from the job
-    if (!job) {
-      return res.status(404).json({ message: "Job not found" });
-    }
-
-    // Find the expense by its id
-    const expense = job.expenses.id(req.params.expenseId);
-    if (!expense) {
-      return res.status(404).json({ message: "Expense not found" });
-    }
-    console.log("Expense found:", expense);
-    if (expense) {
-      // Remove the expense from the job
-      job.expenses.remove(expense._id);
-      const updatedJob = await job.save();
-      res.status(200).json(updatedJob);
-    } else {
-      res.status(404).json({ message: "Expense not found" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
 //POST new job
 router.post("/", async (req, res) => {
   const newJob = new Job(req.body);
@@ -62,19 +32,6 @@ router.post("/", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-//old patch route
-/* //PATCH jobs
-router.patch("/:id", async (req, res) => {
-  try {
-    const updatedJob = await Job.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
-    res.status(200).json(updatedJob);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-}); */
-
-// new patch route that allows update to submitted fields
-// specifically duration and travel days pre.Save in mongoose
 
 // PATCH jobs
 router.patch("/:id", async (req, res) => {
@@ -124,6 +81,16 @@ router.patch("/daily/:id", async (req, res) => {
   }
 });
 
+// DELETE job
+router.delete("/:id", async (req, res) => {
+  try {
+    const deletedJob = await Job.findByIdAndDelete(req.params.id);
+    res.status(200).json(deletedJob);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // NOTES ROUTES
 // ---------------------------------------------------------
 
@@ -161,80 +128,6 @@ router.delete("/notes/:id", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-});
-
-// EXPENSES ROUTES
-// ---------------------------------------------------------
-
-// GET single Expense
-router.get("/expenses/:id", async (req, res) => {
-  try {
-    const job = await Job.findById(req.params.id);
-    res.status(200).json(job.expenses);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Fetch Expenses
-router.get("/expenses", async (req, res) => {
-  try {
-    const expenses = await Expense.find();
-    res.status(200).json(expenses);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// PATCH new expenses by ending jobId
-router.patch("/expenses/:id", async (req, res) => {
-  const { expenseDate, amount, expenseDescription, category } = req.body;
-  try {
-    const job = await Job.findById(req.params.id);
-    job.expenses.push({ expenseDate, amount, expenseDescription, category });
-    const updatedJob = await job.save();
-    res.status(200).json(updatedJob);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// PATCH expenses by sending jobId and expenseId
-router.patch("/expenses/:jobId/:expenseId", async (req, res) => {
-  const { expenseDate, amount, expenseDescription, category } = req.body;
-  try {
-    const job = await Job.findById(req.params.jobId);
-
-    // Find the expense by its id
-    const expense = job.expenses.id(req.params.expenseId);
-
-    // If the expense exists, update its fields
-    if (expense) {
-      expense.expenseDate = expenseDate;
-      expense.amount = amount;
-      expense.expenseDescription = expenseDescription;
-      expense.category = category;
-      const updatedJob = await job.save();
-      res.status(200).json(updatedJob);
-    } else {
-      res.status(404).json({ message: "Expense not found" });
-    }
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-
-  /*   // if expense doesnt exists and jobId is valid push new expense
-  if (req.params.jobId && req.params.expenseId) {
-    const { expenseDate, amount, expenseDescription, category } = req.body;
-    try {
-      const job = await Job.findById(req.params.jobId);
-      job.expenses.push({ expenseDate, amount, expenseDescription, category });
-      const updatedJob = await job.save();
-      res.status(200).json(updatedJob);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  } */
 });
 
 module.exports = router;

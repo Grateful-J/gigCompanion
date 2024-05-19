@@ -11,6 +11,7 @@ const jobRoutes = require("./routes/jobRoutes"); // Adjusted for a models direct
 const locationRoutes = require("./routes/locationRoutes");
 const timeCardRoutes = require("./routes/timecardRoutes");
 const userRoutes = require("./routes/userRoutes");
+const expenseRoutes = require("./routes/expenseRoutes");
 const { adminAuth, userAuth } = require("./utils/auth");
 
 // Express app
@@ -48,6 +49,7 @@ app.use("/api/locations", locationRoutes);
 app.use("/api/timecards", timeCardRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", userRoutes);
+app.use("/api/jobs/expenses", expenseRoutes);
 
 // Database connection
 mongoose
