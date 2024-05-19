@@ -165,6 +165,13 @@ function calculateTotalTimes(entries) {
   return { totalStraightTime, totalOverTime, totalDoubleTime };
 }
 
+function calculateDailyWage(dailyRate, straightTime, overTime, doubleTime) {
+  const sT = straightTime;
+  const oT = overTime;
+  const dT = doubleTime;
+  const rate = dailyRate;
+}
+
 jobSchema.pre("save", function (next) {
   console.log("Pre-save: Starting to calculate fields for save operation.");
   calculateFields(this, this);
