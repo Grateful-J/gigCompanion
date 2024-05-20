@@ -52,6 +52,13 @@ app.use("/api/auth", userRoutes);
 app.use("/api/jobs/expenses", expenseRoutes);
 app.use("/api/jobs/notes", noteRoutes);
 
+// Error Handler
+app.use((err, req, res, next) => {
+  const status = err.status || 500;
+  const message = err.message || "Something went wrong";
+  res.status(status).json({ message });
+});
+
 // Database connection
 mongoose
   .connect(process.env.MONGODB_URI)
