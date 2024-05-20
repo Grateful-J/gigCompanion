@@ -169,7 +169,13 @@ function calculateDailyWage(dailyRate, straightTime, overTime, doubleTime) {
   const sT = straightTime;
   const oT = overTime;
   const dT = doubleTime;
-  const rate = dailyRate;
+  const hourlyRate = dailyRate / 10; // rate is logged on 10hr day. hourly rate
+
+  const totalSt = sT * hourlyRate;
+  const totalOt = oT * hourlyRate;
+  const totalDt = dT * hourlyRate;
+
+  return totalSt, totalOt, totalDt;
 }
 
 jobSchema.pre("save", function (next) {
