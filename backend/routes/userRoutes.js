@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { register, login, update, deleteUser, adminAuth, userAuth } = require("../utils/auth"); // imports auth & login functions for user auth
+const { register, login, update, deleteUser, adminAuth, userAuth, logout } = require("../utils/auth"); // imports auth & login functions for user auth
 const User = require("../models/users.model");
 
 //Get All Users
@@ -50,17 +50,21 @@ router.patch("/:id", async (req, res) => {
 // delete a user
 router.delete("/:id", async (req, res) => {
   try {
-    const deletedUser = await User.findByIdAndDelete(req.params.id);
-    res.status(200).json(deletedUser);
+    /*  const token = req.cookies.jwt; // Get JWT token from cookies
+    const decoded = jwt.verify(token, jwtSecret);
+    if (decoded.role !== "admin") {
+      return res.status(403).json({ message: "Not authorized" });
+    } else {
+      const deletedUser = await User.findByIdAndDelete(req.params.id);
+      res.status(200).json(deletedUser);
+    } */
+    //const deletedUser = await User.findByIdAndDelete(req.params.id);
+    //res.status(200).json(deletedUser);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-// Logout a user
-router.get("/logout", (req, res) => {
-  res.cookie("jwt", "", { maxAge: 1 });
-  res.redirect("/");
-});
+router.route("/logout").get(logout);
 
 module.exports = router;
