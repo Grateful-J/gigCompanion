@@ -18,14 +18,13 @@ if (user === null) {
   console.log("User: " + user);
 }
 
-// Function to reset inputs
+// Function to clear form
 function resetForm() {
-  document.getElementById("signup-username").value = "";
-  document.getElementById("signup-password").value = "";
+  document.getElementById("profile-form").reset();
 }
 
 // Fetch user details
-fetch(`${url}/users/${user}`, {
+fetch(`${apiBaseUrl}/api/users/${user}`, {
   method: "GET",
   headers: {
     "Content-Type": "application/json",
@@ -40,7 +39,7 @@ fetch(`${url}/users/${user}`, {
     document.getElementById("lastName").value = data.lastName;
     document.getElementById("email").value = data.email;
     document.getElementById("phoneNumber").value = data.phoneNumber;
-    document.getElementById("address").value = data.address === undefined ? "" : data.address;
+    //document.getElementById("address").value = data.address === undefined ? "" : data.address;
   });
 
 // Event lister for update user form
@@ -53,7 +52,7 @@ document.getElementById("profile-form").addEventListener("submit", async functio
   const phoneNumber = document.getElementById("phoneNumber").value;
   //const address = document.getElementById("address").value;
   try {
-    const response = await fetch(`${url}/users/${user}`, {
+    const response = await fetch(`${apiBaseUrl}/api/users/${user}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
