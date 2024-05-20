@@ -4,12 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Portal</title>
-    <link href="https://cdn.tailwindcss.com" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <script type="module" src="./src/pages/adminPortal.js"></script>
   </head>
-  <body class="bg-gray-100">
-    <div id="app">
-      <div id="navbar-placeholder" class="mt-0">...</div>
+  <body class="bg-gray-800 min-h-screen flex flex-col text-gray-200">
+    <!-- Navbar Placeholder -->
+    <nav id="navbar-placeholder" class="bg-gray-700 w-full py-4 px-8 text-lg">
+      <span>Navbar</span>
+    </nav>
+
+    <div id="app" class="p-4 lg:p-32">
       <div id="admin-portal">
         <h1>Admin Portal</h1>
         <p>Welcome, Admin</p>
@@ -22,10 +26,10 @@
                 <tr>
                   <th class="border-b border-gray-100 p-2">First Name</th>
                   <th class="border-b border-gray-200 p-2">Last Name</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Edit</th>
-                  <th>Delete</th>
+                  <th class="border-b border-gray-100 p-2">Email</th>
+                  <th class="border-b border-gray-100 p-2">Phone</th>
+                  <th class="border-b border-gray-100 p-2">Edit</th>
+                  <th class="border-b border-gray-100 p-2">Delete</th>
                 </tr>
               </thead>
               <tbody id="users-container">
@@ -33,7 +37,7 @@
               </tbody>
             </table>
           </div>
-          <button id="add-user-btn">Add User</button>
+          <button id="add-user-btn" class="text-center p-4 bg-blue-500 text-white rounded-md">Add User</button>
         </div>
         <div id="admin-portal-footer">
           <p>&copy; 2024. All rights reserved.</p>
