@@ -26,6 +26,8 @@ router.get("/:id", async (req, res) => {
 //POST a new User
 router.route("/register").post(register);
 
+// POST a new Admin
+
 //POST a new login
 router.route("/login").post(login);
 
