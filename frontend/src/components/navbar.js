@@ -21,6 +21,7 @@ function logOut(event) {
   console.log("Button pushed!");
 
   let apiBaseUrl;
+  console.log(`API Base URL: ${apiBaseUrl}`);
 
   // For Dev purposes: check which environment is being used
   if (import.meta.env.VITE_MODE === "dev") {
@@ -43,12 +44,22 @@ function logOut(event) {
       console.error("Error logging out:", error);
     });
 }
-
 // Function to attach the logOut handler
 function attachlogOutHandler() {
+  // Get the logout buttons if they exist
   const logOutButton = document.getElementById("logout-btn");
+  const logOutButtonMobile = document.getElementById("logout-btn-mobile");
+
   if (logOutButton) {
     logOutButton.addEventListener("click", logOut);
+    console.log("Desktop logout button found and event listener attached.");
+  }
+  if (logOutButtonMobile) {
+    logOutButtonMobile.addEventListener("click", logOut);
+    console.log("Mobile logout button found and event listener attached.");
+  }
+  if (!logOutButton && !logOutButtonMobile) {
+    console.error("Logout buttons not found");
   }
 }
 
