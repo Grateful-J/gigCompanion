@@ -15,7 +15,6 @@ function toggleNavbar() {
     menu.classList.toggle("hidden");
   });
 }
-
 // Define the pushMe function
 function pushMe(event) {
   event.preventDefault();
@@ -25,7 +24,7 @@ function pushMe(event) {
 
 // Function to attach the pushMe handler
 function attachPushMeHandler() {
-  const pushMeButton = document.querySelector('button[onclick="pushMe(event)"]');
+  const pushMeButton = document.getElementById("pushMeButton");
   if (pushMeButton) {
     pushMeButton.addEventListener("click", pushMe);
   }
