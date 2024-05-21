@@ -9,27 +9,63 @@
   </head>
   <body class="bg-gray-800 text-gray-200">
     <!-- Navbar placeholder -->
-    <nav id="navbar-placeholder" class="bg-gray-700 w-full py-6 px-8 text-lg mt-1">
+    <nav id="navbar-placeholder" class="bg-gray-700 w-full py-4 px-6 text-lg">
       <span>Navbar</span>
     </nav>
 
-    <!-- container that holds the main content -->
-    <div id="app" class="container mx-auto p-5 flex flex-row space-x-1 justify-center">
-      <h1 class="text-3xl font-bold mb-6 text-center">TITLE</h1>
+    <!-- Main container -->
+    <div id="app" class="container mx-auto p-4 flex flex-col lg:flex-row lg:space-x-4 justify-center items-center lg:items-start">
+      <div class="w-full lg:w-3/4">
+        <h1 class="text-3xl font-bold mb-6 text-center">TITLE</h1>
 
-      <!-- container that holds the main content -->
+        <!-- Example section for content -->
+        <div id="main-content" class="w-full p-4 bg-gray-900 rounded-lg shadow-lg">
+          <div class="mb-4">
+            <h2 class="text-2xl font-semibold mb-2">Section Heading</h2>
+            <p class="text-gray-400">
+              This is a paragraph of text that serves as a description or introduction to the section. It is responsive and adjusts its layout based
+              on the screen size.
+            </p>
+          </div>
 
-      <!-- frontend/crewcall.html -->
+          <div class="mb-4">
+            <button class="w-full lg:w-auto px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">Button</button>
+          </div>
 
-      <!-- frontend/crewcall.html -->
+          <div class="mb-4">
+            <input
+              type="text"
+              placeholder="Input Field"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none text-gray-800"
+            />
+          </div>
 
-      <!-- frontend/crewcall.html -->
-
-      <!-- frontend/crewcall.html -->
-
-      <!-- frontend/crewcall.html -->
-
-      <!-- frontend/crewcall.html -->
+          <!-- Responsive Table -->
+          <div class="overflow-x-auto">
+            <table class="w-full border-collapse border border-gray-300">
+              <thead class="bg-gray-700 text-gray-200">
+                <tr>
+                  <th class="px-4 py-2">Column 1</th>
+                  <th class="px-4 py-2">Column 2</th>
+                  <th class="px-4 py-2">Column 3</th>
+                </tr>
+              </thead>
+              <tbody class="bg-gray-800 text-gray-400">
+                <tr>
+                  <td class="px-4 py-2 border-t border-gray-600">Data 1</td>
+                  <td class="px-4 py-2 border-t border-gray-600">Data 2</td>
+                  <td class="px-4 py-2 border-t border-gray-600">Data 3</td>
+                </tr>
+                <!-- More rows as needed -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <script>
+      // Placeholder for additional scripts
+    </script>
   </body>
 </html>
