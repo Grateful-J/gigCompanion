@@ -54,6 +54,7 @@ app.get("/logout", (req, res) => {
 //app.get("/basic", userAuth, (req, res) => res.send("user"));
 
 //Use Routes
+
 app.use("/api/jobs", jobRoutes);
 app.use("/api/locations", locationRoutes);
 app.use("/api/timecards", timeCardRoutes);
