@@ -4,7 +4,7 @@ function loadNavbar() {
     .then((html) => {
       document.getElementById("navbar-placeholder").innerHTML = html;
       toggleNavbar();
-      attachPushMeHandler();
+      attachlogOutHandler();
     });
 }
 
@@ -15,8 +15,8 @@ function toggleNavbar() {
     menu.classList.toggle("hidden");
   });
 }
-// Define the pushMe function
-function pushMe(event) {
+// Define the logOut function
+function logOut(event) {
   event.preventDefault();
   console.log("Button pushed!");
 
@@ -44,11 +44,11 @@ function pushMe(event) {
     });
 }
 
-// Function to attach the pushMe handler
-function attachPushMeHandler() {
-  const pushMeButton = document.getElementById("pushMeButton");
-  if (pushMeButton) {
-    pushMeButton.addEventListener("click", pushMe);
+// Function to attach the logOut handler
+function attachlogOutHandler() {
+  const logOutButton = document.getElementById("logout-btn");
+  if (logOutButton) {
+    logOutButton.addEventListener("click", logOut);
   }
 }
 
