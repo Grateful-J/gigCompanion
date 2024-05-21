@@ -48,9 +48,10 @@ app.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
-// User Protected Routes
-app.get("/admin", adminAuth, (req, res) => res.send("Admin Route"));
-app.get("/basic", userAuth, (req, res) => res.send("User Route"));
+// User Protected Routes never worked, not using ejs package
+
+//app.get("/admin", adminAuth, (req, res) => res.send("admin"));
+//app.get("/basic", userAuth, (req, res) => res.send("user"));
 
 //Use Routes
 app.use("/api/jobs", jobRoutes);
