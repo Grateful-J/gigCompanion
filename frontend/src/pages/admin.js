@@ -40,22 +40,36 @@ function displayUsers(users) {
   });
 }
 
-// Function to Delete User
+// Function to Delete User with id in JSON body and role:admin
 async function deleteUser(event) {
   const userId = event.target.getAttribute("data-user-id");
-  if (!userId) {
-    alert("User ID not found");
-    return;
-  }
-  const response = await fetch(`${apiBaseUrl}/api/users/${userId}`, {
+
+  console.log(`Deleting user with id: ${userId}`);
+  const token = document.cookies["jwt"].value;
+  console.log(`Token: ${token}`);
+
+  const response = await fetch(`${apiBaseUrl}/api/auth/deleteUser`, {
     method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ id: userId }), // Use 'id' key here
   });
-  if (response.ok) {
-    alert("User deleted successfully");
-    fetchUsers();
-  } else {
-    alert("Failed to delete user");
+
+  const deleteData = await response.json();
+  if (response.status === 401) {
+    alert("User not deleted");
+    return; // Exit the function if unauthorized
   }
+
+  if (response.status === 200) {
+    alert("User successfully deleted");
+  } else {
+    alert(`Failed to delete user: ${deleteData.message}`);
+  }
+
+  location.assign("/admin");
 }
 
 // Event listener for delete user
