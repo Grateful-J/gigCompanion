@@ -191,7 +191,10 @@ exports.userAuth = (req, res, next) => {
   }
 };
 
-module.exports.logout = (req, res) => {
-  res.cookie("jwt", "", { maxAge: 1 });
+module.exports.logout_get = (req, res) => {
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
   res.status(200).json({ message: "User successfully logged out" });
 };

@@ -1,5 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const { register, login, update, deleteUser, adminAuth, userAuth, logout } = require("../utils/auth");
+const { authController } = require("../utils/auth");
 
-router.get("/logout", logout);
+router.get("/logout", authController.logout_get);

@@ -12,7 +12,7 @@ const timeCardRoutes = require("./routes/timecardRoutes");
 const userRoutes = require("./routes/userRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
 const noteRoutes = require("./routes/noteRoutes");
-const { adminAuth, userAuth } = require("./utils/auth");
+const { adminAuth, userAuth, logout_get } = require("./utils/auth");
 
 // Express app
 const app = express();
@@ -20,13 +20,16 @@ const app = express();
 // Pulls production environment variables
 const prodOriginURL = process.env.ORIGIN_INDEX;
 const devOriginURL = "http://localhost:5173";
-const devEmail = process.env.DEV_EMAIL;
 
+// CORS
 // Enable CORS with credentials for HTTPS or HTTP based on the environment
 app.use(
   cors({
     origin: process.env.NODE_ENV === "production" ? [prodOriginURL] : devOriginURL,
     credentials: true,
+    optionsSuccessStatus: 200,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
@@ -37,6 +40,12 @@ app.use(cookieParser());
 // API "GET" Commands
 app.get("/", (req, res) => {
   res.send("Hello from node API! updated");
+});
+
+// Logout Route
+app.get("/logout", (req, res) => {
+  res.cookie("jwt", "", { maxAge: "1" });
+  res.redirect("/");
 });
 
 // User Protected Routes
@@ -51,13 +60,6 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", userRoutes);
 app.use("/api/jobs/expenses", expenseRoutes);
 app.use("/api/jobs/notes", noteRoutes);
-
-// Error Handler
-app.use((err, req, res, next) => {
-  const status = err.status || 500;
-  const message = err.message || "Something went wrong";
-  res.status(status).json({ message });
-});
 
 // Database connection
 mongoose

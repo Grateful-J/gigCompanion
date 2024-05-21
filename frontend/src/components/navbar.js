@@ -4,6 +4,7 @@ function loadNavbar() {
     .then((html) => {
       document.getElementById("navbar-placeholder").innerHTML = html;
       toggleNavbar();
+      attachPushMeHandler();
     });
 }
 
@@ -13,6 +14,21 @@ function toggleNavbar() {
     const menu = document.getElementById("mobile-menu");
     menu.classList.toggle("hidden");
   });
+}
+
+// Define the pushMe function
+function pushMe(event) {
+  event.preventDefault();
+  console.log("Button pushed!");
+  // Add your custom functionality here
+}
+
+// Function to attach the pushMe handler
+function attachPushMeHandler() {
+  const pushMeButton = document.querySelector('button[onclick="pushMe(event)"]');
+  if (pushMeButton) {
+    pushMeButton.addEventListener("click", pushMe);
+  }
 }
 
 export { loadNavbar };

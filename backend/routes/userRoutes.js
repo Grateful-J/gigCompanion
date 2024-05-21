@@ -65,6 +65,6 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.route("/logout").get(logout);
+// router.route("/logout").get(logout);
 
 module.exports = router;
