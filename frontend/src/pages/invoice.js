@@ -46,15 +46,18 @@ document.getElementById("job-dropdown").addEventListener("change", function () {
       document.getElementById("location").textContent = job.location;
       document.getElementById("job-code").textContent = job.showCode || "N/A";
       document.getElementById("hours-st").textContent = job.totalStraightTime || "N/A";
-      document.getElementById("hours-ot").textContent = job.totalOvertime || "N/A";
+      document.getElementById("hours-ot").textContent = job.totalOverTime || "N/A";
       document.getElementById("hours-dt").textContent = job.totalDoubleTime || "N/A";
     })
     .catch((error) => console.error("Error loading job details:", error));
 });
 
+// Function to
+
 // TODO: Function to load job hours sumamry for invoice
 function loadJobHoursSummary(selectedJobId) {
-  // while loop for duration to add timecard rows
+  // while loop for duration to add timecard rows based off of duration
+  //
 }
 
 // TODO: Function to populate timesheet-table-body with job hours

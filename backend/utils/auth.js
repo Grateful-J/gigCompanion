@@ -70,13 +70,13 @@ exports.login = async (req, res, next) => {
         const token = jwt.sign({ id: user._id, username, role: user.role }, jwtSecret, {
           expiresIn: maxAge,
         });
-        console.log("Setting cookie");
+        //console.log("Setting cookie");
         res.cookie("jwt", token, {
           httpOnly: true,
           maxAge: maxAge * 1000, // Convert to milliseconds
           secure: process.env.NODE_ENV === "production", // Secure cookie in production
         });
-        console.log("Cookie set");
+        //console.log("Cookie set");
         res.status(200).json({
           message: "User successfully logged in",
           user: user._id,

@@ -11,50 +11,37 @@ let travelDays = 0;
 let isEditing = false;
 let editingTimecardID = "";
 let globalJob = {};
-let globalTimecardId = "";
+let globalExpenseId = "";
+//TODO: No more global time card > stored in jobs
+let globalTimecardId = ""; // Used to store selected jobId from dropdown
 
-//checks if env is dev or prod
+// For Dev purposes: check which environment is being used
 if (import.meta.env.VITE_MODE === "dev") {
   apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 } else {
   apiBaseUrl = import.meta.env.VITE_API_BASE_URL_PROD;
 }
 
-// Event listener for job dropdown
-const jobDropdown = document.getElementById("job-dropdown");
-jobDropdown.addEventListener("change", () => {
-  const selectedJobId = jobDropdown.value;
-  if (selectedJobId) {
-    fetchJob(selectedJobId).then((job) => {
-      populateJobDetails(job);
-      duration = job.duration;
-      travelDays = job.travelDays;
-      globalTimecardId = job._id;
+// Helper Function for adding commas to numbers
+function numberWithCommas(num) {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
-      // Add timecard rows based on selected job
-      addTimecardFlex(job);
-
-      // Add global timecard if one does not exist
-      fetchJobAndDisplayTimecards(selectedJobId);
-
-      // returns job
-      globalJob = job;
-      //console.log(`Global Job: ${globalJob}`);
-    });
-  }
-});
-
+// !Left Column: Job Dropdown //
+// !--------------------------------------------------------- //
+// Function: Fetch Job and Display Timecards
 function fetchJobAndDisplayTimecards(jobId) {
   //console.log(`Fetching Job: ${jobId}`);
   fetch(`${apiBaseUrl}/api/jobs/${jobId}`)
     .then((response) => response.json())
     .then((job) => {
       addTimecardFlex(job);
+      fetchExpenses(job);
     })
     .catch((error) => console.error("Error fetching job:", error));
 }
 
-// Populate Job details with selected job
+// Function: Populate Job details with selected job
 function populateJobDetails(job) {
   // Variables to Store Start & Stop Dates (formatted)
   const initStartDate = new Date(job.startDate);
@@ -81,7 +68,7 @@ function populateJobDetails(job) {
   startDate.textContent = readableStartDate;
   endDate.textContent = readableEndDate;
   client.textContent = job.client;
-  rate.textContent = job.rate;
+  rate.textContent = "$" + job.rate;
   location.textContent = job.location;
   jobCode.textContent = job.showCode;
   hoursSt.textContent = job.totalStraightTime;
@@ -89,7 +76,10 @@ function populateJobDetails(job) {
   hoursDt.textContent = job.totalDoubleTime;
 }
 
-// Function to addTimecard Flex container
+// !Middle Column: Timecard
+// !--------------------------------------------------------- //
+
+// Function to Display the Timecard Flex container and populate it with timecard rows
 // Dynamically add timecard rows based on the job's showDayEntries into a flexbox container
 function addTimecardFlex(job) {
   // Create the container
@@ -117,7 +107,7 @@ function addTimecardFlex(job) {
   container.appendChild(header);
 
   let travelDays = job.travelDays;
-  console.log(`travelDays: ${travelDays}`);
+  //console.log(`travelDays: ${travelDays}`);
   //travelDays = job.travelDays;
   //const durationIndex = job.duration - 1;
 
@@ -261,7 +251,7 @@ function addTimecardFlex(job) {
 }
 // Function to PATCH showDayEntries based on row ID
 function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue) {
-  console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}`);
+  //console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}`);
 
   fetch(`${apiBaseUrl}/api/jobs/daily/${jobId}`, {
     method: "PATCH",
@@ -303,35 +293,8 @@ function handleConfirmClick(row, jobId) {
   updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue);
 }
 
-// Event delegation for confirm button
-document.addEventListener("click", (event) => {
-  // Check if the clicked element or its parent has the 'confirm-button' id
-  if (event.target.id === "confirm-button" || event.target.closest("#confirm-button")) {
-    event.preventDefault();
-    // Find the row by navigating up from the confirm button
-    const row = event.target.closest("div.flex-row");
-    if (row) {
-      const jobId = globalTimecardId;
-      console.log(`now cicking Job ID: ${jobId}`);
-      handleConfirmClick(row, jobId);
-
-      // await and reload timecarentries
-      fetchAndPopulateJobs(jobId);
-    } else {
-      console.log("Confirm button was clicked, but no row was found.");
-    }
-  }
-});
-
-// TODO: add expensse model to jobs
-
-//Event listener for add expense button
-document.getElementById("add-expense-btn").addEventListener("click", function () {
-  console.log("Add expense button clicked");
-  window.location.href = "addExpense.html";
-});
-
-//TODO: on Confirm /hide confirm button until edit
+// !Right Column: Notes //
+// !--------------------------------------------------------- //
 
 // Function to POST a new note to jobs
 function createNote(id) {
@@ -361,18 +324,13 @@ function createNote(id) {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      //console.log(data);
+      fetchNotes(id);
     })
     .catch((error) => {
       console.error(error);
     });
 }
-
-// event listener for save note button
-document.getElementById("save-note-btn").addEventListener("click", function () {
-  const id = globalTimecardId;
-  createNote(id);
-});
 
 // Function shows previous notes and lists each note as a li in a div
 function showPreviousNotes(id) {
@@ -384,7 +342,7 @@ function showPreviousNotes(id) {
   fetch(`${apiBaseUrl}/api/jobs/notes/${id}`)
     .then((response) => response.json())
     .then((data) => {
-      console.log("Previous Notes:", data);
+      //console.log("Previous Notes:", data);
       const notes = data;
       const noteList = document.getElementById("submitted-notes-container");
 
@@ -403,20 +361,309 @@ function showPreviousNotes(id) {
     });
 }
 
+// !Bottom Div: Expenses //
+// !----------------------------------------------------------- //
+
+// Function to fetch & display expenses
+function fetchExpenses(job) {
+  fetch(`${apiBaseUrl}/api/jobs/expenses/${job._id}`)
+    .then((response) => response.json())
+    .then((data) => {
+      //console.log("Expenses:", data);
+      const expenses = data;
+      populateExpensesList(expenses);
+
+      // Make expenses list visible
+      const expensesList = document.getElementById("expenses-container");
+      expensesList.style.display = "block";
+    })
+    .catch((error) => {
+      console.error("Error fetching expenses:", error);
+    });
+}
+
+// Function to PATCH a new or existing expense by passing JobId and optionally ExpenseId
+
+function createExpense(globalTimecardId) {
+  const jobId = globalTimecardId;
+  const expenseId = globalExpenseId;
+  const expenseDate = document.querySelector("#expense-date").value;
+  const description = document.querySelector("#expense-description").value;
+  const amount = document.querySelector("#expense-amount").value;
+  const category = document.querySelector("#expense-category").value || "";
+
+  // If expenseId is not empty patch expense, else add expense
+
+  const url = expenseId != "" ? `${apiBaseUrl}/api/jobs/expenses/${jobId}/${expenseId}` : `${apiBaseUrl}/api/jobs/expenses/${jobId}`;
+
+  fetch(url, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      expenseDate: expenseDate,
+      expenseDescription: description,
+      amount: amount,
+      category: category,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      fetchExpenses(jobId);
+      document.querySelector("#expense-form").reset();
+      //document.querySelector("#expense-id").value = ""; // Clear the hidden input after submitting
+    })
+    .catch((error) => console.error("Error creating/updating expense:", error));
+}
+
+// Function to populate expenses list
+function populateExpensesList(expenses) {
+  const expensesList = document.getElementById("expenses-list");
+  expensesList.innerHTML = "";
+  expenses.forEach((expense) => {
+    // Creates parent "row" div
+    const expenseDivRow = document.createElement("div");
+    expenseDivRow.classList.add(
+      "flex",
+      "flex-col",
+      "lg:flex-row",
+      "justify-between",
+      "border-b",
+      "border-gray-300",
+      "py-2",
+      "space-y-2",
+      "lg:space-y-0",
+      "lg:space-x-4"
+    );
+    expenseDivRow.setAttribute("data-expense-id", expense._id); // Setting the data-expense-id attribute
+    expensesList.appendChild(expenseDivRow);
+
+    // Hidden div for expense ID
+    const expenseIdDiv = document.createElement("div");
+    expenseIdDiv.textContent = expense._id;
+    expenseIdDiv.classList.add("hidden");
+    expenseIdDiv.setAttribute("id", `expense-id-${expense._id}`);
+    expenseDivRow.appendChild(expenseIdDiv);
+
+    // Expense date
+    const expenseDateDiv = document.createElement("div");
+    const expenseDate = new Date(expense.expenseDate).toLocaleDateString();
+    expenseDateDiv.textContent = expenseDate;
+    expenseDateDiv.classList.add("flex-1", "text-center", "lg:text-left", "px-2");
+    expenseDivRow.appendChild(expenseDateDiv);
+
+    // Expense amount
+    const expenseAmountDiv = document.createElement("div");
+    const exFloat = expense.amount.toFixed(2); // Round to 2 decimal places
+    const exComma = numberWithCommas(exFloat); // Add commas to number
+    expenseAmountDiv.textContent = `$${exComma}`;
+    expenseAmountDiv.classList.add("flex-1", "text-center", "lg:text-left", "px-2");
+    expenseDivRow.appendChild(expenseAmountDiv);
+
+    // Expense description
+    const expenseDescriptionDiv = document.createElement("div");
+    expenseDescriptionDiv.textContent = expense.expenseDescription;
+    expenseDescriptionDiv.classList.add("flex-1", "text-center", "lg:text-left", "px-2");
+    expenseDivRow.appendChild(expenseDescriptionDiv);
+
+    // Expense category
+    const expenseCategoryDiv = document.createElement("div");
+    expenseCategoryDiv.textContent = expense.category;
+    expenseCategoryDiv.classList.add("flex-1", "text-center", "lg:text-left", "px-2");
+    expenseDivRow.appendChild(expenseCategoryDiv);
+
+    // Actions (e.g., edit and delete buttons)
+    const actionsDiv = document.createElement("div");
+    actionsDiv.classList.add("flex-1", "text-center", "lg:text-left", "px-2");
+    actionsDiv.setAttribute("id", "actions-container");
+    const editButton = document.createElement("button");
+    editButton.textContent = "Edit";
+    editButton.classList.add("bg-blue-500", "hover:bg-blue-700", "text-white", "font-bold", "py-1", "px-2", "rounded");
+    editButton.setAttribute("id", "edit-expense-btn");
+    actionsDiv.appendChild(editButton);
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.classList.add("bg-red-500", "hover:bg-red-700", "text-white", "font-bold", "py-1", "px-2", "rounded", "ml-2");
+    deleteButton.setAttribute("id", "delete-expense-btn");
+    actionsDiv.appendChild(deleteButton);
+    expenseDivRow.appendChild(actionsDiv);
+  });
+}
+// Helper function to Toggles Add button to Add or Update
+function toggleAddButton() {
+  const addExpenseBtn = document.getElementById("add-expense-btn");
+  if (addExpenseBtn.textContent === "Add") {
+    addExpenseBtn.textContent = "Update";
+    addExpenseBtn.classList.remove("bg-green-500", "hover:bg-green-700");
+    addExpenseBtn.classList.add("bg-blue-500", "hover:bg-blue-700");
+  } else {
+    addExpenseBtn.textContent = "Add";
+    addExpenseBtn.classList.remove("bg-blue-500", "hover:bg-blue-700");
+    addExpenseBtn.classList.add("bg-green-500", "hover:bg-green-700");
+  }
+}
+
+// Function to edit an expense
+function editExpense(expenseId) {
+  // Fetch job and search for expense with matching ID
+  fetch(`${apiBaseUrl}/api/jobs/${globalTimecardId}`)
+    .then((response) => response.json())
+    .then((data) => {
+      const expense = data.expenses.find((expense) => expense._id === expenseId);
+      if (expense) {
+        populateForm(expense);
+        toggleAddButton();
+
+        // update Add button to Update
+        const addExpenseBtn = document.getElementById("add-expense-btn");
+        addExpenseBtn.textContent = "Update";
+        addExpenseBtn.classList.remove("bg-green-500", "hover:bg-green-700");
+        addExpenseBtn.classList.add("bg-blue-500", "hover:bg-blue-700");
+      }
+    })
+    .catch((error) => console.error("Error fetching expenses:", error));
+
+  // Populate form with expense data
+  function populateForm({ _id, expenseDate, expenseDescription, amount, category }) {
+    //document.querySelector("#expense-id").value = _id; // Set hidden input value to expenseId
+    document.querySelector("#expense-date").value = new Date(expenseDate).toISOString().slice(0, 10); // Format date to YYYY-MM-DD
+    document.querySelector("#expense-description").value = expenseDescription;
+    document.querySelector("#expense-amount").value = amount;
+    document.querySelector("#expense-category").value = category;
+  }
+}
+
+// Function to delete an expense after alert confirmation
+function deleteExpense(expenseId) {
+  // Fetch job and search for expense with matching ID
+  fetch(`${apiBaseUrl}/api/jobs/${globalTimecardId}`)
+    .then((response) => response.json())
+    .then((data) => {
+      const expense = data.expenses.find((expense) => expense._id === expenseId);
+      if (expense) {
+        // Show alert confirmation
+        if (confirm("Are you sure you want to delete this expense?")) {
+          // Delete expense
+          console.log("Expense deleted:", expense);
+          const expenseId = expense._id;
+          fetch(`${apiBaseUrl}/api/jobs/expenses/${globalTimecardId}/${expenseId}`, {
+            method: "DELETE",
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Expense deleted:", data);
+              fetchJobAndDisplayTimecards(globalTimecardId);
+            })
+            .catch((error) => console.error("Error deleting expense:", error));
+        }
+      }
+    })
+    .catch((error) => console.error("Error fetching expenses:", error));
+}
+
+// !Event Listeners //
+// !----------------------------------------------------------- //
+
+// Event listener for job dropdown
+const jobDropdown = document.getElementById("job-dropdown");
+jobDropdown.addEventListener("change", () => {
+  const selectedJobId = jobDropdown.value;
+  if (selectedJobId) {
+    fetchJob(selectedJobId).then((job) => {
+      populateJobDetails(job);
+      duration = job.duration;
+      travelDays = job.travelDays;
+      globalTimecardId = job._id;
+
+      // Add timecard rows based on selected job
+      addTimecardFlex(job);
+
+      // Add global timecard if one does not exist
+      fetchJobAndDisplayTimecards(selectedJobId);
+
+      // returns job
+      globalJob = job;
+      //console.log(`Global Job: ${globalJob}`);
+    });
+  }
+});
+
+// Event delegation for "Confirm"  button for nested timecards
+document.addEventListener("click", (event) => {
+  // Check if the clicked element or its parent has the 'confirm-button' id
+  if (event.target.id === "confirm-button" || event.target.closest("#confirm-button")) {
+    event.preventDefault();
+    //console.log(`confirm button clicked ${event.target.id}`);
+    // Find the row by navigating up from the confirm button
+    const row = event.target.closest("div.flex-col.lg\\:flex-row");
+    if (row) {
+      const jobId = globalTimecardId;
+      //console.log(`now cicking Job ID: ${jobId}`);
+      handleConfirmClick(row, jobId);
+
+      // await and reload timecarentries
+      fetchAndPopulateJobs(jobId);
+    } else {
+      console.log("Confirm button was clicked, but no row was found.");
+    }
+  }
+});
+
+// event listener for save note button
+document.getElementById("save-note-btn").addEventListener("click", function () {
+  const id = globalTimecardId;
+  createNote(id);
+});
+
 // event listener for previous notes button
 document.getElementById("previous-notes-btn").addEventListener("click", function () {
   const id = globalTimecardId;
   showPreviousNotes(id);
 });
 
-// TODO: Add Expenses
+//Event listener for add expense button
+document.getElementById("add-expense-btn").addEventListener("click", function () {
+  //console.log("Add expense button clicked");
+  //fetchExpenses(); // Temp test for functionality
+  createExpense(globalTimecardId);
+});
+
+// Event delegation for edit button for nested expenses
+document.addEventListener("click", (event) => {
+  if (event.target.id === "edit-expense-btn" || event.target.closest("#edit-expense-btn")) {
+    event.preventDefault();
+    // Find the row by navigating up from the edit button
+    const row = event.target.closest("div.flex-col.lg\\:flex-row"); // Ensure matching class
+    if (row) {
+      const expenseId = row.getAttribute("data-expense-id");
+      console.log(`Editing expense ID: ${expenseId}`);
+      globalExpenseId = expenseId;
+      editExpense(expenseId);
+    } else {
+      console.log("Edit button was clicked, but no row was found.");
+    }
+  }
+});
+
+// Event delegation for delete button for nested expenses
+document.addEventListener("click", (event) => {
+  if (event.target.id === "delete-expense-btn" || event.target.closest("#delete-expense-btn")) {
+    event.preventDefault();
+    // Find the row by navigating up from the delete button
+    const row = event.target.closest("div.flex-col.lg\\:flex-row"); // Ensure matching class
+    if (row) {
+      const expenseId = row.getAttribute("data-expense-id");
+      console.log(`Deleting expense ID: ${expenseId}`);
+      deleteExpense(expenseId);
+    } else {
+      console.log("Delete button was clicked, but no row was found.");
+    }
+  }
+});
 
 // TODO: add DELETE to delete timecard entries
 
 // TODO: add edit timecard entries
 
-// TODO: optimize for mobile
-// TODO: Mobile: Top view- just select job
-// TODO: Mobile: below that- timecard flex
-// TODO: Mobile: below that notes then expenses
-// TODO:
+//TODO: on Confirm /hide confirm button until edit

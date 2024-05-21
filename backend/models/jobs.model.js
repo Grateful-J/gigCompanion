@@ -13,6 +13,10 @@ const showDayEntriesSchema = new mongoose.Schema({
   straightTime: Number,
   overTime: Number,
   doubleTime: Number,
+  dailyRate: Number, // pulled from rate for now
+  straightPay: Number, // daily rate * straight time
+  overPay: Number, // daily rate * over time
+  doublePay: Number,
 });
 
 // Schema for Expenses
@@ -88,6 +92,13 @@ function calculateWorkHours(clockIn, clockOut, breakTime) {
   const end = new Date();
   end.setHours(endHours, endMinutes, 0, 0);
 
+  // If end hours roll past midnight append remaining to current endHours
+  if (end.getHours() < start.getHours()) {
+    end.setHours(end.getHours() + 24);
+  }
+
+  console.log(`End Hours: ${end}`);
+
   const breakDuration = breakTime * 60 * 1000; // Convert break time to milliseconds
   const totalMilliseconds = end - start - breakDuration;
   const totalMinutes = Math.max(totalMilliseconds / 1000 / 60, 0); // Ensure no negative duration
@@ -152,6 +163,19 @@ function calculateTotalTimes(entries) {
   });
 
   return { totalStraightTime, totalOverTime, totalDoubleTime };
+}
+
+function calculateDailyWage(dailyRate, straightTime, overTime, doubleTime) {
+  const sT = straightTime;
+  const oT = overTime;
+  const dT = doubleTime;
+  const hourlyRate = dailyRate / 10; // rate is logged on 10hr day. hourly rate
+
+  const totalSt = sT * hourlyRate;
+  const totalOt = oT * hourlyRate;
+  const totalDt = dT * hourlyRate;
+
+  return totalSt, totalOt, totalDt;
 }
 
 jobSchema.pre("save", function (next) {

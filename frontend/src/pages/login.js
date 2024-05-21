@@ -54,7 +54,7 @@ document.getElementById("login-form").addEventListener("submit", async function 
   }
 });
 
-// Event lister for user signup form submit
+/* // Event lister for user signup form submit
 document.getElementById("signup-form").addEventListener("submit", async function (event) {
   event.preventDefault();
   const username = document.getElementById("signup-username").value;
@@ -77,7 +77,7 @@ document.getElementById("signup-form").addEventListener("submit", async function
     document.getElementById("signup").classList.add("hidden");
     document.getElementById("login").classList.remove("hidden");
   }
-});
+}); */
 
 //event listenter for signup button >> show signup form / hide login form
 document.getElementById("signup-btn").addEventListener("click", function () {

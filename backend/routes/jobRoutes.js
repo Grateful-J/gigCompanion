@@ -32,19 +32,6 @@ router.post("/", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-//old patch route
-/* //PATCH jobs
-router.patch("/:id", async (req, res) => {
-  try {
-    const updatedJob = await Job.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
-    res.status(200).json(updatedJob);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-}); */
-
-// new patch route that allows update to submitted fields
-// specifically duration and travel days pre.Save in mongoose
 
 // PATCH jobs
 router.patch("/:id", async (req, res) => {
@@ -94,7 +81,7 @@ router.patch("/daily/:id", async (req, res) => {
   }
 });
 
-//DELETE job
+// DELETE job
 router.delete("/:id", async (req, res) => {
   try {
     const deletedJob = await Job.findByIdAndDelete(req.params.id);
@@ -105,26 +92,3 @@ router.delete("/:id", async (req, res) => {
 });
 
 module.exports = router;
-
-// PATCH a new note in job/notes/:id
-router.patch("/notes/:id", async (req, res) => {
-  const { note, noteDescription, noteDate, photo } = req.body;
-  try {
-    const job = await Job.findById(req.params.id);
-    job.notes.push({ note, noteDescription, noteDate, photo });
-    const updatedJob = await job.save();
-    res.status(200).json(updatedJob);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-//Fetch notes
-router.get("/notes/:id", async (req, res) => {
-  try {
-    const job = await Job.findById(req.params.id);
-    res.status(200).json(job.notes);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});

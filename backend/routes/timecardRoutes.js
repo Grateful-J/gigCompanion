@@ -49,7 +49,28 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
-// PATCH a time card and $addToSet
+// PATCH to mark timecard as submitted
+router.patch("/submit/:id", async (req, res) => {
+  try {
+    const updatedTimecard = await Timecard.findByIdAndUpdate(req.params.id, { isSubmited: true }, { new: true });
+    res.status(200).json(updatedTimecard);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+//DELETE a timecard
+router.delete("/:id", async (req, res) => {
+  try {
+    const deletedTimecard = await Timecard.findByIdAndDelete(req.params.id);
+    res.status(200).json(deletedTimecard);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Removed for now... move functionality to job routes
+/* // PATCH a time card and $addToSet
 router.patch("/daily/:id", async (req, res) => {
   console.log(req.body);
 
@@ -76,26 +97,6 @@ router.patch("/daily/:id", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-});
-
-// PATCH to mark timecard as submitted
-router.patch("/submit/:id", async (req, res) => {
-  try {
-    const updatedTimecard = await Timecard.findByIdAndUpdate(req.params.id, { isSubmited: true }, { new: true });
-    res.status(200).json(updatedTimecard);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-//DELETE a timecard
-router.delete("/:id", async (req, res) => {
-  try {
-    const deletedTimecard = await Timecard.findByIdAndDelete(req.params.id);
-    res.status(200).json(deletedTimecard);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+}); */
 
 module.exports = router;

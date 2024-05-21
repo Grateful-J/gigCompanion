@@ -26,6 +26,8 @@ router.get("/:id", async (req, res) => {
 //POST a new User
 router.route("/register").post(register);
 
+// POST a new Admin
+
 //POST a new login
 router.route("/login").post(login);
 
@@ -48,17 +50,19 @@ router.patch("/:id", async (req, res) => {
 // delete a user
 router.delete("/:id", async (req, res) => {
   try {
-    const deletedUser = await User.findByIdAndDelete(req.params.id);
-    res.status(200).json(deletedUser);
+    const token = req.cookies.jwt; // Get JWT token from cookies
+    const decoded = jwt.verify(token, jwtSecret);
+    if (decoded.role !== "admin") {
+      return res.status(403).json({ message: "Not authorized" });
+    } else {
+      const deletedUser = await User.findByIdAndDelete(req.params.id);
+      res.status(200).json(deletedUser);
+    }
+    //const deletedUser = await User.findByIdAndDelete(req.params.id);
+    //res.status(200).json(deletedUser);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-});
-
-// Logout a user
-router.get("/logout", (req, res) => {
-  res.cookie("jwt", "", { maxAge: 1 });
-  res.redirect("/");
 });
 
 module.exports = router;

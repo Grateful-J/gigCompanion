@@ -1,7 +1,6 @@
 const express = require("express");
 const https = require("https");
 const fs = require("fs");
-//const crypto = require("node:crypto");
 const cors = require("cors");
 const path = require("path");
 const mongoose = require("mongoose");
@@ -11,6 +10,8 @@ const jobRoutes = require("./routes/jobRoutes"); // Adjusted for a models direct
 const locationRoutes = require("./routes/locationRoutes");
 const timeCardRoutes = require("./routes/timecardRoutes");
 const userRoutes = require("./routes/userRoutes");
+const expenseRoutes = require("./routes/expenseRoutes");
+const noteRoutes = require("./routes/noteRoutes");
 const { adminAuth, userAuth } = require("./utils/auth");
 
 // Express app
@@ -19,13 +20,16 @@ const app = express();
 // Pulls production environment variables
 const prodOriginURL = process.env.ORIGIN_INDEX;
 const devOriginURL = "http://localhost:5173";
-const devEmail = process.env.DEV_EMAIL;
 
+// CORS
 // Enable CORS with credentials for HTTPS or HTTP based on the environment
 app.use(
   cors({
     origin: process.env.NODE_ENV === "production" ? [prodOriginURL] : devOriginURL,
     credentials: true,
+    optionsSuccessStatus: 200,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
@@ -38,6 +42,12 @@ app.get("/", (req, res) => {
   res.send("Hello from node API! updated");
 });
 
+// Logout Route
+app.get("/logout", (req, res) => {
+  res.cookie("jwt", "", { maxAge: "1", httpOnly: true, secure: process.env.NODE_ENV === "production" });
+  res.redirect("/");
+});
+
 // User Protected Routes
 app.get("/admin", adminAuth, (req, res) => res.send("Admin Route"));
 app.get("/basic", userAuth, (req, res) => res.send("User Route"));
@@ -48,6 +58,8 @@ app.use("/api/locations", locationRoutes);
 app.use("/api/timecards", timeCardRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", userRoutes);
+app.use("/api/jobs/expenses", expenseRoutes);
+app.use("/api/jobs/notes", noteRoutes);
 
 // Database connection
 mongoose
