@@ -32,10 +32,10 @@ router.route("/register").post(register);
 router.route("/login").post(login);
 
 //PUT an update to user Role
-router.route("/update").put(update);
+router.route("/update").put(adminAuth, update);
 
 // AUTH DELETE a user
-router.route("/deleteUser").delete(deleteUser);
+router.route("/deleteUser").delete(adminAuth, deleteUser);
 
 //PATCH a User
 router.patch("/:id", async (req, res) => {
@@ -47,7 +47,7 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
-// delete a user
+/* // delete a user without auth
 router.delete("/:id", async (req, res) => {
   try {
     const token = req.cookies.jwt; // Get JWT token from cookies
@@ -64,5 +64,5 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
+ */
 module.exports = router;

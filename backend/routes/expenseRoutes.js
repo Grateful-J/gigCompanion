@@ -15,11 +15,11 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Fetch Expenses
+// GET all expenses by ending jobId
 router.get("/", async (req, res) => {
   try {
-    const expenses = await Expense.find();
-    res.status(200).json(expenses);
+    const job = await Job.findById(req.params.id);
+    res.status(200).json(job.expenses);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
