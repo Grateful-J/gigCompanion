@@ -19,7 +19,29 @@ function toggleNavbar() {
 function pushMe(event) {
   event.preventDefault();
   console.log("Button pushed!");
-  // Add your custom functionality here
+
+  let apiBaseUrl;
+
+  // For Dev purposes: check which environment is being used
+  if (import.meta.env.VITE_MODE === "dev") {
+    apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  } else {
+    apiBaseUrl = import.meta.env.VITE_API_BASE_URL_PROD;
+  }
+
+  // GET /logout route
+  fetch(`${apiBaseUrl}/logout`, {
+    method: "GET",
+    credentials: "include", // Include cookies in the request
+  })
+    .then((response) => {
+      if (response.redirected) {
+        window.location.href = "/login";
+      }
+    })
+    .catch((error) => {
+      console.error("Error logging out:", error);
+    });
 }
 
 // Function to attach the pushMe handler

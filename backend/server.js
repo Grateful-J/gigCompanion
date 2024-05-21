@@ -44,7 +44,7 @@ app.get("/", (req, res) => {
 
 // Logout Route
 app.get("/logout", (req, res) => {
-  res.cookie("jwt", "", { maxAge: "1" });
+  res.cookie("jwt", "", { maxAge: "1", httpOnly: true, secure: process.env.NODE_ENV === "production" });
   res.redirect("/");
 });
 
