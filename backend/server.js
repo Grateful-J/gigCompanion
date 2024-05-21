@@ -12,7 +12,7 @@ const timeCardRoutes = require("./routes/timecardRoutes");
 const userRoutes = require("./routes/userRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
 const noteRoutes = require("./routes/noteRoutes");
-const { adminAuth, userAuth, logout_get } = require("./utils/auth");
+const { adminAuth, userAuth } = require("./utils/auth");
 
 // Express app
 const app = express();
