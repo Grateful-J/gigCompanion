@@ -18,6 +18,86 @@
       <div class="w-full lg:w-3/4">
         <h1 class="text-3xl font-bold mb-6 text-center">Project Management Portal</h1>
 
+        <div id="project-buttons" class="flex flex-col lg:flex-row justify-center mt-2 space-y-4 lg:space-y-0 lg:space-x-8 p-8">
+          <button
+            id="add-project-btn"
+            class="block w-full lg:w-auto px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-green-600 focus:outline-none"
+          >
+            Add Project
+          </button>
+          <button
+            id="previous-projects-btn"
+            class="block w-full lg:w-auto px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-yellow-600 focus:outline-none"
+          >
+            Previous Projects
+          </button>
+        </div>
+
+        <div id="project-form" class="hidden">
+          <form id="project-form">
+            <div class="mb-4">
+              <label for="project-name" class="block text-gray-200 font-bold mb-2">Project Name:</label>
+              <input
+                type="text"
+                id="project-name"
+                name="project-name"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none text-gray-800"
+              />
+            </div>
+            <div class="mb-4">
+              <label for="project-description" class="block text-gray-200 font-bold mb-2">Project Description:</label>
+              <textarea
+                id="project-description"
+                name="project-description"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none text-gray-800"
+              ></textarea>
+            </div>
+            <div class="mb-4">
+              <label for="project-start-date" class="block text-gray-200 font-bold mb-2">Project Start Date:</label>
+              <input
+                type="date"
+                id="project-start-date"
+                name="project-start-date"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none text-gray-800"
+              />
+            </div>
+            <div class="mb-4">
+              <label for="project-end-date" class="block text-gray-200 font-bold mb-2">Project End Date:</label>
+              <input
+                type="date"
+                id="project-end-date"
+                name="project-end-date"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none text-gray-800"
+              />
+            </div>
+            <div class="mb-4">
+              <label for="project-budget" class="block text-gray-200 font-bold mb-2">Project Budget:</label>
+              <input
+                type="number"
+                id="project-budget"
+                name="project-budget"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none text-gray-800"
+              />
+            </div>
+            <div class="mb-4">
+              <label for="project-status" class="block text-gray-200 font-bold mb-2">Project Status:</label>
+              <select
+                id="project-status"
+                name="project-status"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none text-gray-800"
+              >
+                <option value="active">Active</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div>
+            <div class="mb-4">
+              <button type="submit" class="w-full lg:w-auto px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none">
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+
         <!-- Example section for content -->
         <div id="main-content" class="w-full p-4 bg-gray-900 rounded-lg shadow-lg">
           <div class="mb-4">
