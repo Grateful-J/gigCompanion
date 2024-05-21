@@ -190,11 +190,3 @@ exports.userAuth = (req, res, next) => {
     return res.status(401).json({ message: "Not authorized, token not available" });
   }
 };
-
-module.exports.logout_get = (req, res) => {
-  res.cookie("jwt", "", {
-    httpOnly: true,
-    maxAge: 1,
-  });
-  res.status(200).json({ message: "User successfully logged out" });
-};
