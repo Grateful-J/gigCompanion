@@ -3,6 +3,51 @@ const bcrypt = require("bcryptjs"); //encrypts passwords
 const jwt = require("jsonwebtoken");
 const jwtSecret = process.env.JWT_SECRET;
 
+// Handle Errors
+const handleErrors = (err) => {
+  console.log(err.message, err.code);
+  let errors = { username: "", password: "" };
+
+  // incorrect username
+  if (err.message === "Incorrect username") {
+    errors.username = "That username is not registered";
+  }
+
+  // incorrect password
+  if (err.message === "Incorrect password") {
+    errors.password = "That password is incorrect";
+  }
+
+  // duplicate email error code
+  if (err.code === 11000) {
+    errors.username = "That username is already registered";
+    return errors;
+  }
+
+  // validation errors
+  if (err.message.includes("user validation failed")) {
+    Object.values(err.errors).forEach(({ properties }) => {
+      errors[properties.path] = properties.message;
+    });
+  }
+  return errors;
+};
+
+exports.checkToken = (req, res, next) => {
+  const token = req.cookies.jwt;
+  if (!token) {
+    return res.status(403).json({ message: "Login first" });
+  }
+
+  jwt.verify(token, jwtSecret, (err, decodedToken) => {
+    if (err) {
+      return res.status(401).json({ message: "Invalid or expired token" });
+    }
+    req.user = decodedToken; // Attach decoded token to request object
+    next();
+  });
+};
+
 // POST a new User and return it
 exports.register = async (req, res, next) => {
   const { username, password, firstName, lastName, email, phoneNumber } = req.body;
@@ -31,6 +76,7 @@ exports.register = async (req, res, next) => {
               httpOnly: true,
               secure: process.env.NODE_ENV === "production",
               maxAge: maxAge * 1000, // 3hrs in ms
+              //sameSite: "None", // Ensure cross-origin cookies are allowed
             });
             res.status(201).json({
               message: "User successfully created",
@@ -75,6 +121,7 @@ exports.login = async (req, res, next) => {
           httpOnly: true,
           maxAge: maxAge * 1000, // Convert to milliseconds
           secure: process.env.NODE_ENV === "production", // Secure cookie in production
+          //sameSite: "None", // Ensure cross-origin cookies are allowed
         });
         //console.log("Cookie set");
         res.status(200).json({
@@ -152,23 +199,13 @@ exports.getUsers = async (req, res, next) => {
 };
 
 exports.adminAuth = (req, res, next) => {
-  const token = req.cookies.jwt;
-  if (token) {
-    jwt.verify(token, jwtSecret, (err, decodedToken) => {
-      if (err) {
-        return res.status(401).json({ message: "Not authorized" });
-      } else {
-        if (decodedToken.role !== "admin") {
-          return res.status(401).json({ message: "Not authorized" });
-        } else {
-          next();
-        }
-      }
-    });
+  if (req.user && req.user.role === "admin") {
+    next();
   } else {
-    return res.status(401).json({ message: "Not authorized, token not available" });
+    return res.status(401).json({ message: "Not authorized" });
   }
 };
+
 exports.userAuth = (req, res, next) => {
   const token = req.cookies.jwt;
   if (token) {

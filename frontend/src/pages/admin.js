@@ -39,20 +39,29 @@ function displayUsers(users) {
     usersContainer.appendChild(row);
   });
 }
+const cook = document.cookie;
+console.log(`This is the cookie: ${cook}`);
+// Function to get cookie by name
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(";").shift();
+  else return value;
+}
 
 // Function to Delete User with id in JSON body and role:admin
 async function deleteUser(event) {
   const userId = event.target.getAttribute("data-user-id");
 
   console.log(`Deleting user with id: ${userId}`);
-  const token = document.cookies["jwt"].value;
+  const token = getCookie("jwt"); // Use getCookie function to get the jwt token
   console.log(`Token: ${token}`);
 
   const response = await fetch(`${apiBaseUrl}/api/auth/deleteUser`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`, // Ensure the token is correctly set
     },
     body: JSON.stringify({ id: userId }), // Use 'id' key here
   });

@@ -12,7 +12,8 @@ const timeCardRoutes = require("./routes/timecardRoutes");
 const userRoutes = require("./routes/userRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
 const noteRoutes = require("./routes/noteRoutes");
-const { adminAuth, userAuth } = require("./utils/auth");
+const { adminAuth, userAuth, checkToken } = require("./utils/authController");
+const { createHash } = require("crypto");
 
 // Express app
 const app = express();
@@ -22,7 +23,6 @@ const prodOriginURL = process.env.ORIGIN_INDEX;
 const devOriginURL = "http://localhost:5173";
 
 // CORS
-// Enable CORS with credentials for HTTPS or HTTP based on the environment
 app.use(
   cors({
     origin: process.env.NODE_ENV === "production" ? [prodOriginURL] : devOriginURL,
@@ -49,9 +49,8 @@ app.get("/logout", (req, res) => {
 });
 
 // User Protected Routes never worked, not using ejs package
-
-//app.get("/admin", adminAuth, (req, res) => res.send("admin"));
-//app.get("/basic", userAuth, (req, res) => res.send("user"));
+app.get("/admin", adminAuth, (req, res) => res.send("admin"));
+app.get("/basic", userAuth, (req, res) => res.send("user"));
 
 //Use Routes
 
