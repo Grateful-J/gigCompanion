@@ -163,8 +163,13 @@ async function getEvents() {
 // Quick Create an Event to Primary Calendar via POST https://www.googleapis.com/calendar/v3/calendars/calendarId/events/quickAdd
 async function quickCreateEvent() {
   const calendar = "primary"; // Default is primary
-  startDate = new Date();
-  endDate = new Date() + 7 * 24 * 60 * 60 * 1000;
+  //start date is today
+  const startDate = new Date();
+  console.log(`Start Date: ${startDate}`);
+  //End Date is 5 days from today
+  const endDate = new Date();
+  endDate.setDate(startDate.getDate() + 5);
+  console.log(`End Date: ${endDate}`);
 
   const response = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendar}/events?sendNotifications=true`, {
     method: "POST",
@@ -175,10 +180,10 @@ async function quickCreateEvent() {
     body: JSON.stringify({
       summary: "Quick Event Added via API!! ",
       start: {
-        dateTime: new Date().toISOString(),
+        dateTime: startDate.toISOString(),
       },
       end: {
-        dateTime: new Date().toISOString(),
+        dateTime: endDate.toISOString(),
       },
     }),
   });
