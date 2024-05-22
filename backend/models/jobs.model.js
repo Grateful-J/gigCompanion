@@ -17,6 +17,7 @@ const showDayEntriesSchema = new mongoose.Schema({
   straightPay: Number, // daily rate * straight time
   overPay: Number, // daily rate * over time
   doublePay: Number,
+  dailyPosition: String, // TODO: would be edge case for person performing multiple roles in same Job
 });
 
 // Schema for Expenses
@@ -47,16 +48,18 @@ const jobSchema = new mongoose.Schema(
     isRTW: { type: Boolean, default: false },
     showCode: String,
     isFreelance: { type: Boolean, default: false },
+    crewPosition: { type: String, default: "A2" }, // Is set by self or project manager
     rate: { type: Number, default: 650 },
     isLocal: { type: Boolean, default: false },
-    totalStraightTime: Number, // TODO: calculate total straight time in hours
-    totalOverTime: Number, // TODO: calculate total over time in hours
-    totalDoubleTime: Number, // TODO: calculate total double time in hours
-    isSubmitted: { type: Boolean, default: false },
-    isInvoiced: { type: Boolean, default: false },
+    totalStraightTime: Number, // Calculates total straight time in hours
+    totalOverTime: Number, // Calculate total over time in hours
+    totalDoubleTime: Number, // Calculate total double time in hours
+    isSubmitted: { type: Boolean, default: false }, // Submits to self or to project manager
+    isInvoiced: { type: Boolean, default: false }, // Submits to self or client
     showDayEntries: [showDayEntriesSchema], // Add showDayEntries to Job schema
     expenses: [expensesSchema],
     notes: [notesSchema],
+    project: { type: mongoose.Schema.Types.ObjectId, ref: "Project" }, // Reference to the Project
   },
   {
     timestamps: true,
