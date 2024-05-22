@@ -33,6 +33,14 @@ const handleErrors = (err) => {
   return errors;
 };
 
+// Create JSON web token
+const maxAge = 3 * 24 * 60 * 60;
+const createToken = (id) => {
+  return jwt.sign({ id }, jwtSecret, {
+    expiresIn: maxAge,
+  });
+};
+
 exports.checkToken = (req, res, next) => {
   const token = req.cookies.jwt;
   if (!token) {
@@ -68,26 +76,21 @@ exports.register = async (req, res, next) => {
           phoneNumber,
         })
           .then((user) => {
-            const maxAge = 3 * 60 * 60;
-            const token = jwt.sign({ id: user._id, username, role: user.role }, jwtSecret, {
-              expiresIn: maxAge, // 3 hours in seconds
-            });
+            const token = createToken(user._id);
             res.cookie("jwt", token, {
               httpOnly: true,
-              secure: process.env.NODE_ENV === "production",
+              //secure: process.env.NODE_ENV === "production",
               maxAge: maxAge * 1000, // 3hrs in ms
-              //sameSite: "None", // Ensure cross-origin cookies are allowed
             });
+
             res.status(201).json({
               message: "User successfully created",
               user: user._id,
             });
           })
           .catch((error) => {
-            res.status(400).json({
-              message: "Error occured",
-              error: error.message,
-            });
+            const errors = handleErrors(error);
+            res.status(400).json({ errors: errors, message: "Error occurred" });
           });
       }
     });
@@ -169,7 +172,7 @@ exports.update = async (req, res, next) => {
     res.status(400).json({ message: "Role or Id not present" });
   }
 }; // DELETE a user
-exports.deleteUser = async (req, res, next) => {
+module.exports.deleteUser = async (req, res, next) => {
   const { id } = req.body;
   try {
     const user = await User.findById(id);
@@ -198,7 +201,7 @@ exports.getUsers = async (req, res, next) => {
     .catch((err) => res.status(401).json({ message: "Not successful", error: err.message }));
 };
 
-exports.adminAuth = (req, res, next) => {
+module.exports.adminAuth = (req, res, next) => {
   if (req.user && req.user.role === "admin") {
     next();
   } else {
@@ -206,7 +209,7 @@ exports.adminAuth = (req, res, next) => {
   }
 };
 
-exports.userAuth = (req, res, next) => {
+module.exports.userAuth = (req, res, next) => {
   const token = req.cookies.jwt;
   if (token) {
     jwt.verify(token, jwtSecret, (err, decodedToken) => {

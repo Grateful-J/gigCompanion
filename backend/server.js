@@ -13,6 +13,7 @@ const userRoutes = require("./routes/userRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
 const noteRoutes = require("./routes/noteRoutes");
 const { adminAuth, userAuth, checkToken } = require("./utils/authController");
+const { requireAuth, checkUser } = require("./middleware/authMiddleware");
 const { createHash } = require("crypto");
 
 // Express app
@@ -34,26 +35,30 @@ app.use(
 );
 
 // Middle-ware for JSON in API
+//app.use(express.static(path.join(__dirname, "public"))); // for production
 app.use(express.json());
 app.use(cookieParser());
 
-// API "GET" Commands
+/* // API "GET" Commands
 app.get("/", (req, res) => {
   res.send("Hello from node API! updated");
-});
+}); */
 
 // Logout Route
 app.get("/logout", (req, res) => {
-  res.cookie("jwt", "", { maxAge: "1", httpOnly: true, secure: process.env.NODE_ENV === "production" });
+  res.cookie("jwt", "", { maxAge: "1" });
   res.redirect("/");
 });
 
-// User Protected Routes never worked, not using ejs package
-app.get("/admin", adminAuth, (req, res) => res.send("admin"));
-app.get("/basic", userAuth, (req, res) => res.send("user"));
+// Page Routes to check if user is logged in
+app.get("/", requireAuth, (req, res) => res.render("/"));
 
-//Use Routes
+// Admin Protected Route
+app.get("/admin", adminAuth, (req, res) => {
+  res.send(req.user);
+});
 
+//API Routes
 app.use("/api/jobs", jobRoutes);
 app.use("/api/locations", locationRoutes);
 app.use("/api/timecards", timeCardRoutes);
