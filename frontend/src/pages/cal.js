@@ -145,6 +145,22 @@ function loadScript(src, onload) {
   document.head.appendChild(script);
 }
 
+// Fetch events from Google Calendar API GET https://www.googleapis.com/calendar/v3/users/me/calendarList/calendarId
+async function getEvents() {
+  const response = await fetch(
+    "https://www.googleapis.com/calendar/v3/calendars/primary/events?orderBy=startTime&singleEvents=true&timeMin=" + new Date().toISOString(),
+    {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + gapi.client.getToken().access_token,
+      },
+    }
+  );
+  const data = await response.json();
+  console.log(data);
+}
+
 // Event listeners for buttons
 document.getElementById("signout_button").addEventListener("click", handleSignoutClick);
 document.getElementById("authorize_button").addEventListener("click", () => handleAuthClick());
+document.getElementById("list_events_button").addEventListener("click", () => getEvents());
