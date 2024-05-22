@@ -9,8 +9,10 @@ loadNavbar();
 /* exported gapiLoaded, gisLoaded, handleAuthClick, handleSignoutClick */
 
 // TODO: Set to client ID and API key from the Developer Console
-const CLIENT_ID = VITE_GOOGLE_CAL_CLIENT_ID;
-const API_KEY = VITE_GOOGLE_CAL_API_KEY;
+const calAuthId = import.meta.env.VITE_GOOGLE_CAL_CLIENT_ID;
+const calAuthKey = import.meta.env.VITE_GOOGLE_CAL_API_KEY;
+const CLIENT_ID = calAuthId;
+const API_KEY = calAuthKey;
 
 // Discovery doc URL for APIs used by the quickstart
 const DISCOVERY_DOC = "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
