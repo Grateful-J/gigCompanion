@@ -160,7 +160,34 @@ async function getEvents() {
   console.log(data);
 }
 
+// Quick Create an Event to Primary Calendar via POST https://www.googleapis.com/calendar/v3/calendars/calendarId/events/quickAdd
+async function quickCreateEvent() {
+  const calendar = "primary"; // Default is primary
+  startDate = new Date();
+  endDate = new Date() + 7 * 24 * 60 * 60 * 1000;
+
+  const response = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendar}/events?sendNotifications=true`, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + gapi.client.getToken().access_token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      summary: "Quick Event Added via API!! ",
+      start: {
+        dateTime: new Date().toISOString(),
+      },
+      end: {
+        dateTime: new Date().toISOString(),
+      },
+    }),
+  });
+  const data = await response.json();
+  console.log(data);
+}
+
 // Event listeners for buttons
 document.getElementById("signout_button").addEventListener("click", handleSignoutClick);
 document.getElementById("authorize_button").addEventListener("click", () => handleAuthClick());
 document.getElementById("list_events_button").addEventListener("click", () => getEvents());
+document.getElementById("create_event_button").addEventListener("click", () => quickCreateEvent());
