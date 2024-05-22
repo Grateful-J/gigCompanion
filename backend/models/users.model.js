@@ -23,9 +23,10 @@ const userSchema = new mongoose.Schema(
     phoneNumber: String,
     role: {
       type: String,
-      default: "basic",
-      required: true,
+      enum: ["tech", "manager", "admin", "client", "freelancer", "projectManager"],
+      default: "tech",
     },
+    assignedJobs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Job" }], // List of jobs assigned to the user
   },
   {
     timestamps: true,

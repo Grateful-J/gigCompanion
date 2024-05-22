@@ -28,7 +28,7 @@ app.use(
     origin: process.env.NODE_ENV === "production" ? [prodOriginURL] : devOriginURL,
     credentials: true,
     optionsSuccessStatus: 200,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
@@ -54,6 +54,7 @@ app.get("/logout", (req, res) => {
 //app.get("/basic", userAuth, (req, res) => res.send("user"));
 
 //Use Routes
+
 app.use("/api/jobs", jobRoutes);
 app.use("/api/locations", locationRoutes);
 app.use("/api/timecards", timeCardRoutes);

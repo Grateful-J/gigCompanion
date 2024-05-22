@@ -121,11 +121,76 @@ exports.update = async (req, res, next) => {
   } else {
     res.status(400).json({ message: "Role or Id not present" });
   }
-};
-// DELETE a user
-// Function to Delete User
+}; // DELETE a user
 exports.deleteUser = async (req, res, next) => {
-  const userId = req.body.userId; // Assuming userId is sent in the request body
+  const { id } = req.body;
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    await user.remove();
+    res.status(200).json({ message: "User successfully deleted", user });
+  } catch (error) {
+    res.status(400).json({ message: "An error occurred", error: error.message });
+  }
+};
+
+// GET all users
+exports.getUsers = async (req, res, next) => {
+  await User.find({})
+    .then((users) => {
+      const userFunction = users.map((user) => {
+        const container = {};
+        container.username = user.username;
+        container.role = user.role;
+        return container;
+      });
+      res.status(200).json({ user: userFunction });
+    })
+    .catch((err) => res.status(401).json({ message: "Not successful", error: err.message }));
+};
+
+exports.adminAuth = (req, res, next) => {
+  const token = req.cookies.jwt;
+  if (token) {
+    jwt.verify(token, jwtSecret, (err, decodedToken) => {
+      if (err) {
+        return res.status(401).json({ message: "Not authorized" });
+      } else {
+        if (decodedToken.role !== "admin") {
+          return res.status(401).json({ message: "Not authorized" });
+        } else {
+          next();
+        }
+      }
+    });
+  } else {
+    return res.status(401).json({ message: "Not authorized, token not available" });
+  }
+};
+exports.userAuth = (req, res, next) => {
+  const token = req.cookies.jwt;
+  if (token) {
+    jwt.verify(token, jwtSecret, (err, decodedToken) => {
+      if (err) {
+        return res.status(401).json({ message: "Not authorized" });
+      } else {
+        if (decodedToken.role !== "Basic") {
+          return res.status(401).json({ message: "Not authorized" });
+        } else {
+          next();
+        }
+      }
+    });
+  } else {
+    return res.status(401).json({ message: "Not authorized, token not available" });
+  }
+};
+
+// Function to Delete User
+/* exports.deleteUser = async (req, res, next) => {
+  const userId = req.body.userId; //
   if (!userId) {
     return res.status(400).json({ message: "User ID is required" });
   }
@@ -149,44 +214,4 @@ exports.deleteUser = async (req, res, next) => {
     console.error("Error deleting user:", error);
     res.status(500).json({ message: "Internal server error", error: error.message });
   }
-};
-
-// Authenticates an admin user
-exports.adminAuth = (req, res, next) => {
-  const token = req.cookies.jwt;
-  if (token) {
-    jwt.verify(token, jwtSecret, (err, decodedToken) => {
-      if (err) {
-        return res.status(401).json({ message: "Not authorized" });
-      } else {
-        if (decodedToken.role !== "admin") {
-          return res.status(401).json({ message: "Not authorized" });
-        } else {
-          next();
-        }
-      }
-    });
-  } else {
-    return res.status(401).json({ message: "Not authorized, token not available" });
-  }
-};
-
-//Authenticates basic user
-exports.userAuth = (req, res, next) => {
-  const token = req.cookies.jwt;
-  if (token) {
-    jwt.verify(token, jwtSecret, (err, decodedToken) => {
-      if (err) {
-        return res.status(401).json({ message: "Not authorized" });
-      } else {
-        if (decodedToken.role !== "Basic") {
-          return res.status(401).json({ message: "Not authorized" });
-        } else {
-          next();
-        }
-      }
-    });
-  } else {
-    return res.status(401).json({ message: "Not authorized, token not available" });
-  }
-};
+}; */
