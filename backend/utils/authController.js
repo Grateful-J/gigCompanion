@@ -188,11 +188,20 @@ exports.login = async (req, res, next) => {
             //httpOnly: true,
           }
         );
+
+        res.cookie("bearer", token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          maxAge: maxAge * 1000, // 3hrs in ms
+          sameSite: "strict",
+        });
+
         return res.status(200).json({
           message: "Auth successful",
           token: token,
           stashUser: user.username,
           stashRole: user.role,
+          cookie: res.cookie,
         });
       } else {
         return res.status(401).json({ message: "User or password combination not found" });
@@ -278,7 +287,9 @@ exports.update = async (req, res, next) => {
   } else {
     res.status(400).json({ message: "Role or Id not present" });
   }
-}; // DELETE a user
+};
+
+// DELETE a user
 module.exports.deleteUser = async (req, res, next) => {
   const { id } = req.body;
   try {
