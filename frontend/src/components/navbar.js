@@ -35,7 +35,7 @@ function logOut(event) {
   })
     .then((response) => {
       if (response.redirected) {
-        window.location.href = "/login";
+        console.log("Logout successful");
       }
     })
     .catch((error) => {

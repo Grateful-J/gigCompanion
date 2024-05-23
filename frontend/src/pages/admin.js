@@ -2,6 +2,40 @@ let apiBaseUrl;
 import { loadNavbar } from "../components/navbar.js";
 loadNavbar();
 
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(";").shift();
+}
+
+function checkAuth() {
+  const token = document.cookie.jwt;
+  if (!token) {
+    alert("You are not authenticated!");
+    window.location.href = "/login.html";
+  } else {
+    fetch("/admin", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (response.status === 403 || response.status === 401) {
+          document.getElementById("message").innerText = "Invalid or expired token!";
+          // Optionally redirect to login page
+          window.location.href = "/login.html";
+        } else if (response.status === 200) {
+          document.getElementById("message").innerText = "You are authenticated!";
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+}
+
+//checkAuth();
+
 //checks if env is dev or prod
 if (import.meta.env.VITE_MODE === "dev") {
   apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -38,15 +72,6 @@ function displayUsers(users) {
     `;
     usersContainer.appendChild(row);
   });
-}
-const cook = document.cookie;
-console.log(`This is the cookie: ${cook}`);
-// Function to get cookie by name
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(";").shift();
-  else return value;
 }
 
 // Function to Delete User with id in JSON body and role:admin
@@ -90,3 +115,13 @@ document.addEventListener("click", async function (event) {
     }
   }
 });
+
+// Sends POST request to add users
+async function addUser() {
+  //get cookie from HTTP only cookie
+  const cookie = getCookie("jwt");
+  console.log(`Cookie: ${cookie}`);
+}
+
+// Event listener for add user button
+document.querySelector("#add-user-btn").addEventListener("click", addUser);

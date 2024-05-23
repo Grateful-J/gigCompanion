@@ -8,20 +8,21 @@ if (import.meta.env.VITE_MODE === "dev") {
 } else {
   apiBaseUrl = import.meta.env.VITE_API_BASE_URL_PROD;
 }
-
+/* 
 // Function to reset inputs
 function resetForm() {
   document.getElementById("login-username").value = "";
   document.getElementById("login-password").value = "";
-  document.getElementById("signup-username").value = "";
-  document.getElementById("signup-password").value = "";
-}
+  //document.getElementById("signup-username").value = "";
+  //document.getElementById("signup-password").value = "";
+} */
 
-// On login form submit call login API, check if admin and send to admin page, else go to user page
 document.getElementById("login-form").addEventListener("submit", async function (event) {
   event.preventDefault();
+
   const username = document.getElementById("login-username").value;
   const password = document.getElementById("login-password").value;
+
   try {
     const response = await fetch(`${apiBaseUrl}/api/auth/login`, {
       method: "POST",
@@ -29,17 +30,21 @@ document.getElementById("login-form").addEventListener("submit", async function 
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ username, password }),
-      credentials: "include",
     });
 
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.message);
     }
+
     // After successfully logging in
-    const { token, user } = await response.json();
-    localStorage.setItem("jwt", token); // Store the JWT token
-    localStorage.setItem("user", JSON.stringify(user)); // Store the user object
+    const { user } = await response.json();
+
+    // Store user information in session storage
+    console.log("User:", user);
+    console.log("Response:", response);
+    sessionStorage.setItem("username", user.username);
+    sessionStorage.setItem("role", user.role);
 
     // Redirect to appropriate page based on user role
     if (user.role === "admin") {
@@ -53,6 +58,10 @@ document.getElementById("login-form").addEventListener("submit", async function 
     resetForm();
   }
 });
+
+function resetForm() {
+  document.getElementById("login-form").reset();
+}
 
 /* // Event lister for user signup form submit
 document.getElementById("signup-form").addEventListener("submit", async function (event) {

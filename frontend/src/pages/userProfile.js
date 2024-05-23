@@ -11,7 +11,7 @@ if (import.meta.env.VITE_MODE === "dev") {
 }
 
 //check local storage for User
-const user = JSON.parse(localStorage.getItem("user"));
+const user = sessionStorage.getItem("role");
 if (user === null) {
   window.location.href = "/login";
 } else {
