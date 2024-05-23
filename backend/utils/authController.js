@@ -102,7 +102,110 @@ exports.register = async (req, res, next) => {
   }
 };
 
-// POST a login
+/* // POST a login
+exports.login = async (req, res, next) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    return res.status(400).json({ message: "Both username & password are required" });
+  }
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ message: "User or password combination not found" });
+    }
+
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    if (isPasswordMatch) {
+      console.log(`Login successful: ${username}`);
+      console.log(`User details: ${JSON.stringify(user)}`);
+
+      // Check if user.role exists before signing the token
+      if (!user.role) {
+        console.error("Role is undefined for user:", user);
+        return res.status(500).json({ message: "User role is undefined" });
+      }
+
+      // Create token
+      const token = jwt.sign(
+        {
+          id: user._id,
+          username: user.username,
+          role: user.role,
+        },
+        jwtSecret,
+        {
+          expiresIn: "1h",
+        }
+      );
+
+      console.log(`Token created: ${token}`);
+
+      return res.status(200).json({
+        message: "Auth successful",
+        token: token,
+        user: user,
+        role: user.role,
+      });
+    } else {
+      return res.status(401).json({ message: "User or password combination not found" });
+    }
+  } catch (error) {
+    console.error("Error occurred:", error);
+    res.status(500).json({
+      message: "Error occurred",
+      error: error.message,
+    });
+  }
+}; */
+
+// POST a login (works but throws error)
+exports.login = async (req, res, next) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    return res.status(400).json({ message: "Both username & password are required" });
+  }
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ message: "User or password combination not found" });
+    }
+    bcrypt.compare(password, user.password).then((result) => {
+      if (result) {
+        console.log(`Login successful: ${username}
+        result: ${result}
+        role: ${user.role}`);
+
+        // Create token
+        const token = jwt.sign(
+          {
+            userId: user._id,
+            username: user.username,
+            role: user.role,
+          },
+          jwtSecret,
+          {
+            expiresIn: "1h",
+            //httpOnly: true,
+          }
+        );
+        return res.status(200).json({
+          message: "Auth successful",
+          token: token,
+        });
+      } else {
+        return res.status(401).json({ message: "User or password combination not found" });
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "Error occurred",
+      error: error.message,
+    });
+  }
+};
+
+/* 
+// POST a login (old)
 exports.login = async (req, res, next) => {
   const { username, password } = req.body;
   if (!username || !password) {
@@ -123,12 +226,13 @@ exports.login = async (req, res, next) => {
         res.cookie("jwt", token, {
           httpOnly: true,
           maxAge: maxAge * 1000, // Convert to milliseconds
-          secure: process.env.NODE_ENV === "production", // Secure cookie in production
+          //secure: process.env.NODE_ENV === "production", // Secure cookie in production
           //sameSite: "None", // Ensure cross-origin cookies are allowed
         });
         //console.log("Cookie set");
         res.status(200).json({
           message: "User successfully logged in",
+          token: token,
           user: user._id,
         });
       } else {
@@ -142,6 +246,7 @@ exports.login = async (req, res, next) => {
     });
   }
 };
+ */
 
 // PATCH an update to user Role
 exports.update = async (req, res, next) => {
