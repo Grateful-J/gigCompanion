@@ -33,12 +33,9 @@ document.getElementById("login-form").addEventListener("submit", async function 
     const { stashUser, stashRole, token } = await response.json();
 
     // Store user information and token in session storage
-    //sessionStorage.setItem("token", token);
+
     sessionStorage.setItem("username", stashUser);
     sessionStorage.setItem("role", stashRole);
-
-    //store token in cookie
-    //document.cookie = `jwt=${token}; path=/; max-age=${60 * 60 * 24 * 30};`;
 
     // Redirect to appropriate page based on user role
     if (stashRole === "admin") {
