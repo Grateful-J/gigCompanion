@@ -74,27 +74,21 @@ function displayUsers(users) {
   });
 }
 
-// Function to Delete User with id in JSON body and role:admin
 async function deleteUser(event) {
   const userId = event.target.getAttribute("data-user-id");
-
-  console.log(`Deleting user with id: ${userId}`);
-  const token = getCookie("jwt"); // Use getCookie function to get the jwt token
-  console.log(`Token: ${token}`);
 
   const response = await fetch(`${apiBaseUrl}/api/auth/deleteUser`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`, // Ensure the token is correctly set
     },
-    body: JSON.stringify({ id: userId }), // Use 'id' key here
+    body: JSON.stringify({ id: userId }),
   });
 
   const deleteData = await response.json();
   if (response.status === 401) {
     alert("User not deleted");
-    return; // Exit the function if unauthorized
+    return;
   }
 
   if (response.status === 200) {
@@ -102,8 +96,6 @@ async function deleteUser(event) {
   } else {
     alert(`Failed to delete user: ${deleteData.message}`);
   }
-
-  location.assign("/admin");
 }
 
 // Event listener for delete user
@@ -119,7 +111,7 @@ document.addEventListener("click", async function (event) {
 // Sends POST request to add users
 async function addUser() {
   //get cookie from HTTP only cookie
-  const cookie = getCookie("jwt");
+  const cookie = getCookie("bearer");
   console.log(`Cookie: ${cookie}`);
 }
 
