@@ -36,8 +36,8 @@ router.route("/login").post(login);
 //PUT an update to user Role
 router.route("/update").put(adminAuth, update);
 
-// AUTH DELETE a user
-router.route("/deleteUser").delete(requireAuth, deleteUser);
+// DELETE a user
+router.route("/deleteUser").delete(deleteUser);
 
 //PATCH a User
 router.patch("/:id", async (req, res) => {
