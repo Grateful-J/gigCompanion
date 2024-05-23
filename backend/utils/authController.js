@@ -191,6 +191,8 @@ exports.login = async (req, res, next) => {
         return res.status(200).json({
           message: "Auth successful",
           token: token,
+          stashUser: user.username,
+          stashRole: user.role,
         });
       } else {
         return res.status(401).json({ message: "User or password combination not found" });

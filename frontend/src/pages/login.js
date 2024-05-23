@@ -8,14 +8,6 @@ if (import.meta.env.VITE_MODE === "dev") {
 } else {
   apiBaseUrl = import.meta.env.VITE_API_BASE_URL_PROD;
 }
-/* 
-// Function to reset inputs
-function resetForm() {
-  document.getElementById("login-username").value = "";
-  document.getElementById("login-password").value = "";
-  //document.getElementById("signup-username").value = "";
-  //document.getElementById("signup-password").value = "";
-} */
 
 document.getElementById("login-form").addEventListener("submit", async function (event) {
   event.preventDefault();
@@ -36,18 +28,16 @@ document.getElementById("login-form").addEventListener("submit", async function 
       const error = await response.json();
       throw new Error(error.message);
     }
-
     // After successfully logging in
-    const { user } = await response.json();
+    const { stashUser, stashRole } = await response.json();
 
-    // Store user information in session storage
-    console.log("User:", user);
-    console.log("Response:", response);
-    sessionStorage.setItem("username", user.username);
-    sessionStorage.setItem("role", user.role);
+    // Store user information and token in session storage
+    //sessionStorage.setItem("token", token);
+    sessionStorage.setItem("username", stashUser);
+    sessionStorage.setItem("role", stashRole);
 
     // Redirect to appropriate page based on user role
-    if (user.role === "admin") {
+    if (stashRole === "admin") {
       window.location.href = "/admin";
     } else {
       window.location.href = "/profile";
