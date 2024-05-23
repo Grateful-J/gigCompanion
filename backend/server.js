@@ -1,9 +1,11 @@
 const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
 const https = require("https");
 const fs = require("fs");
-const cors = require("cors");
+
 const path = require("path");
-const mongoose = require("mongoose");
+
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const jobRoutes = require("./routes/jobRoutes"); // Adjusted for a models directory
@@ -30,14 +32,14 @@ app.use(
     credentials: true,
     optionsSuccessStatus: 200,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Cookie", "Origin"],
   })
 );
 
 // Middle-ware for JSON in API
 //app.use(express.static(path.join(__dirname, "public"))); // for production
-app.use(express.json());
 app.use(cookieParser());
+app.use(express.json());
 
 /* // API "GET" Commands
 app.get("/", (req, res) => {
@@ -50,8 +52,16 @@ app.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
+/* // Page Routes to check if user is logged in
+app.get("/admin", requireAuth, (req, res) => res.sendFile("/admin.html"));
+
+// Admin Protected Route
+app.get("/admin", adminAuth, (req, res) => {
+  res.send(req.user);
+}); */
+
 // Page Routes to check if user is logged in
-app.get("/", requireAuth, (req, res) => res.render("/"));
+app.get("/admin", requireAuth, (req, res) => res.sendFile("/admin.html", { root: __dirname }));
 
 // Admin Protected Route
 app.get("/admin", adminAuth, (req, res) => {
@@ -96,5 +106,23 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-// Serve static assets for production
-//app.use(express.static(path.join(__dirname, "public")));
+/* // Setting up the HTTPS server in production
+if (process.env.NODE_ENV === "production") {
+  const keyLocation = process.env.HTTPS_KEY_LOCATION;
+  const certLocation = process.env.HTTPS_CERT_LOCATION;
+
+  const sslOptions = {
+    key: fs.readFileSync(path.join(__dirname, keyLocation)),
+    cert: fs.readFileSync(path.join(__dirname, certLocation)),
+  };
+
+  const port = process.env.PORT || 443;
+  https.createServer(sslOptions, app).listen(port, () => {
+    console.log(`HTTPS Server running on port ${port}`);
+  });
+} else {
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => {
+    console.log(`HTTP Server running on port ${port}`);
+  });
+} */
