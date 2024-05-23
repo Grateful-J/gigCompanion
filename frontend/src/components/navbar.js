@@ -5,6 +5,7 @@ function loadNavbar() {
       document.getElementById("navbar-placeholder").innerHTML = html;
       toggleNavbar();
       attachlogOutHandler();
+      loadWelcomeMessage();
     });
 }
 
@@ -57,6 +58,13 @@ function attachlogOutHandler() {
   if (!logOutButton && !logOutButtonMobile) {
     console.error("Logout buttons not found");
   }
+}
+
+// Pulls username from Session Storage
+function loadWelcomeMessage() {
+  const user = sessionStorage.getItem("username");
+  const welcome = document.getElementById("navbar-welcome");
+  welcome.textContent = `Welcome, ${user}`;
 }
 
 export { loadNavbar };
