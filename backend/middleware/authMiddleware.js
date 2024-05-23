@@ -3,18 +3,24 @@ const jwtSecret = process.env.JWT_SECRET;
 const User = require("../models/users.model");
 
 const requireAuth = (req, res, next) => {
-  const token = req.cookies.jwt;
-  if (!token) {
-    console.log("No token found");
+  console.log(`requireAuth called- headers: ${JSON.stringify(req.headers)}`);
+  const token = req.headers.authorization.split(" ")[1];
+  console.log("requireAuth token", token);
+
+  // check json web token exists & is verified
+  if (token) {
+    jwt.verify(token, jwtSecret, (err, decodedToken) => {
+      if (err) {
+        console.log(err.message);
+        res.redirect("/login");
+      } else {
+        console.log(decodedToken);
+        next();
+      }
+    });
+  } else {
     res.redirect("/login");
-    return res.status(401).json({ message: "Login first" });
   }
-  jwt.verify(token, jwtSecret, (err, decodedToken) => {
-    if (err) {
-      return res.status(401).json({ message: "Invalid or expired token" });
-    }
-    next();
-  });
 };
 
 // Check current user
@@ -28,8 +34,7 @@ const checkUser = (req, res, next) => {
       return res.status(401).json({ message: "Invalid or expired token" });
     }
     const user = await User.findById(decodedToken.id);
-    req.user = user;
-    //res.local.user = user; // Tutorial method
+    res.locals.user = user; // Fixed typo from res.local to res.locals
     next();
   });
 };
