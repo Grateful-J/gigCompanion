@@ -1,17 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { authController } = require("../utils/authController");
-const { checkToken } = require("../utils/authController");
+const { register, login, update, deleteUser, getUsers } = require("../utils/authController");
+const { adminAuth, userAuth } = require("../middleware/authMiddleware");
+//const { checkToken } = require("../utils/authController");
 
-router.get("/logout", authController.logout_get);
-
-router.post("/login", authController.login_post);
-
-router.post("/register", authController.register_post);
-
-router.get("/user", checkToken, authController.user_get);
-
-module.exports = {
-  router,
-  checkToken,
-};
+router.route("/register").post(register);
+router.route("/update").post(update);
+router.route("/login").post(login);
+router.route("/deleteUser").post(deleteUser);
+router.route("/getUsers").get(getUsers);
+module.exports = { router };
