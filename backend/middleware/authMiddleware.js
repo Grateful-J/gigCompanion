@@ -3,9 +3,22 @@ const jwtSecret = process.env.JWT_SECRET;
 const User = require("../models/users.model");
 
 const requireAuth = (req, res, next) => {
-  console.log(`requireAuth called- headers: ${JSON.stringify(req.headers)}`);
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedData = jwt.verify(token, jwtSecret);
+    req.userDecodedData = decodedData;
+
+    next();
+  } catch (error) {
+    console.log(error.message);
+    return res.status(401).json({ message: "Auth Failed" });
+  }
+};
+
+/* const requireAuth = (req, res, next) => {
+  //console.log(`requireAuth called- headers: ${JSON.stringify(req.headers)}`);
   const token = req.headers.authorization.split(" ")[1];
-  console.log("requireAuth token", token);
+  //console.log("requireAuth token", token);
 
   // check json web token exists & is verified
   if (token) {
@@ -21,7 +34,7 @@ const requireAuth = (req, res, next) => {
   } else {
     res.redirect("/login");
   }
-};
+}; */
 
 // Check current user
 const checkUser = (req, res, next) => {
