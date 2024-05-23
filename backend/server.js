@@ -29,9 +29,6 @@ app.use(
   cors({
     origin: process.env.NODE_ENV === "production" ? [prodOriginURL] : devOriginURL,
     credentials: true,
-    optionsSuccessStatus: 200,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Cookie", "Origin"],
   })
 );
 
@@ -40,10 +37,6 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
-
-// Routes to check if user is logged in
-app.get("/admin", adminAuth, (req, res) => res.send("Admin Route"));
-app.get("/basic", userAuth, (req, res) => res.send("User Route"));
 
 // Logout Route
 app.get("/logout", (req, res) => {
@@ -59,6 +52,10 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs/expenses", expenseRoutes);
 app.use("/api/jobs/notes", noteRoutes);
+
+// Routes to check if user is logged in
+app.get("/admin", adminAuth, (req, res) => res.send("Admin Route"));
+app.get("/basic", userAuth, (req, res) => res.send("User Route"));
 
 // Database connection
 mongoose

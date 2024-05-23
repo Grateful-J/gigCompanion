@@ -289,19 +289,12 @@ exports.update = async (req, res, next) => {
   }
 };
 
-// DELETE a user
-module.exports.deleteUser = async (req, res, next) => {
+exports.deleteUser = async (req, res, next) => {
   const { id } = req.body;
-  try {
-    const user = await User.findById(id);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    await user.remove();
-    res.status(200).json({ message: "User successfully deleted", user });
-  } catch (error) {
-    res.status(400).json({ message: "An error occurred", error: error.message });
-  }
+  await User.findById(id)
+    .then((user) => user.remove())
+    .then((user) => res.status(201).json({ message: "User successfully deleted", user }))
+    .catch((error) => res.status(400).json({ message: "An error occurred", error: error.message }));
 };
 
 // GET all users
