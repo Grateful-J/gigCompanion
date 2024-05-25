@@ -15,7 +15,7 @@ function resetForm() {
   document.getElementById("signup-username").value = "";
   document.getElementById("signup-password").value = "";
 }
-
+/* 
 // Event lister for user signup form submit
 document.getElementById("signup-form").addEventListener("submit", async function (event) {
   event.preventDefault();
@@ -41,5 +41,30 @@ document.getElementById("signup-form").addEventListener("submit", async function
     resetForm();
     alert(`"User successfully created : " ${username}, ${firstName}, ${lastName}, ${email}, ${phoneNumber}`);
     window.location.href = "/login";
+  }
+}); */
+
+document.getElementById("signup-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  try {
+    const response = await fetch("/mongo/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (response.ok) {
+      alert("Registration successful! Please check your email to confirm your account.");
+    } else {
+      const errorMessage = await response.text();
+      alert(`Registration failed: ${errorMessage}`);
+    }
+  } catch (error) {
+    alert(`Error: ${error.message}`);
   }
 });
