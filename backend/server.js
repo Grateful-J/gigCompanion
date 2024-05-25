@@ -16,7 +16,7 @@ const authRoutes = require("./routes/authRoutes");
 const { adminAuth, userAuth, checkToken } = require("./utils/authController");
 const { requireAuth, checkUser } = require("./middleware/authMiddleware");
 const { createHash } = require("crypto");
-
+const realm = require("realm");
 // Express app
 const app = express();
 
