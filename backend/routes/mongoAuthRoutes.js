@@ -28,4 +28,26 @@ router.post("/confirm", async (req, res) => {
   }
 });
 
+// Route to send password reset email
+router.post("/send-reset-password-email", async (req, res) => {
+  const { email } = req.body;
+  try {
+    await realmApp.emailPasswordAuth.sendResetPasswordEmail({ email });
+    res.status(200).send("Password reset email sent.");
+  } catch (err) {
+    res.status(400).send(`Failed to send password reset email: ${err.message}`);
+  }
+});
+
+// Route to reset the password
+router.post("/reset-password", async (req, res) => {
+  const { password, token, tokenId } = req.body;
+  try {
+    await realmApp.emailPasswordAuth.resetPassword({ password, token, tokenId });
+    res.status(200).send("Password reset successful.");
+  } catch (err) {
+    res.status(400).send(`Failed to reset password: ${err.message}`);
+  }
+});
+
 module.exports = router;
