@@ -9,27 +9,20 @@ if (import.meta.env.VITE_MODE === "dev") {
   apiBaseUrl = import.meta.env.VITE_API_BASE_URL_PROD;
 }
 
-// Function to reset inputs
-function resetForm() {
-  document.getElementById("login-username").value = "";
-  document.getElementById("login-password").value = "";
-  document.getElementById("signup-username").value = "";
-  document.getElementById("signup-password").value = "";
-}
-
-// On login form submit call login API, check if admin and send to admin page, else go to user page
 document.getElementById("login-form").addEventListener("submit", async function (event) {
   event.preventDefault();
+
   const username = document.getElementById("login-username").value;
   const password = document.getElementById("login-password").value;
+
   try {
     const response = await fetch(`${apiBaseUrl}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password }),
       credentials: "include",
+      body: JSON.stringify({ username, password }),
     });
 
     if (!response.ok) {
@@ -37,12 +30,15 @@ document.getElementById("login-form").addEventListener("submit", async function 
       throw new Error(error.message);
     }
     // After successfully logging in
-    const { token, user } = await response.json();
-    localStorage.setItem("jwt", token); // Store the JWT token
-    localStorage.setItem("user", JSON.stringify(user)); // Store the user object
+    const { stashUser, stashRole, token } = await response.json();
+
+    // Store user information and token in session storage
+
+    sessionStorage.setItem("username", stashUser);
+    sessionStorage.setItem("role", stashRole);
 
     // Redirect to appropriate page based on user role
-    if (user.role === "admin") {
+    if (stashRole === "admin") {
       window.location.href = "/admin";
     } else {
       window.location.href = "/profile";
@@ -53,6 +49,10 @@ document.getElementById("login-form").addEventListener("submit", async function 
     resetForm();
   }
 });
+
+function resetForm() {
+  document.getElementById("login-form").reset();
+}
 
 /* // Event lister for user signup form submit
 document.getElementById("signup-form").addEventListener("submit", async function (event) {

@@ -1,9 +1,9 @@
 const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
 const https = require("https");
 const fs = require("fs");
-const cors = require("cors");
 const path = require("path");
-const mongoose = require("mongoose");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const jobRoutes = require("./routes/jobRoutes"); // Adjusted for a models directory
@@ -12,8 +12,13 @@ const timeCardRoutes = require("./routes/timecardRoutes");
 const userRoutes = require("./routes/userRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
 const noteRoutes = require("./routes/noteRoutes");
-const { adminAuth, userAuth } = require("./utils/auth");
-
+const authRoutes = require("./routes/authRoutes");
+const { adminAuth, userAuth, checkToken } = require("./utils/authController");
+const { requireAuth, checkUser } = require("./middleware/authMiddleware");
+const { createHash } = require("crypto");
+const realm = require("realm");
+const mongoRoutes = require("./mongoRoutes");
+//const { App, Credentials } = require("realm");
 // Express app
 const app = express();
 
@@ -22,46 +27,40 @@ const prodOriginURL = process.env.ORIGIN_INDEX;
 const devOriginURL = "http://localhost:5173";
 
 // CORS
-// Enable CORS with credentials for HTTPS or HTTP based on the environment
 app.use(
   cors({
     origin: process.env.NODE_ENV === "production" ? [prodOriginURL] : devOriginURL,
     credentials: true,
-    optionsSuccessStatus: 200,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
 // Middle-ware for JSON in API
+//app.use(express.static(path.join(__dirname, "public"))); // for production
+
 app.use(express.json());
 app.use(cookieParser());
 
-// API "GET" Commands
-app.get("/", (req, res) => {
-  res.send("Hello from node API! updated");
-});
-
 // Logout Route
 app.get("/logout", (req, res) => {
-  res.cookie("jwt", "", { maxAge: "1", httpOnly: true, secure: process.env.NODE_ENV === "production" });
+  res.cookie("bearer", "", { maxAge: "1" });
   res.redirect("/");
 });
 
-// User Protected Routes never worked, not using ejs package
-
-//app.get("/admin", adminAuth, (req, res) => res.send("admin"));
-//app.get("/basic", userAuth, (req, res) => res.send("user"));
-
-//Use Routes
-
+//API Routes
 app.use("/api/jobs", jobRoutes);
 app.use("/api/locations", locationRoutes);
 app.use("/api/timecards", timeCardRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/auth", userRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/api/jobs/expenses", expenseRoutes);
 app.use("/api/jobs/notes", noteRoutes);
+
+// Import mongoRoutes
+app.use("/mongo", mongoRoutes);
+
+// Routes to check if user is logged in
+app.get("/admin", adminAuth, (req, res) => res.send("Admin Route"));
+app.get("/basic", userAuth, (req, res) => res.send("User Route"));
 
 // Database connection
 mongoose
@@ -92,5 +91,22 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-// Serve static assets for production
-//app.use(express.static(path.join(__dirname, "public")));
+// ! -------------------------------------------------------------------------
+// ! The code below is for retention in case i blow this up any further
+
+/* // Page Routes to check if user is logged in
+app.get("/admin", requireAuth, (req, res) => res.sendFile("/admin.html"));
+
+// Admin Protected Route
+app.get("/admin", adminAuth, (req, res) => {
+  res.send(req.user);
+}); */
+
+// Page Routes to check if user is logged in
+//app.get("/admin", (req, res) => res.sendFile("/admin.html", { root: __dirname }));
+
+/* // Admin Protected Route
+app.get("/admin", adminAuth, (req, res) => {
+  res.send(req.user);
+});
+ */

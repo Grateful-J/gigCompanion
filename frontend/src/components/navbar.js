@@ -5,6 +5,7 @@ function loadNavbar() {
       document.getElementById("navbar-placeholder").innerHTML = html;
       toggleNavbar();
       attachlogOutHandler();
+      loadWelcomeMessage();
     });
 }
 
@@ -35,7 +36,7 @@ function logOut(event) {
   })
     .then((response) => {
       if (response.redirected) {
-        window.location.href = "/login";
+        console.log("Logout successful");
       }
     })
     .catch((error) => {
@@ -57,6 +58,13 @@ function attachlogOutHandler() {
   if (!logOutButton && !logOutButtonMobile) {
     console.error("Logout buttons not found");
   }
+}
+
+// Pulls username from Session Storage
+function loadWelcomeMessage() {
+  const user = sessionStorage.getItem("username");
+  const welcome = document.getElementById("navbar-welcome");
+  welcome.textContent = `Welcome, ${user}`;
 }
 
 export { loadNavbar };

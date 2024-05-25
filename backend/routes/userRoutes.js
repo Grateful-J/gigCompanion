@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { register, login, update, deleteUser, adminAuth, userAuth } = require("../utils/auth"); // imports auth & login functions for user auth
+const { register, login, update, deleteUser, adminAuth, userAuth } = require("../utils/authController"); // imports auth & login functions for user auth
 const User = require("../models/users.model");
+const { requireAuth, checkUser } = require("../middleware/authMiddleware");
+const { checkToken } = require("../utils/authController");
 
 //Get All Users
 router.get("/", async (req, res) => {
@@ -34,8 +36,8 @@ router.route("/login").post(login);
 //PUT an update to user Role
 router.route("/update").put(adminAuth, update);
 
-// AUTH DELETE a user
-router.route("/deleteUser").delete(adminAuth, deleteUser);
+// DELETE a user
+router.route("/deleteUser").delete(deleteUser);
 
 //PATCH a User
 router.patch("/:id", async (req, res) => {

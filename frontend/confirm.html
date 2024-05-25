@@ -1,0 +1,47 @@
+<!-- confirm.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Confirm Email</title>
+  </head>
+  <body>
+    <h1>Email Confirmation</h1>
+    <div id="confirmationMessage"></div>
+
+    <script>
+      async function confirmUser(token, tokenId) {
+        try {
+          const response = await fetch("/mongo/confirm", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token, tokenId }),
+          });
+
+          if (response.ok) {
+            document.getElementById("confirmationMessage").innerText = "Email confirmed! You can now log in.";
+          } else {
+            const errorMessage = await response.text();
+            document.getElementById("confirmationMessage").innerText = `Confirmation failed: ${errorMessage}`;
+          }
+        } catch (error) {
+          document.getElementById("confirmationMessage").innerText = `Error: ${error.message}`;
+        }
+      }
+
+      // Extract token and tokenId from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get("token");
+      const tokenId = urlParams.get("tokenId");
+
+      if (token && tokenId) {
+        confirmUser(token, tokenId);
+      } else {
+        document.getElementById("confirmationMessage").innerText = "Invalid confirmation link.";
+      }
+    </script>
+  </body>
+</html>
