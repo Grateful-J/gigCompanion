@@ -17,7 +17,8 @@ const { adminAuth, userAuth, checkToken } = require("./utils/authController");
 const { requireAuth, checkUser } = require("./middleware/authMiddleware");
 const { createHash } = require("crypto");
 const realm = require("realm");
-const { App, Credentials } = require("realm");
+const mongoRoutes = require("./mongoRoutes");
+//const { App, Credentials } = require("realm");
 // Express app
 const app = express();
 
@@ -53,6 +54,9 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/jobs/expenses", expenseRoutes);
 app.use("/api/jobs/notes", noteRoutes);
+
+// Import mongoRoutes
+app.use("/mongo", mongoRoutes);
 
 // Routes to check if user is logged in
 app.get("/admin", adminAuth, (req, res) => res.send("Admin Route"));
