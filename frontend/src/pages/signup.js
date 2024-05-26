@@ -47,7 +47,7 @@ document.getElementById("signup-form").addEventListener("submit", async function
 document.getElementById("signup-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const password = document.getElementById("signup-password").value;
 
   try {
     const response = await fetch("/mongo/register", {
