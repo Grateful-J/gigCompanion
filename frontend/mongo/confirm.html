@@ -39,6 +39,7 @@
 
       if (token && tokenId) {
         confirmUser(token, tokenId);
+        console.log("Token and tokenId extracted from URL:", token, tokenId);
       } else {
         document.getElementById("confirmationMessage").innerText = "Invalid confirmation link.";
       }
