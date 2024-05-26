@@ -1,5 +1,6 @@
 const express = require("express");
 const { App } = require("realm");
+const path = require("path");
 const router = express.Router();
 
 const appId = process.env.MONGODB_APP_ID;
@@ -19,7 +20,7 @@ router.post("/register", async (req, res) => {
 
 // Route to serve the confirmation page
 router.get("/confirm", (req, res) => {
-  res.sendFile(path.join(__dirname, "confirm.html"));
+  res.sendFile("confirm.html", { root: path.join(__dirname, "../public") });
 });
 
 // Route to handle user confirmation
