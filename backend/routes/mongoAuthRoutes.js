@@ -17,6 +17,11 @@ router.post("/register", async (req, res) => {
   }
 });
 
+// Route to serve the confirmation page
+router.get("/confirm", (req, res) => {
+  res.sendFile(path.join(__dirname, "confirm.html"));
+});
+
 // Route to handle user confirmation
 router.post("/confirm", async (req, res) => {
   const { token, tokenId } = req.body;
