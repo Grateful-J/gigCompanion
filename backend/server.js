@@ -38,7 +38,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Serve static files
-app.use(express.static(path.join(__dirname, "public"))); // for production
+//app.use(express.static(path.join(__dirname, "public"))); // for production
 
 // Logout Route
 app.get("/logout", (req, res) => {
