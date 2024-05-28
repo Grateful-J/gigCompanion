@@ -620,7 +620,7 @@ document.addEventListener("click", (event) => {
     console.log(`Confirm button clicked`);
 
     // Find the row by navigating up from the confirm button
-    const row = event.target.closest("flex-row");
+    const row = event.target.closest("div:flex-row");
     if (row) {
       const jobId = globalTimecardId;
       const rowId = row.getAttribute("data-row-id");
