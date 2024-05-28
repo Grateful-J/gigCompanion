@@ -127,7 +127,7 @@ function addTimecardFlex(job) {
       "flex",
       //"flex-col",
       "flex-row",
-      "sm: px-8",
+      "sm:px-8",
       "w-full",
       "items-baseline",
       "justify-between",
