@@ -68,10 +68,14 @@ router.patch("/:id", async (req, res) => {
     // Log the incoming request body to see what's being updated
     console.log("Updating job with data:", req.body);
 
-    const updatedJob = await Job.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true, runValidators: true });
+    const updatedJob = await Job.findOneAndUpdate(
+      { _id: req.params.id, user: req.user.id }, // Ensure the user owns the job
+      req.body,
+      { new: true, runValidators: true }
+    );
 
     if (!updatedJob) {
-      console.log("No job found with ID:", req.params.id);
+      console.log("No job found with ID or user does not own the job:", req.params.id);
       return res.status(404).json({ message: "Job not found" });
     }
 
