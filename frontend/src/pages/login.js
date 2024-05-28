@@ -25,7 +25,7 @@ document.getElementById("login-form").addEventListener("submit", async function 
 
     if (response.ok) {
       const data = await response.json();
-      document.getElementById("loginMessage").innerText = `Login successful! User ID: ${data.userId}`;
+      document.getElementById("login-message").innerText = `Login successful! User ID: ${data.userId}`;
       console.log(data);
       sessionStorage.setItem("accessToken", data.accessToken || "");
       sessionStorage.setItem("userId", data.userId || "");
@@ -39,13 +39,13 @@ document.getElementById("login-form").addEventListener("submit", async function 
       window.location.href = "/home";
     } else {
       const errorMessage = await response.text();
-      document.getElementById("loginMessage").innerText = `Login failed: ${errorMessage}`;
+      document.getElementById("login-message").innerText = `Login failed: ${errorMessage}`;
     }
   } catch (error) {
     // Alerts user if login fails
     console.error("Error:", error);
     alert(`Error: ${error.message}`);
-    //document.getElementById("loginMessage").innerText = `Error: ${error.message}`;
+    document.getElementById("login-message").innerText = `Error: ${error.message}`;
   }
 });
 
