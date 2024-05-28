@@ -55,7 +55,6 @@ app.use("/api/jobs", jobRoutes);
 app.use("/api/locations", locationRoutes);
 app.use("/api/timecards", authenticateToken, timeCardRoutes);
 app.use("/api/users", userRoutes);
-//app.use("/api/auth", authRoutes);
 app.use("/api/jobs/expenses", expenseRoutes);
 app.use("/api/jobs/notes", noteRoutes);
 

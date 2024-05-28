@@ -82,7 +82,7 @@ let editingJobID = "";
 //GET all jobs
 async function fetchJobs() {
   try {
-    const response = await fetch(`${apiBaseUrl}/api/jobs`);
+    const response = await fetch(`${apiBaseUrl}/api/jobs`, { Authorization: `Bearer ${token}`, "Content-Type": "application/json" });
     const jobs = await response.json();
     globalJobs = jobs; //update global variable
     console.log(`fetched jobs: ${globalJobs[0]}`);
