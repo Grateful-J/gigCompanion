@@ -83,7 +83,7 @@ let editingJobID = "";
 async function fetchJobs() {
   try {
     const token =
-      localStorage.getItem("authToken") ||
+      sessionStorage.getItem("authToken") ||
       document.cookie
         .split("; ")
         .find((row) => row.startsWith("authToken="))
