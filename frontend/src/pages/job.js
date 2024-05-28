@@ -82,15 +82,25 @@ let editingJobID = "";
 //GET all jobs
 async function fetchJobs() {
   try {
-    const token =
-      sessionStorage.getItem("authToken") ||
-      document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("authToken="))
-        .split("=")[1];
-    const response = await fetch(`${apiBaseUrl}/api/jobs`, { Authorization: `Bearer ${token}`, "Content-Type": "application/json" });
+    const token = sessionStorage.getItem("authToken");
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+
+    const response = await fetch(`${apiBaseUrl}/api/jobs`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch jobs");
+    }
+
     const jobs = await response.json();
-    globalJobs = jobs; //update global variable
+    globalJobs = jobs; // Update global variable
     console.log(`fetched jobs: ${globalJobs[0]}`);
     displayJobs(jobs);
   } catch (error) {
