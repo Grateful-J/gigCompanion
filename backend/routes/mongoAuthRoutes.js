@@ -32,13 +32,13 @@ router.post("/login", async (req, res) => {
 
 // Route to handle user registration
 router.post("/register", async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, username, firstName, lastName, phoneNumber } = req.body;
   try {
     await realmApp.emailPasswordAuth.registerUser({ email, password });
     console.log("User registered successfully:", email);
 
     // Create user in MongoDB
-    const user = new User({ email, name });
+    const user = new User({ email, username, firstName, lastName, phoneNumber });
     await user.save();
 
     res.status(200).send("Successfully registered new user.");
