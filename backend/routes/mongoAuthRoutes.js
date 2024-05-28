@@ -1,5 +1,5 @@
 const express = require("express");
-const { App } = require("realm");
+const { App, Credentials, User } = require("realm");
 const path = require("path");
 const router = express.Router();
 
