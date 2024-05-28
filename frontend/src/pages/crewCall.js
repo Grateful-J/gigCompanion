@@ -215,6 +215,7 @@ function addTimecardFlex(job) {
     // Check if there is an entry for the current date and prefill inputs if data exists
     const rowId = `${job._id}-${formattedDate}-${i + 1}`;
     row.id = rowId;
+    console.log("Row ID:", i, ":", rowId);
     const entry = job.showDayEntries.find((entry) => entry.rowId === rowId);
     if (entry) {
       startTimeInput.value = entry.clockIn;
