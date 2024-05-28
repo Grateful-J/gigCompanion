@@ -27,10 +27,6 @@ document.getElementById("login-form").addEventListener("submit", async function 
       const data = await response.json();
       document.getElementById("login-message").innerText = `Login successful! User ID: ${data.userId}`;
       console.log(data);
-      sessionStorage.setItem("accessToken", data.accessToken || "");
-      sessionStorage.setItem("userId", data.userId || "");
-      sessionStorage.setItem("username", data.username || "");
-      sessionStorage.setItem("test", "test");
 
       // Stores information about user in session storage
 
