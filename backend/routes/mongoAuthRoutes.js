@@ -1,6 +1,8 @@
 const express = require("express");
-const { App, Credentials, User } = require("realm");
+const { App, Credentials } = require("realm");
 const { google } = require("googleapis");
+const User = require("../models/users.model");
+//const { body, validationResult } = require("express-validator");
 const path = require("path");
 const router = express.Router();
 const authenticateToken = require("../middleware/authMiddleware");
@@ -31,22 +33,42 @@ router.post("/login", async (req, res) => {
 });
 
 // Route to handle user registration
-router.post("/register", async (req, res) => {
-  const { email, password, username, firstName, lastName, phoneNumber } = req.body;
-  try {
-    await realmApp.emailPasswordAuth.registerUser({ email, password });
-    console.log("User registered successfully:", email);
+router.post(
+  "/register",
+  // Validation middleware
+  /*   [
+    body("email").isEmail().withMessage("Invalid email format"),
+    body("password").isLength({ min: 6 }).withMessage("Password must be at least 6 characters long"),
+    body("username").notEmpty().withMessage("Username is required"),
+    body("firstName").notEmpty().withMessage("First name is required"),
+    body("lastName").notEmpty().withMessage("Last name is required"),
+    body("phoneNumber").optional().isMobilePhone().withMessage("Invalid phone number format"),
+  ], */
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
-    // Create user in MongoDB
-    const user = new User({ email, username, firstName, lastName, phoneNumber });
-    await user.save();
+    const { email, password, username, firstName, lastName, phoneNumber } = req.body;
+    try {
+      // Register user in MongoDB Realm
+      await realmApp.emailPasswordAuth.registerUser({ email, password });
+      console.log("User registered successfully:", email);
 
-    res.status(200).send("Successfully registered new user.");
-  } catch (err) {
-    console.error("Failed to register user:", err.message);
-    res.status(400).send(`Failed to register user: ${err.message}`);
+      // Create user in MongoDB
+      const user = new User({ email, username, firstName, lastName, phoneNumber });
+      await user.save(); // Save user to MongoDB
+
+      console.log("User created successfully:", user.id);
+
+      res.status(200).send("Successfully registered new user.");
+    } catch (err) {
+      console.error("Failed to register user:", err.message);
+      res.status(400).send(`Failed to register user: ${err.message}`);
+    }
   }
-});
+);
 
 // Route to handle user confirmation
 router.post("/confirm", async (req, res) => {
