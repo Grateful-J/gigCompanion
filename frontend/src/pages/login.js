@@ -42,7 +42,10 @@ document.getElementById("login-form").addEventListener("submit", async function 
       document.getElementById("loginMessage").innerText = `Login failed: ${errorMessage}`;
     }
   } catch (error) {
-    document.getElementById("loginMessage").innerText = `Error: ${error.message}`;
+    // Alerts user if login fails
+    console.error("Error:", error);
+    alert(`Error: ${error.message}`);
+    //document.getElementById("loginMessage").innerText = `Error: ${error.message}`;
   }
 });
 
