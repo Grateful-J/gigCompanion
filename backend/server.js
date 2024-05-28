@@ -51,7 +51,7 @@ app.get("/logout", (req, res) => {
 });
 
 //API Routes
-app.use("/api/jobs", jobRoutes);
+app.use("/api/jobs", authenticateToken, jobRoutes);
 app.use("/api/locations", locationRoutes);
 app.use("/api/timecards", authenticateToken, timeCardRoutes);
 app.use("/api/users", userRoutes);
