@@ -66,7 +66,7 @@ router.patch("/:id", async (req, res) => {
   console.log("Received PATCH request for job:", req.params.id);
   try {
     // Log the incoming request body to see what's being updated
-    //console.log("Updating job with data:", req.body);
+    console.log("Updating job with data:", req.body);
 
     const updatedJob = await Job.findOneAndUpdate(
       { _id: req.params.id, user: req.user.id }, // Ensure the user owns the job
@@ -79,7 +79,7 @@ router.patch("/:id", async (req, res) => {
       return res.status(404).json({ message: "Job not found" });
     }
 
-    //console.log("Updated job:", updatedJob);
+    console.log("Updated job:", updatedJob);
     res.status(200).json(updatedJob);
   } catch (error) {
     console.error("Error in PATCH job route:", error);
@@ -91,13 +91,12 @@ router.patch("/:id", async (req, res) => {
 // PATCH a job to add or update showDayEntries
 router.patch("/daily/:id", async (req, res) => {
   const { rowId, clockIn, breakTime, clockOut, description } = req.body;
-  // Log the user ID and job ID for debugging
   console.log("User ID:", req.user.id);
   console.log("Job ID:", req.params.id);
+  console.log("Row ID:", rowId);
 
   try {
-    //const job = await Job.findById(req.params.id); OLD- functional but not with new auth
-    const job = await Job.findOne({ _id: req.params.id, user: req.user.id });
+    const job = await Job.findById(req.params.id);
 
     // Check if entry with the same rowId already exists
     const entryIndex = job.showDayEntries.findIndex((entry) => entry.rowId === rowId);
@@ -105,11 +104,9 @@ router.patch("/daily/:id", async (req, res) => {
     if (entryIndex !== -1) {
       // Update existing entry
       job.showDayEntries[entryIndex] = { rowId, clockIn, breakTime, clockOut, description };
-      console.log("Entry updated:", job.showDayEntries[entryIndex]);
     } else {
       // Add new entry
       job.showDayEntries.push({ rowId, clockIn, breakTime, clockOut, description });
-      console.log("Entry added:", job.showDayEntries[job.showDayEntries.length - 1]);
     }
 
     const updatedJob = await job.save();
