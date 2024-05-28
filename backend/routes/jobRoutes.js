@@ -2,13 +2,23 @@ const express = require("express");
 const router = express.Router();
 const Job = require("../models/jobs.model");
 
-//GET all jobs
+/* //GET all jobs - No Auth
 router.get("/", async (req, res) => {
   try {
     const jobs = await Job.find({});
     res.status(200).json(jobs);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+}); */
+
+// Route to get jobs for the logged-in user
+router.get("/jobs", async (req, res) => {
+  try {
+    const jobs = await Job.find({ user: req.user.id });
+    res.status(200).json(jobs);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -21,8 +31,8 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
-//POST new job
+/* 
+//POST new job - No Auth
 router.post("/", async (req, res) => {
   const newJob = new Job(req.body);
   try {
@@ -30,6 +40,20 @@ router.post("/", async (req, res) => {
     res.status(201).json(savedJob);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+}); */
+
+// Route to create a new job for the logged-in user
+router.post("/jobs", async (req, res) => {
+  try {
+    const job = new Job({
+      ...req.body,
+      user: req.user.id,
+    });
+    await job.save();
+    res.status(201).json(job);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
