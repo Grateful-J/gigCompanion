@@ -140,6 +140,7 @@ function addTimecardFlex(job) {
       "lg:space-x-2",
       "p-2"
     );
+    row.setAttribute("data-row-id", `${job._id}-${formattedDate}-${i + 1}`);
 
     const dayOfWeek = document.createElement("div");
     dayOfWeek.innerHTML = `<p class="block p-2">${currentDate.toLocaleDateString("en-US", { weekday: "long" })}</p>`;
