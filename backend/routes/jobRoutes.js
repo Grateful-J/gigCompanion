@@ -66,7 +66,7 @@ router.patch("/:id", async (req, res) => {
   console.log("Received PATCH request for job:", req.params.id);
   try {
     // Log the incoming request body to see what's being updated
-    console.log("Updating job with data:", req.body);
+    //console.log("Updating job with data:", req.body);
 
     const updatedJob = await Job.findOneAndUpdate(
       { _id: req.params.id, user: req.user.id }, // Ensure the user owns the job
@@ -79,7 +79,7 @@ router.patch("/:id", async (req, res) => {
       return res.status(404).json({ message: "Job not found" });
     }
 
-    console.log("Updated job:", updatedJob);
+    //console.log("Updated job:", updatedJob);
     res.status(200).json(updatedJob);
   } catch (error) {
     console.error("Error in PATCH job route:", error);
