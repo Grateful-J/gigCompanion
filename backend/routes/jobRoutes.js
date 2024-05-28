@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Job = require("../models/jobs.model");
+const authenticateToken = require("../middleware/authMiddleware");
+
+// Middleware to ensure the user is authenticated
+router.use(authenticateToken);
 
 /* //GET all jobs - No Auth
 router.get("/", async (req, res) => {
