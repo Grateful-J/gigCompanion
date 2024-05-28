@@ -17,12 +17,6 @@ const noteRoutes = require("./routes/noteRoutes");
 const mongoRoutes = require("./routes/mongoAuthRoutes");
 const authenticateToken = require("./middleware/authMiddleware");
 
-//const authRoutes = require("./routes/authRoutes");
-//const { adminAuth, userAuth, checkToken } = require("./utils/authController");
-//const { requireAuth, checkUser } = require("./middleware/authMiddleware");
-//const { createHash } = require("crypto");
-
-//const { App, Credentials } = require("realm");
 // Express app
 const app = express();
 
@@ -46,7 +40,13 @@ app.use(cookieParser());
 
 // Logout Route
 app.get("/logout", (req, res) => {
-  res.cookie("bearer", "", { maxAge: "1" });
+  res.cookie("authToken", "", { maxAge: "1" });
+  res.clearCookie("authToken");
+  res.clearCookie("bearer");
+  // clear session
+  if (req.session) {
+    req.session.destroy();
+  }
   res.redirect("/");
 });
 

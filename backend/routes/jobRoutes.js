@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
 }); */
 
 // Route to get jobs for the logged-in user
-router.get("/jobs", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const jobs = await Job.find({ user: req.user.id });
     res.status(200).json(jobs);
