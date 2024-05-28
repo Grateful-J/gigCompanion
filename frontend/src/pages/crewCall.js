@@ -125,7 +125,7 @@ function addTimecardFlex(job) {
     const row = document.createElement("div");
     row.classList.add(
       "flex",
-      //"flex-col",
+      "flex-col",
       "flex-row",
       "sm:px-8",
       "w-full",
