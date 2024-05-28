@@ -8,7 +8,7 @@ const realmApp = new App({ id: appId });
 
 async function authenticateToken(req, res, next) {
   const token = sessionStorage.getItem("authToken");
-  //console.log("authenticateToken token init from middleware:", token);
+  console.log("authenticateToken token init from middleware:", token);
 
   if (!token) return res.sendStatus(401); // Unauthorized
 
