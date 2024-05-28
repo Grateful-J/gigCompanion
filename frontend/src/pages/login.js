@@ -29,7 +29,7 @@ document.getElementById("login-form").addEventListener("submit", async function 
       console.log(data);
 
       // Stores access token in session storage
-      sessionStorage.setItem("accessToken", data.accessToken);
+      sessionStorage.setItem("authToken", data.accessToken);
 
       // stores access token in HTTP cookie
       //document.cookie = `accessToken=${data.accessToken};`;
