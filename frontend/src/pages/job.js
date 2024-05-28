@@ -90,7 +90,7 @@ async function fetchJobs() {
     const response = await fetch(`${apiBaseUrl}/api/jobs`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `${token}`,
         "Content-Type": "application/json",
       },
     });
