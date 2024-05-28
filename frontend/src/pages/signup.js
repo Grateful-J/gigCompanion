@@ -48,6 +48,10 @@ document.getElementById("signup-form").addEventListener("submit", async (event) 
   event.preventDefault();
   const email = document.getElementById("email").value;
   const password = document.getElementById("signup-password").value;
+  const username = document.getElementById("signup-username").value;
+  const firstName = document.getElementById("first-name").value;
+  const lastName = document.getElementById("last-name").value;
+  const phoneNumber = document.getElementById("phone-number").value || null;
 
   try {
     const response = await fetch("/mongo/register", {
@@ -55,7 +59,7 @@ document.getElementById("signup-form").addEventListener("submit", async (event) 
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, username, firstName, lastName, phoneNumber }),
     });
 
     if (response.ok) {
