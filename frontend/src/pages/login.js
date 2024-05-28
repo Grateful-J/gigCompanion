@@ -11,42 +11,28 @@ if (import.meta.env.VITE_MODE === "dev") {
 
 document.getElementById("login-form").addEventListener("submit", async function (event) {
   event.preventDefault();
-
-  const username = document.getElementById("login-username").value;
+  const email = document.getElementById("login-email").value;
   const password = document.getElementById("login-password").value;
 
   try {
-    const response = await fetch(`${apiBaseUrl}/api/auth/login`, {
+    const response = await fetch("/mongo/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      credentials: "include",
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ email, password }),
     });
 
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message);
-    }
-    // After successfully logging in
-    const { stashUser, stashRole, token } = await response.json();
-
-    // Store user information and token in session storage
-
-    sessionStorage.setItem("username", stashUser);
-    sessionStorage.setItem("role", stashRole);
-
-    // Redirect to appropriate page based on user role
-    if (stashRole === "admin") {
-      window.location.href = "/admin";
+    if (response.ok) {
+      const data = await response.json();
+      document.getElementById("loginMessage").innerText = `Login successful! User ID: ${data.userId}`;
+      sessionStorage.setItem("accessToken", data.accessToken);
     } else {
-      window.location.href = "/profile";
+      const errorMessage = await response.text();
+      document.getElementById("loginMessage").innerText = `Login failed: ${errorMessage}`;
     }
   } catch (error) {
-    alert(error.message);
-  } finally {
-    resetForm();
+    document.getElementById("loginMessage").innerText = `Error: ${error.message}`;
   }
 });
 

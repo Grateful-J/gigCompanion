@@ -12,6 +12,20 @@ router.use((req, res, next) => {
   next();
 });
 
+// Route to handle user login
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const credentials = Credentials.emailPassword(email, password);
+    const user = await realmApp.logIn(credentials);
+    console.log("User logged in successfully:", user.id);
+    res.status(200).send({ userId: user.id, accessToken: user.accessToken });
+  } catch (err) {
+    console.error("User login failed:", err.message);
+    res.status(400).send(`User login failed: ${err.message}`);
+  }
+});
+
 // Route to handle user registration
 router.post("/register", async (req, res) => {
   const { email, password } = req.body;
