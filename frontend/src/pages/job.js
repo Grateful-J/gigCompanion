@@ -82,6 +82,12 @@ let editingJobID = "";
 //GET all jobs
 async function fetchJobs() {
   try {
+    const token =
+      localStorage.getItem("authToken") ||
+      document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("authToken="))
+        .split("=")[1];
     const response = await fetch(`${apiBaseUrl}/api/jobs`, { Authorization: `Bearer ${token}`, "Content-Type": "application/json" });
     const jobs = await response.json();
     globalJobs = jobs; //update global variable
