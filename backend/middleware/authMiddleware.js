@@ -13,15 +13,15 @@ async function authenticateToken(req, res, next) {
   if (!token) return res.sendStatus(401); // Unauthorized
 
   try {
-    // Use JWT token provided by Realm
-    const user = await realmApp.logIn(Credentials.jwt(token));
-    if (!user) {
-      console.log("User session validation failed: User not found");
-      return res.sendStatus(401);
-    } // Unauthorized
-    req.user = user;
-    console.log("User session validated:", user.id);
-    next();
+    const user = realmApp.currentUser;
+
+    // Check if the current user is already logged in and token matches
+    if (user && user.accessToken === token) {
+      req.user = user;
+      next();
+    } else {
+      return res.sendStatus(401); // Unauthorized
+    }
   } catch (err) {
     console.error("User session validation failed:", err.message);
     res.sendStatus(403); // Forbidden
