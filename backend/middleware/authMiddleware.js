@@ -7,8 +7,8 @@ const appId = process.env.MONGODB_APP_ID;
 const realmApp = new App({ id: appId });
 
 async function authenticateToken(req, res, next) {
-  const token = req.headers["authorization"]?.split(" ")[1] || req.cookies.authToken;
-  //console.log("authenticateToken token init from middleware:", token);
+  const token = sessionStorage.getItem("authToken");
+  console.log("authenticateToken token init from middleware:", token);
 
   if (!token) return res.sendStatus(401); // Unauthorized
 
