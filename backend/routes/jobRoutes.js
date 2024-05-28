@@ -93,7 +93,8 @@ router.patch("/daily/:id", async (req, res) => {
   const { rowId, clockIn, breakTime, clockOut, description } = req.body;
 
   try {
-    const job = await Job.findById(req.params.id);
+    //const job = await Job.findById(req.params.id); OLD- functional but not with new auth
+    const job = await Job.findById({ _id: req.params.id, user: req.user.id });
 
     // Check if entry with the same rowId already exists
     const entryIndex = job.showDayEntries.findIndex((entry) => entry.rowId === rowId);
