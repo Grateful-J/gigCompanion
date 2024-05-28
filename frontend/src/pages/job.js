@@ -82,25 +82,9 @@ let editingJobID = "";
 //GET all jobs
 async function fetchJobs() {
   try {
-    const token = sessionStorage.getItem("authToken");
-    if (!token) {
-      throw new Error("No authentication token found");
-    }
-
-    const response = await fetch(`${apiBaseUrl}/api/jobs`, {
-      method: "GET",
-      headers: {
-        Authorization: `${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch jobs");
-    }
-
+    const response = await fetch(`${apiBaseUrl}/api/jobs`);
     const jobs = await response.json();
-    globalJobs = jobs; // Update global variable
+    globalJobs = jobs; //update global variable
     console.log(`fetched jobs: ${globalJobs[0]}`);
     displayJobs(jobs);
   } catch (error) {
