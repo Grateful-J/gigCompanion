@@ -590,7 +590,7 @@ jobDropdown.addEventListener("change", () => {
     });
   }
 });
-
+/* 
 // Event delegation for "Confirm"  button for nested timecards
 document.addEventListener("click", (event) => {
   // Check if the clicked element or its parent has the 'confirm-button' id
@@ -605,6 +605,30 @@ document.addEventListener("click", (event) => {
       handleConfirmClick(row, jobId);
 
       // await and reload timecarentries
+      fetchAndPopulateJobs(jobId);
+    } else {
+      console.log("Confirm button was clicked, but no row was found.");
+    }
+  }
+}); */
+
+// Event delegation for "Confirm" button for nested timecards
+document.addEventListener("click", (event) => {
+  // Check if the clicked element or its parent has the 'confirm-button' id
+  if (event.target.id === "confirm-button" || event.target.closest("#confirm-button")) {
+    event.preventDefault();
+    console.log(`Confirm button clicked`);
+
+    // Find the row by navigating up from the confirm button
+    const row = event.target.closest("div[data-row-id]");
+    if (row) {
+      const jobId = globalTimecardId;
+      const rowId = row.getAttribute("data-row-id");
+      console.log(`Job ID: ${jobId}, Row ID: ${rowId}`);
+
+      handleConfirmClick(row, jobId);
+
+      // await and reload timecard entries
       fetchAndPopulateJobs(jobId);
     } else {
       console.log("Confirm button was clicked, but no row was found.");
