@@ -31,7 +31,7 @@ document.getElementById("login-form").addEventListener("submit", async function 
       // Stores information about user in session storage
 
       // stores access token in HTTP cookie
-      document.cookie = `accessToken=${data.accessToken};`;
+      //document.cookie = `accessToken=${data.accessToken};`;
       window.location.href = "/home";
     } else {
       const errorMessage = await response.text();
