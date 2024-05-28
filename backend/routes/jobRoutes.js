@@ -48,7 +48,7 @@ router.post("/", async (req, res) => {
 }); */
 
 // Route to create a new job for the logged-in user
-router.post("/jobs", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const job = new Job({
       ...req.body,
