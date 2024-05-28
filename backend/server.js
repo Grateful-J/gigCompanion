@@ -4,6 +4,7 @@ const cors = require("cors");
 const https = require("https");
 const fs = require("fs");
 const path = require("path");
+const realm = require("realm");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const jobRoutes = require("./routes/jobRoutes"); // Adjusted for a models directory
@@ -12,12 +13,15 @@ const timeCardRoutes = require("./routes/timecardRoutes");
 const userRoutes = require("./routes/userRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
 const noteRoutes = require("./routes/noteRoutes");
-const authRoutes = require("./routes/authRoutes");
-const { adminAuth, userAuth, checkToken } = require("./utils/authController");
-const { requireAuth, checkUser } = require("./middleware/authMiddleware");
-const { createHash } = require("crypto");
-const realm = require("realm");
+// Auth Routes through MongoDB
 const mongoRoutes = require("./routes/mongoAuthRoutes");
+const authenticateToken = require("./middleware/authMiddleware");
+
+//const authRoutes = require("./routes/authRoutes");
+//const { adminAuth, userAuth, checkToken } = require("./utils/authController");
+//const { requireAuth, checkUser } = require("./middleware/authMiddleware");
+//const { createHash } = require("crypto");
+
 //const { App, Credentials } = require("realm");
 // Express app
 const app = express();
@@ -49,9 +53,9 @@ app.get("/logout", (req, res) => {
 //API Routes
 app.use("/api/jobs", jobRoutes);
 app.use("/api/locations", locationRoutes);
-app.use("/api/timecards", timeCardRoutes);
+app.use("/api/timecards", authenticateToken, timeCardRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/auth", authRoutes);
+//app.use("/api/auth", authRoutes);
 app.use("/api/jobs/expenses", expenseRoutes);
 app.use("/api/jobs/notes", noteRoutes);
 
@@ -59,8 +63,8 @@ app.use("/api/jobs/notes", noteRoutes);
 app.use("/mongo", mongoRoutes);
 
 // Routes to check if user is logged in
-app.get("/admin", adminAuth, (req, res) => res.send("Admin Route"));
-app.get("/basic", userAuth, (req, res) => res.send("User Route"));
+//app.get("/admin", adminAuth, (req, res) => res.send("Admin Route"));
+//app.get("/basic", userAuth, (req, res) => res.send("User Route"));
 
 // Database connection
 mongoose

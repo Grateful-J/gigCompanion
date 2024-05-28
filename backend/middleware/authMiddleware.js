@@ -2,6 +2,35 @@ const jwt = require("jsonwebtoken");
 const jwtSecret = process.env.JWT_SECRET;
 const User = require("../models/users.model");
 
+const { App, Credentials } = require("realm");
+const appId = process.env.MONGODB_APP_ID;
+const realmApp = new App({ id: appId });
+
+async function authenticateToken(req, res, next) {
+  const token = req.headers["authorization"]?.split(" ")[1] || req.cookies.authToken;
+  console.log("authenticateToken token init from middleware:", token);
+
+  if (!token) return res.sendStatus(401); // Unauthorized
+
+  try {
+    // Use JWT token provided by Realm
+    const user = await realmApp.logIn(Credentials.jwt(token));
+    if (!user) {
+      console.log("User session validation failed: User not found");
+      return res.sendStatus(401);
+    } // Unauthorized
+    req.user = user;
+    console.log("User session validated:", user.id);
+    next();
+  } catch (err) {
+    console.error("User session validation failed:", err.message);
+    res.sendStatus(403); // Forbidden
+  }
+}
+
+module.exports = authenticateToken;
+
+/* 
 exports.adminAuth = (req, res, next) => {
   const token = req.cookie;
   if (token) {
@@ -54,7 +83,7 @@ const requireAuth = (req, res, next) => {
     return res.status(401).json({ message: "Auth Failed" });
   }
 };
-
+ */
 /* const requireAuth = (req, res, next) => {
   //console.log(`requireAuth called- headers: ${JSON.stringify(req.headers)}`);
   const token = req.headers.authorization.split(" ")[1];
@@ -76,7 +105,7 @@ const requireAuth = (req, res, next) => {
   }
 }; */
 
-// Check current user
+/* // Check current user
 const checkUser = (req, res, next) => {
   const token = req.cookies.jwt;
   if (!token) {
@@ -93,3 +122,4 @@ const checkUser = (req, res, next) => {
 };
 
 module.exports = { requireAuth, checkUser };
+ */
