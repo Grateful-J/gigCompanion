@@ -60,7 +60,7 @@ const jobSchema = new mongoose.Schema(
     expenses: [expensesSchema],
     notes: [notesSchema],
     project: { type: mongoose.Schema.Types.ObjectId, ref: "Project" }, // Reference to the Project
-    //user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Reference to the User from MongoDB
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Reference to the User from MongoDB
   },
   {
     timestamps: true,
