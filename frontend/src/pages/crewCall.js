@@ -598,7 +598,7 @@ document.addEventListener("click", (event) => {
     event.preventDefault();
     //console.log(`confirm button clicked ${event.target.id}`);
     // Find the row by navigating up from the confirm button
-    const row = event.target.closest("div.flex-col.lg || div:flex-row");
+    const row = event.target.closest("div:flex-row");
     if (row) {
       const jobId = globalTimecardId;
       //console.log(`now cicking Job ID: ${jobId}`);
