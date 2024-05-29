@@ -8,6 +8,14 @@ function loadNavbar() {
       loadWelcomeMessage();
     });
 }
+
+//function to chage navebar
+function toggleNavbar() {
+  document.getElementById("navbar-toggle").addEventListener("click", function () {
+    const menu = document.getElementById("mobile-menu");
+    menu.classList.toggle("hidden");
+  });
+}
 // Define the logOut function
 function logOut() {
   fetch(`${apiBaseUrl}/logout`, {
