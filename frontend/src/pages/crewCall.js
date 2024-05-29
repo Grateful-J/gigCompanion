@@ -129,7 +129,7 @@ function addTimecardFlex(job) {
       "p-4",
       "border-b",
       "border-gray-300",
-      "bg-gray-600",
+      "bg-gray-700",
       "text-gray-200",
       "md:space-x-2"
     );
@@ -152,7 +152,7 @@ function addTimecardFlex(job) {
     startTimeInput.type = "time";
     startTimeInput.name = "start-time";
     startTimeInput.step = "900";
-    startTimeInput.classList.add("border", "border-gray-300", "rounded", "px-2", "py-1", "w-full", "md:w-auto");
+    startTimeInput.classList.add("border", "border-gray-300", "rounded", "px-2", "py-1", "w-full", "md:w-auto", "text-gray-900");
     startTimeCell.appendChild(startTimeInput);
 
     const endTimeCell = document.createElement("div");
@@ -162,7 +162,7 @@ function addTimecardFlex(job) {
     endTimeInput.type = "time";
     endTimeInput.name = "end-time";
     endTimeInput.step = "900";
-    endTimeInput.classList.add("border", "border-gray-300", "rounded", "px-2", "py-1", "w-full", "md:w-auto");
+    endTimeInput.classList.add("border", "border-gray-300", "rounded", "px-2", "py-1", "w-full", "md:w-auto", "text-gray-900");
     endTimeCell.appendChild(endTimeInput);
 
     const hoursWorkedCell = document.createElement("div");
