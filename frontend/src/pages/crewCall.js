@@ -92,11 +92,11 @@ function addTimecardFlex(job) {
     "md:flex",
     "w-full",
     "justify-between",
-    "text-gray-200",
+    "text-gray-800",
     "border-b",
     "border-gray-400",
     "font-bold",
-    "bg-gray-600",
+    "bg-gray-100",
     "p-2"
   );
 
@@ -129,7 +129,8 @@ function addTimecardFlex(job) {
       "p-4",
       "border-b",
       "border-gray-300",
-      "bg-gray-50",
+      "bg-gray-600",
+      "text-gray-200",
       "md:space-x-2"
     );
 
