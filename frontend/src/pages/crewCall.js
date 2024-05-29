@@ -126,7 +126,7 @@ function addTimecardFlex(job) {
     row.classList.add(
       "flex",
       "flex-col",
-      "flex-row",
+      "sm:flex-row",
       "sm:px-8",
       "w-full",
       "items-baseline",
