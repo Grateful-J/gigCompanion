@@ -129,17 +129,20 @@ function addTimecardFlex(job) {
       "p-4",
       "border-b",
       "border-gray-300",
-      "bg-white",
+      "bg-gray-50",
       "md:space-x-2"
     );
 
-    const dayCell = document.createElement("div");
-    dayCell.classList.add("md:flex-1", "mb-2", "md:mb-0");
-    dayCell.innerHTML = `<span class="block md:hidden font-bold">Day of Week:</span> ${dayOfWeek}`;
-
-    const dateCell = document.createElement("div");
-    dateCell.classList.add("md:flex-1", "mb-2", "md:mb-0");
-    dateCell.innerHTML = `<span class="block md:hidden font-bold">Date:</span> ${formattedDate}`;
+    const dayAndDateCell = document.createElement("div");
+    dayAndDateCell.classList.add("md:flex-1", "mb-2", "md:mb-0", "flex", "flex-col", "md:flex-row", "justify-between", "w-full");
+    dayAndDateCell.innerHTML = `
+      <div class="flex-1">
+        <span class="block md:hidden font-bold">Day of Week:</span> ${dayOfWeek}
+      </div>
+      <div class="flex-1">
+        <span class="block md:hidden font-bold">Date:</span> ${formattedDate}
+      </div>
+    `;
 
     const startTimeCell = document.createElement("div");
     startTimeCell.classList.add("md:flex-1", "mb-2", "md:mb-0");
@@ -162,15 +165,14 @@ function addTimecardFlex(job) {
     endTimeCell.appendChild(endTimeInput);
 
     const hoursWorkedCell = document.createElement("div");
-    hoursWorkedCell.classList.add("md:flex-1", "mb-2", "md:mb-0");
+    hoursWorkedCell.classList.add("md:flex-1", "mb-2", "md:mb-0", "text-center");
     hoursWorkedCell.innerHTML = `<span class="block md:hidden font-bold">Hours Worked:</span> 0`;
 
     const confirmButton = document.createElement("button");
     confirmButton.classList.add("bg-blue-500", "hover:bg-green-700", "text-white", "font-bold", "py-1", "px-2", "rounded", "w-full", "md:w-auto");
     confirmButton.textContent = "Confirm";
 
-    row.appendChild(dayCell);
-    row.appendChild(dateCell);
+    row.appendChild(dayAndDateCell);
     row.appendChild(startTimeCell);
     row.appendChild(endTimeCell);
     row.appendChild(hoursWorkedCell);
