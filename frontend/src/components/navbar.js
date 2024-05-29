@@ -8,6 +8,13 @@ function loadNavbar() {
       loadWelcomeMessage();
     });
 }
+let apiBaseUrl;
+//checks if env is dev or prod
+if (import.meta.env.VITE_MODE === "dev") {
+  apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+} else {
+  apiBaseUrl = import.meta.env.VITE_API_BASE_URL_PROD;
+}
 
 //function to chage navebar
 function toggleNavbar() {
@@ -18,7 +25,6 @@ function toggleNavbar() {
 }
 // Define the logOut function
 function logOut() {
-  let apiBaseUrl;
   fetch(`${apiBaseUrl}/logout`, {
     method: "GET",
     credentials: "include", // Include cookies in the request
