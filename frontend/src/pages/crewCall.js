@@ -207,21 +207,24 @@ function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue) {
 }
 
 // Function to handle confirm button clicks and fetch times
-function handleConfirmClick(row, jobId) {
+function handleConfirmClick(cell, jobId) {
+  // Retrieve the parent row of the cell
+  const row = cell.closest("tr");
+
   // Retrieve the start and end time inputs within the same row
   const startTimeInput = row.querySelector('input[name="start-time"]');
   const endTimeInput = row.querySelector('input[name="end-time"]');
 
   // Fetch the values from these inputs
-  const startTimeValue = startTimeInput.value; //  startTimeInput.value : "No start time";
-  const endTimeValue = endTimeInput.value; //  endTimeInput.value : "No end time";
+  const startTimeValue = startTimeInput ? startTimeInput.value : "No start time";
+  const endTimeValue = endTimeInput ? endTimeInput.value : "No end time";
 
-  //console.log("Start Time:", startTimeValue);
-  //console.log("End Time:", endTimeValue);
+  console.log("Start Time:", startTimeValue);
+  console.log("End Time:", endTimeValue);
 
-  // Find row id of parent div of the clicked button
+  // Find row id of parent row of the clicked cell
   const rowId = row.id;
-  //console.log(`Row ID: ${rowId}`);
+  console.log(`Row ID: ${rowId}`);
 
   // PATCH showDayEntries
   updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue);
