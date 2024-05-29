@@ -18,6 +18,7 @@ function toggleNavbar() {
 }
 // Define the logOut function
 function logOut() {
+  let apiBaseUrl;
   fetch(`${apiBaseUrl}/logout`, {
     method: "GET",
     credentials: "include", // Include cookies in the request
