@@ -30,9 +30,9 @@ router.post("/login", async (req, res) => {
       return res.status(404).send("User not found in MongoDB");
     }
 
-    // Store user details in session
+    // Store user details in session (or send them in the response)
     req.session.user = {
-      mongoId: mongoUser._id,
+      id: mongoUser._id,
       firstName: mongoUser.firstName,
     };
 
@@ -40,7 +40,7 @@ router.post("/login", async (req, res) => {
     res.status(200).send({
       userId: user.id,
       accessToken: user.accessToken,
-      userDetails: req.session.user,
+      userDetails: req.session.user, // You can also send user details in the response
     });
   } catch (err) {
     console.error("User login failed:", err.message);
