@@ -63,22 +63,51 @@ function displayJobs(jobs) {
     const endDate = new Date(job.endDate);
     const daysWorked = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
 
-    const row = container.insertRow();
-    row.innerHTML = `
-      <td class="border-b border-gray-600 p-2">${job.jobName}</td>
-      <td class="border-b border-gray-600 p-2">${job.client}</td>
-      <td class="border-b border-gray-600 p-2">${job.location}</td>
-      <td class="border-b border-gray-600 p-2">${new Date(job.startDate).toLocaleDateString()}</td>
-      <td class="border-b border-gray-600 p-2">${new Date(job.endDate).toLocaleDateString()}</td>
-      <td class="border-b border-gray-600 p-2">${job.isRTW ? "Yes" : "No"}</td>
-      <td class="border-b border-gray-600 p-2">${daysWorked}</td>
-      <td class="border-b border-gray-600 p-2"><button class="edit-btn bg-blue-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full" data-id="${
-        job._id
-      }">Edit</button></td>
-      <td class="border-b border-gray-600 p-2"><button class="delete-btn bg-blue-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full" data-id="${
-        job._id
-      }">Delete</button></td>
+    const jobCard = document.createElement("div");
+    jobCard.classList.add(
+      "bg-gray-700",
+      "text-gray-200",
+      "p-4",
+      "rounded-lg",
+      "shadow-md",
+      "flex",
+      "flex-col",
+      "space-y-2",
+      "sm:space-y-0",
+      "sm:flex-row",
+      "sm:justify-between",
+      "sm:items-center"
+    );
+
+    jobCard.innerHTML = `
+      <div class="flex-1">
+        <span class="block font-semibold">Job Name:</span> ${job.jobName}
+      </div>
+      <div class="flex-1">
+        <span class="block font-semibold">Client:</span> ${job.client}
+      </div>
+      <div class="flex-1">
+        <span class="block font-semibold">State:</span> ${job.location}
+      </div>
+      <div class="flex-1">
+        <span class="block font-semibold">Start Date:</span> ${new Date(job.startDate).toLocaleDateString()}
+      </div>
+      <div class="flex-1">
+        <span class="block font-semibold">End Date:</span> ${new Date(job.endDate).toLocaleDateString()}
+      </div>
+      <div class="flex-1">
+        <span class="block font-semibold">RTW:</span> ${job.isRTW ? "Yes" : "No"}
+      </div>
+      <div class="flex-1">
+        <span class="block font-semibold">Days Worked:</span> ${daysWorked}
+      </div>
+      <div class="flex-1 flex space-x-2">
+        <button class="edit-btn bg-blue-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full" data-id="${job._id}">Edit</button>
+        <button class="delete-btn bg-blue-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full" data-id="${job._id}">Delete</button>
+      </div>
     `;
+
+    container.appendChild(jobCard);
   });
 
   updateCounters(jobs);
