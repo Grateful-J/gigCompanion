@@ -23,24 +23,14 @@ router.post("/login", async (req, res) => {
     const user = await realmApp.logIn(credentials);
     console.log("User logged in successfully:", user.id);
     const token = user.accessToken;
-
-    // Fetch user details from MongoDB
-    const mongoUser = await User.findOne({ email });
-    if (!mongoUser) {
-      return res.status(404).send("User not found in MongoDB");
-    }
-
-    // Store user details in session (or send them in the response)
-    req.session.user = {
-      id: mongoUser._id,
-      firstName: mongoUser.firstName,
-    };
-
     res.cookie("authToken", token, { httpOnly: true });
     res.status(200).send({
       userId: user.id,
       accessToken: user.accessToken,
-      userDetails: req.session.user, // You can also send user details in the response
+      user: {
+        id: mongoUser._id,
+        firstName: mongoUser.firstName,
+      },
     });
   } catch (err) {
     console.error("User login failed:", err.message);
