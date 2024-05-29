@@ -30,10 +30,13 @@ function logOut() {
     credentials: "include", // Include cookies in the request
   })
     .then((response) => {
-      if (response.redirected) {
-        sessionStorage.clear(); // Clear session storage on the client side
-        window.location.href = response.url; // Redirect to the redirected URL
-        console.log("Logout successful");
+      if (response.ok) {
+        // Successful logout, clear the session storage
+        sessionStorage.clear();
+        // Successful logout, redirect to the login page
+        window.location.href = "login.html";
+      } else {
+        throw new Error("Failed to log out");
       }
     })
     .catch((error) => {
