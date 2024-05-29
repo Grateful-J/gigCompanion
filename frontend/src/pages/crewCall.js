@@ -92,11 +92,11 @@ function addTimecardFlex(job) {
     "md:flex",
     "w-full",
     "justify-between",
-    "text-gray-800",
+    "text-gray-200",
     "border-b",
     "border-gray-400",
     "font-bold",
-    "bg-gray-100",
+    "bg-gray-600",
     "p-2"
   );
 
