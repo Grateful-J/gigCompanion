@@ -224,7 +224,7 @@ function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue) {
 }
 
 // Function to handle confirm button clicks and fetch times
-function handleConfirmClick(cell, jobId) {
+function handleConfirmClick(button, jobId) {
   // Retrieve the parent row of the cell
   const row = button.closest("div[data-row-id]");
 
@@ -240,7 +240,7 @@ function handleConfirmClick(cell, jobId) {
   console.log("End Time:", endTimeValue);
 
   // Find row id of parent row of the clicked cell
-  const rowId = ow.getAttribute("data-row-id");
+  const rowId = row.getAttribute("data-row-id");
   console.log(`Row ID: ${rowId}`);
 
   // PATCH showDayEntries
