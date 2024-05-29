@@ -82,176 +82,104 @@ function populateJobDetails(job) {
 // Function to Display the Timecard Flex container and populate it with timecard rows
 // Dynamically add timecard rows based on the job's showDayEntries into a flexbox container
 function addTimecardFlex(job) {
-  // Create the container
   const container = document.getElementById("timesheet-flexbox");
-
-  // Clear the container
   container.innerHTML = "";
 
-  // Create the header row
+  // Create the header row for larger screens
   const header = document.createElement("div");
-  header.classList.add("flex", "flex-row", "w-full", "justify-between", "text-gray-800", "border-b", "border-gray-400", "font-bold", "bg-gray-100");
+  header.classList.add(
+    "hidden",
+    "md:flex",
+    "w-full",
+    "justify-between",
+    "text-gray-800",
+    "border-b",
+    "border-gray-400",
+    "font-bold",
+    "bg-gray-100",
+    "p-2"
+  );
 
-  // Add headers for each column
   const headers = ["Day of Week", "Date", "Start Time", "End Time", "Hours Worked", "Confirm"];
   headers.forEach((headerText) => {
     const headerDiv = document.createElement("div");
     headerDiv.innerHTML = headerText;
-    const formattedHeaderText = headerText.toLowerCase().replace(" ", "-") + "-header"; // Replaces spaces with hyphens and all to lower
+    const formattedHeaderText = headerText.toLowerCase().replace(" ", "-") + "-header";
     headerDiv.classList.add("flex-1", "text-center");
     headerDiv.setAttribute("id", formattedHeaderText);
     header.appendChild(headerDiv);
   });
 
-  // Add the header row to the container
   container.appendChild(header);
 
-  let travelDays = job.travelDays;
-  //console.log(`travelDays: ${travelDays}`);
-  //travelDays = job.travelDays;
-  //const durationIndex = job.duration - 1;
-
-  // Generate rows based on the job's duration and start date
   const baseDate = new Date(job.startDate);
   for (let i = 0; i < job.duration; i++) {
     const currentDate = new Date(baseDate);
     currentDate.setDate(baseDate.getDate() + i);
-    let formattedDate = currentDate.toISOString().split("T")[0]; // Format: yyyy-mm-dd
-
-    // Format date to mm/dd/yyyy
-    const formattedDateParts = formattedDate.split("-");
-    formattedDate = formattedDateParts[1] + "/" + formattedDateParts[2] + "/" + formattedDateParts[0];
+    const formattedDate = currentDate.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" });
+    const dayOfWeek = currentDate.toLocaleDateString("en-US", { weekday: "long" });
 
     const row = document.createElement("div");
     row.classList.add(
       "flex",
       "flex-col",
-      "sm:flex-row",
-      "sm:px-8",
+      "md:flex-row",
+      "md:items-center",
       "w-full",
-      "items-baseline",
-      "justify-between",
-      "border",
+      "p-4",
+      "border-b",
       "border-gray-300",
-      "self-center",
-      "rounded",
-      "space-y-2",
-      "lg:space-y-0",
-      "lg:space-x-2",
-      "p-2"
+      "bg-white",
+      "md:space-x-2"
     );
-    row.setAttribute("data-row-id", `${job._id}-${formattedDate}-${i + 1}`);
 
-    const dayOfWeek = document.createElement("div");
-    dayOfWeek.innerHTML = `<p class="block p-2">${currentDate.toLocaleDateString("en-US", { weekday: "long" })}</p>`;
-    dayOfWeek.classList.add("flex-1");
+    const dayCell = document.createElement("div");
+    dayCell.classList.add("md:flex-1", "mb-2", "md:mb-0");
+    dayCell.innerHTML = `<span class="block md:hidden font-bold">Day of Week:</span> ${dayOfWeek}`;
 
-    const dateDiv = document.createElement("div");
-    dateDiv.innerHTML = `<span class="block p-2">${formattedDate}</span>`;
-    dateDiv.classList.add("flex-1");
+    const dateCell = document.createElement("div");
+    dateCell.classList.add("md:flex-1", "mb-2", "md:mb-0");
+    dateCell.innerHTML = `<span class="block md:hidden font-bold">Date:</span> ${formattedDate}`;
 
+    const startTimeCell = document.createElement("div");
+    startTimeCell.classList.add("md:flex-1", "mb-2", "md:mb-0");
+    startTimeCell.innerHTML = `<span class="block md:hidden font-bold">Start Time:</span>`;
     const startTimeInput = document.createElement("input");
     startTimeInput.type = "time";
     startTimeInput.name = "start-time";
-    startTimeInput.step = "900"; // 15 minutes
-    startTimeInput.classList.add(
-      "border",
-      "border-gray-300",
-      "rounded",
-      "px-1",
-      "py-1",
-      "text-gray-600",
-      "flex-1",
-      "max-w-36",
-      "min-h-10",
-      "text-balance"
-    );
+    startTimeInput.step = "900";
+    startTimeInput.classList.add("border", "border-gray-300", "rounded", "px-2", "py-1", "w-full", "md:w-auto");
+    startTimeCell.appendChild(startTimeInput);
 
+    const endTimeCell = document.createElement("div");
+    endTimeCell.classList.add("md:flex-1", "mb-2", "md:mb-0");
+    endTimeCell.innerHTML = `<span class="block md:hidden font-bold">End Time:</span>`;
     const endTimeInput = document.createElement("input");
     endTimeInput.type = "time";
     endTimeInput.name = "end-time";
-    endTimeInput.step = "900"; // 15 minutes
-    endTimeInput.classList.add(
-      "w-full",
-      "border",
-      "border-gray-300",
-      "rounded",
-      "px-1",
-      "py-1",
-      "text-gray-600",
-      "flex-1",
-      "max-w-36",
-      "min-h-10",
-      "text-balance"
-    );
+    endTimeInput.step = "900";
+    endTimeInput.classList.add("border", "border-gray-300", "rounded", "px-2", "py-1", "w-full", "md:w-auto");
+    endTimeCell.appendChild(endTimeInput);
 
-    const hoursWorkedInput = document.createElement("div");
-    hoursWorkedInput.name = "hours-worked";
-    hoursWorkedInput.classList.add(
-      "w-full",
-      "border",
-      "border-gray-300",
-      "rounded",
-      "px-2",
-      "py-1",
-      "text-gray-600",
-      "flex-1",
-      "max-w-14",
-      "block",
-      "bg-gray-100",
-      "text-center"
-    );
-    hoursWorkedInput.innerHTML = `<span class="">0</span>`;
-
-    if ((job.travelDays > 0 && i === 0) || (job.travelDays > 0 && i === job.duration - 1)) {
-      row.classList.add("bg-gray-600");
-      startTimeInput.value = "06:00";
-      endTimeInput.value = "16:00";
-    }
-
-    //TODO: figure out why .step isnt working with the seconds
-
-    // TODO: if travelDays is not 0, show travel time and set hours worked to 10 for i[0] && length-1
-
-    // Check if there is an entry for the current date and prefill inputs if data exists
-    const rowId = `${job._id}-${formattedDate}-${i + 1}`;
-    row.id = rowId;
-    console.log("Row ID:", i, ":", rowId);
-    const entry = job.showDayEntries.find((entry) => entry.rowId === rowId);
-    if (entry) {
-      startTimeInput.value = entry.clockIn;
-      endTimeInput.value = entry.clockOut;
-      hoursWorkedInput.innerHTML = `<span>${entry.dailyDuration}</span>`; // Will eventually be calculated. current default is 0
-    }
+    const hoursWorkedCell = document.createElement("div");
+    hoursWorkedCell.classList.add("md:flex-1", "mb-2", "md:mb-0");
+    hoursWorkedCell.innerHTML = `<span class="block md:hidden font-bold">Hours Worked:</span> 0`;
 
     const confirmButton = document.createElement("button");
-    confirmButton.innerHTML = "Confirm";
-    confirmButton.classList.add(
-      "bg-blue-500",
-      "hover:bg-green-700",
-      "text-white",
-      "font-bold",
-      "py-1",
-      "px-2",
-      "rounded",
-      "w-full",
-      "lg:w-auto",
-      "flex-1"
-    );
-    confirmButton.setAttribute("type", "submit");
-    confirmButton.setAttribute("id", "confirm-button");
+    confirmButton.classList.add("bg-blue-500", "hover:bg-green-700", "text-white", "font-bold", "py-1", "px-2", "rounded", "w-full", "md:w-auto");
+    confirmButton.textContent = "Confirm";
 
-    row.appendChild(dayOfWeek);
-    row.appendChild(dateDiv);
-    row.appendChild(startTimeInput);
-    row.appendChild(endTimeInput);
-    row.appendChild(hoursWorkedInput);
+    row.appendChild(dayCell);
+    row.appendChild(dateCell);
+    row.appendChild(startTimeCell);
+    row.appendChild(endTimeCell);
+    row.appendChild(hoursWorkedCell);
     row.appendChild(confirmButton);
-    //console.log("Row Add with ID:", rowId);
 
     container.appendChild(row);
   }
 }
+
 // Function to PATCH showDayEntries based on row ID
 function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue) {
   //console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}`);
