@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 // Schema for showDayEntries
 const showDayEntries = new mongoose.Schema({
   rowId: String,
-  //date: Date, // TODO: new date is preventing the addToSet from working
+  // date: Date, // TODO: new date is preventing the addToSet from working
   clockIn: String,
   breakTime: Number,
   clockOut: String,
@@ -30,7 +30,6 @@ const timecardSchema = new mongoose.Schema(
     isSubmitted: { type: Boolean, default: false },
     jobID: { type: mongoose.Schema.Types.ObjectId, ref: "Job" }, // Import Job ID from job model
   },
-
   {
     timestamps: true,
   }
@@ -38,15 +37,25 @@ const timecardSchema = new mongoose.Schema(
 
 // Function to calculate duration
 function calculateDuration(clockIn, clockOut) {
+  if (!clockIn || !clockOut) return null;
+
   const start = new Date(clockIn);
   const end = new Date(clockOut);
+  if (isNaN(start) || isNaN(end)) return null;
+
   const duration = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
   console.log("Calculated Duration:", duration);
   return duration;
 }
 
 function calculateWorkHours(clockIn, clockOut) {
-  const hours = (clockOut - clockIn) / (1000 * 60 * 60); // Convert milliseconds to hours
+  if (!clockIn || !clockOut) return { totalHours: 0, straightTime: 0, overTime: 0, doubleTime: 0 };
+
+  const start = new Date(clockIn);
+  const end = new Date(clockOut);
+  if (isNaN(start) || isNaN(end)) return { totalHours: 0, straightTime: 0, overTime: 0, doubleTime: 0 };
+
+  const hours = (end - start) / (1000 * 60 * 60); // Convert milliseconds to hours
   let straightTime = 0,
     overTime = 0,
     doubleTime = 0;
@@ -65,44 +74,39 @@ function calculateWorkHours(clockIn, clockOut) {
   return { totalHours: hours, straightTime, overTime, doubleTime };
 }
 
-// Pre-save hook to calculate duration
+// Combined pre-save hook to calculate duration and work hours
 timecardSchema.pre("save", function (next) {
   const clockIn = this.clockIn;
   const clockOut = this.clockOut;
+
   const duration = calculateDuration(clockIn, clockOut);
   this.duration = duration;
-  next();
-});
 
-// TODO: try to combine pre-save hooks once established functional
-// Pre-save hook to calculate work hours
-timecardSchema.pre("save", function (next) {
-  const clockIn = this.clockIn;
-  const clockOut = this.clockOut;
   const workHours = calculateWorkHours(clockIn, clockOut);
   this.totalHours = workHours.totalHours;
   this.straightTime = workHours.straightTime;
   this.overTime = workHours.overTime;
   this.doubleTime = workHours.doubleTime;
+
   next();
 });
 
-// TODO: Find out if this will work with the nested showDayEntries model
-// pre-findOneAndUpdate hook to calculate duration
+// Pre-findOneAndUpdate hook to calculate duration and work hours
 timecardSchema.pre("findOneAndUpdate", function (next) {
   const clockIn = this._update.clockIn;
   const clockOut = this._update.clockOut;
+
   const duration = calculateDuration(clockIn, clockOut);
   this._update.duration = duration;
+
+  const workHours = calculateWorkHours(clockIn, clockOut);
+  this._update.totalHours = workHours.totalHours;
+  this._update.straightTime = workHours.straightTime;
+  this._update.overTime = workHours.overTime;
+  this._update.doubleTime = workHours.doubleTime;
+
   next();
 });
-
-// TODO: handle edge cases like clockIn and clockOut being null
-// TODO: handle edge cases like clockIn and clockOut being in the future
-// TODO: handle edge cases like clockIn and clockOut being in the past
-// TODO: handle edge cases like rolling past midnight or a 24+ hour day on the clock
-
-// TODO: handle edge cases like "turnaround time" where OT or DT are carried over and start the day in that time
 
 const Timecard = mongoose.model("Timecard", timecardSchema);
 
