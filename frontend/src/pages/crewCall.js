@@ -548,7 +548,7 @@ document.addEventListener("click", (event) => {
 }); */
 
 // Event delegation for "Confirm" button for nested timecards
-document.addEventListener("click", (event) => {
+document.addEventListener("click", async (event) => {
   // Check if the clicked element or its parent has the 'confirm-button' id
   if (event.target.id === "confirm-button" || event.target.closest("#confirm-button")) {
     event.preventDefault();
@@ -564,7 +564,7 @@ document.addEventListener("click", (event) => {
       handleConfirmClick(row, jobId);
 
       // await and reload timecard entries
-      fetchAndPopulateJobs(jobId);
+      await fetchAndPopulateJobs(jobId);
     } else {
       console.log("Confirm button was clicked, but no row was found.");
     }
