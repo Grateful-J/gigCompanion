@@ -28,53 +28,56 @@
         </button>
       </div>
       <!-- Hidden form for adding/editing jobs -->
-      <div id="job-form-container" class="flex flex-col items-center justify-start space-y-4 hidden">
-        <form id="job-form" class="flex flex-col space-y-4 w-full lg:flex-row lg:flex-wrap lg:justify-center lg:space-y-0 lg:space-x-8">
+      <div id="job-form-container" class="flex flex-col items-center justify-start space-y-4 hidden p-4">
+        <form
+          id="job-form"
+          class="flex flex-col space-y-4 w-full lg:flex-row lg:flex-wrap lg:justify-between lg:space-y-0 lg:space-x-8 bg-white shadow-md p-6 rounded-lg"
+        >
           <input type="hidden" id="job-id" />
-          <div class="w-full lg:w-1/2">
-            <label for="job-name" class="block font-semibold">Job Name:</label>
-            <input type="text" id="job-name" class="border border-gray-300 p-2 rounded-lg w-full text-gray-800" />
+          <div class="w-full lg:w-5/12 mb-4">
+            <label for="job-name" class="block font-semibold mb-2">Job Name:</label>
+            <input type="text" id="job-name" class="border border-gray-300 p-3 rounded-lg w-full text-gray-800" />
           </div>
-          <div class="w-full lg:w-1/2">
-            <label for="client" class="block font-semibold">Client:</label>
-            <input type="text" id="client" class="border border-gray-300 p-2 rounded-lg w-full text-gray-800" />
+          <div class="w-full lg:w-5/12 mb-4">
+            <label for="client" class="block font-semibold mb-2">Client:</label>
+            <input type="text" id="client" class="border border-gray-300 p-3 rounded-lg w-full text-gray-800" />
           </div>
-          <div class="w-full lg:w-1/2">
-            <label for="location-input" class="block font-semibold">Location:</label>
-            <input type="text" id="location-input" class="border border-gray-300 p-2 rounded-lg w-full text-gray-800" />
+          <div class="w-full lg:w-5/12 mb-4">
+            <label for="location-input" class="block font-semibold mb-2">Location:</label>
+            <input type="text" id="location-input" class="border border-gray-300 p-3 rounded-lg w-full text-gray-800" />
           </div>
-          <div class="w-full lg:w-1/2">
-            <label for="start-date" class="block font-semibold">Start Date:</label>
-            <input type="date" id="start-date" class="border border-gray-300 p-2 rounded-lg w-full text-gray-800" />
+          <div class="w-full lg:w-5/12 mb-4">
+            <label for="start-date" class="block font-semibold mb-2">Start Date:</label>
+            <input type="date" id="start-date" class="border border-gray-300 p-3 rounded-lg w-full text-gray-800" />
           </div>
-          <div class="w-full lg:w-1/2">
-            <label for="end-date" class="block font-semibold">End Date:</label>
-            <input type="date" id="end-date" class="border border-gray-300 p-2 rounded-lg w-full text-gray-800" />
+          <div class="w-full lg:w-5/12 mb-4">
+            <label for="end-date" class="block font-semibold mb-2">End Date:</label>
+            <input type="date" id="end-date" class="border border-gray-300 p-3 rounded-lg w-full text-gray-800" />
           </div>
-          <div class="w-full lg:w-1/2">
-            <label for="show-code" class="block font-semibold">Job Code:</label>
-            <input type="text" id="show-code" class="border border-gray-300 p-2 rounded-lg w-full text-gray-800" />
+          <div class="w-full lg:w-5/12 mb-4">
+            <label for="show-code" class="block font-semibold mb-2">Job Code:</label>
+            <input type="text" id="show-code" class="border border-gray-300 p-3 rounded-lg w-full text-gray-800" />
           </div>
-          <div class="w-full lg:w-1/2">
-            <label for="rate" class="block font-semibold">Rate:</label>
-            <input type="number" id="rate" class="border border-gray-300 p-2 rounded-lg w-full text-gray-800" />
+          <div class="w-full lg:w-5/12 mb-4">
+            <label for="rate" class="block font-semibold mb-2">Rate:</label>
+            <input type="number" id="rate" class="border border-gray-300 p-3 rounded-lg w-full text-gray-800" />
           </div>
-          <div class="w-full lg:w-1/2">
-            <label for="is-freelance" class="block font-semibold">Freelance:</label>
-            <select id="is-freelance" class="border border-gray-300 p-2 rounded-lg w-full text-gray-800">
+          <div class="w-full lg:w-5/12 mb-4">
+            <label for="is-freelance" class="block font-semibold mb-2">Freelance:</label>
+            <select id="is-freelance" class="border border-gray-300 p-3 rounded-lg w-full text-gray-800">
               <option value="true">Yes</option>
               <option value="false">No</option>
             </select>
           </div>
-          <div class="w-full lg:w-1/2">
-            <label for="is-local" class="block font-semibold">Local:</label>
-            <select id="is-local" class="border border-gray-300 p-2 rounded-lg w-full text-gray-800">
+          <div class="w-full lg:w-5/12 mb-4">
+            <label for="is-local" class="block font-semibold mb-2">Local:</label>
+            <select id="is-local" class="border border-gray-300 p-3 rounded-lg w-full text-gray-800">
               <option value="true">Yes</option>
               <option selected="selected" value="false">No</option>
             </select>
           </div>
-          <div class="w-full lg:w-1/2">
-            <button type="submit" class="bg-blue-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full w-full lg:w-auto">Save</button>
+          <div class="w-full lg:w-5/12 mb-4">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg w-full lg:w-auto">Save</button>
           </div>
         </form>
         <div id="job-form-error" class="text-red-500"></div>
