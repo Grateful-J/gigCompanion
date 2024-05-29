@@ -79,6 +79,13 @@ let globalJobs;
 let isEditing = false;
 let editingJobID = "";
 
+// Add minimum value to endDate based on startDate
+document.querySelector("#startDate").addEventListener("change", () => {
+  const startDate = document.querySelector("#startDate").value;
+  const endDate = document.querySelector("#endDate");
+  endDate.min = startDate;
+});
+
 //GET all jobs
 async function fetchJobs() {
   try {
