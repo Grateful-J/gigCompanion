@@ -28,7 +28,6 @@ async function fetchJobs() {
   }
 }
 
-//TODO: Fix math on counters. upper counters dont match rtw day math
 //Displays Counter of Right to Work days
 function updateCounters(jobs) {
   let rtwDays = 0;
