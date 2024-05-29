@@ -80,9 +80,9 @@ let isEditing = false;
 let editingJobID = "";
 
 // Add minimum value to endDate based on startDate
-document.querySelector("#startDate").addEventListener("change", () => {
-  const startDate = document.querySelector("#startDate").value;
-  const endDate = document.querySelector("#endDate");
+document.querySelector("#start-date").addEventListener("change", () => {
+  const startDate = document.querySelector("#start-date").value;
+  const endDate = document.querySelector("#end-date");
   endDate.min = startDate;
 });
 
