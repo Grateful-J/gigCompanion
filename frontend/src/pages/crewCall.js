@@ -181,7 +181,7 @@ function addTimecardFlex(job) {
 
     // Add the travel days functionality back in
     if ((job.travelDays > 0 && i === 0) || (job.travelDays > 0 && i === job.duration - 1)) {
-      row.classList.add("bg-gray-600");
+      row.classList.add("bg-gray-400");
       startTimeInput.value = "06:00";
       endTimeInput.value = "16:00";
     }
