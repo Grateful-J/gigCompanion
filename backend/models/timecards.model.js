@@ -1,34 +1,17 @@
 const mongoose = require("mongoose");
 
-// Schema for showDayEntries
-const showDayEntries = new mongoose.Schema({
-  rowId: String,
-  // date: Date, // TODO: new date is preventing the addToSet from working
-  clockIn: String,
-  breakTime: Number,
-  clockOut: String,
-  description: String,
-  totalHours: Number,
-  totalMinutes: Number,
-  duration: String,
-  isSubmitted: { type: Boolean, default: false },
-  straightTime: Number,
-  overTime: Number,
-  doubleTime: Number,
-});
-
 // Schema for Timecard
 const timecardSchema = new mongoose.Schema(
   {
-    showDayEntries: [showDayEntries], // Import showDayEntries from showDayEntries model
-    clockIn: Date, // Legacy field- used for task hour tracking
-    clockOut: Date, // Legacy field- used for task hour tracking
+    //showDayEntries: [showDayEntries], // ? Legacy: Import showDayEntries from showDayEntries model
+    clockIn: Date,
+    clockOut: Date,
     description: String,
     totalHours: Number,
     totalMinutes: Number,
-    duration: String, // Legacy field- used for task hour tracking in HH:MM format
+    duration: String,
     isSubmitted: { type: Boolean, default: false },
-    jobID: { type: mongoose.Schema.Types.ObjectId, ref: "Job" }, // Import Job ID from job model
+    //jobID: { type: mongoose.Schema.Types.ObjectId, ref: "Job" }, // Import Job ID from job model
   },
   {
     timestamps: true,
@@ -111,3 +94,21 @@ timecardSchema.pre("findOneAndUpdate", function (next) {
 const Timecard = mongoose.model("Timecard", timecardSchema);
 
 module.exports = Timecard;
+
+// !! Legacy code !! \\
+/* // Schema for showDayEntries
+const showDayEntries = new mongoose.Schema({
+  rowId: String,
+  // date: Date, // TODO: new date is preventing the addToSet from working
+  clockIn: String,
+  breakTime: Number,
+  clockOut: String,
+  description: String,
+  totalHours: Number,
+  totalMinutes: Number,
+  duration: String,
+  isSubmitted: { type: Boolean, default: false },
+  straightTime: Number,
+  overTime: Number,
+  doubleTime: Number,
+}); */
