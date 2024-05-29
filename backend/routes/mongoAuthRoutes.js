@@ -27,10 +27,6 @@ router.post("/login", async (req, res) => {
     res.status(200).send({
       userId: user.id,
       accessToken: user.accessToken,
-      user: {
-        id: mongoUser._id,
-        firstName: mongoUser.firstName,
-      },
     });
   } catch (err) {
     console.error("User login failed:", err.message);
