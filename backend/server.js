@@ -42,12 +42,7 @@ app.use(cookieParser());
 // Logout Route
 app.get("/logout", (req, res) => {
   res.cookie("authToken", "", { maxAge: "1" });
-  res.clearCookie("authToken");
-  res.clearCookie("bearer");
-  // clear session storage
-  if (sessionStorage.getItem("authToken")) {
-    sessionStorage.removeItem("authToken");
-  }
+  sessionStorage.clear();
   res.redirect("/");
 });
 
