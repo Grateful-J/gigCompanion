@@ -31,11 +31,10 @@ document.getElementById("login-form").addEventListener("submit", async function 
       // Stores access token in session storage
       sessionStorage.setItem("authToken", data.accessToken);
 
-      // Stores gigUser in session storage
-      sessionStorage.setItem("gigUser", JSON.stringify(data));
-
       // stores access token in HTTP cookie
       //document.cookie = `accessToken=${data.accessToken};`;
+
+      // Redirects to home page
       window.location.href = "/home";
     } else {
       const errorMessage = await response.text();
