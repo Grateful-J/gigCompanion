@@ -7,6 +7,7 @@ const path = require("path");
 const realm = require("realm");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
+//const session = require("express-session");
 const jobRoutes = require("./routes/jobRoutes"); // Adjusted for a models directory
 const locationRoutes = require("./routes/locationRoutes");
 const timeCardRoutes = require("./routes/timecardRoutes");

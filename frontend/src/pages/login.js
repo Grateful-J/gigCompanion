@@ -33,6 +33,8 @@ document.getElementById("login-form").addEventListener("submit", async function 
 
       // stores access token in HTTP cookie
       //document.cookie = `accessToken=${data.accessToken};`;
+
+      // Redirects to home page
       window.location.href = "/home";
     } else {
       const errorMessage = await response.text();

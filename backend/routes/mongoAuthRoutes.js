@@ -2,10 +2,9 @@ const express = require("express");
 const { App, Credentials } = require("realm");
 const { google } = require("googleapis");
 const User = require("../models/users.model");
-//const { body, validationResult } = require("express-validator");
-const path = require("path");
+//const { body, validationResult } = require("express-validator"); // TODO: Maybe later look into it
+//const path = require("path");
 const router = express.Router();
-const authenticateToken = require("../middleware/authMiddleware");
 
 const appId = process.env.MONGODB_APP_ID;
 const realmApp = new App({ id: appId });
@@ -25,7 +24,10 @@ router.post("/login", async (req, res) => {
     console.log("User logged in successfully:", user.id);
     const token = user.accessToken;
     res.cookie("authToken", token, { httpOnly: true });
-    res.status(200).send({ userId: user.id, accessToken: user.accessToken });
+    res.status(200).send({
+      userId: user.id,
+      accessToken: user.accessToken,
+    });
   } catch (err) {
     console.error("User login failed:", err.message);
     res.status(400).send(`User login failed: ${err.message}`);

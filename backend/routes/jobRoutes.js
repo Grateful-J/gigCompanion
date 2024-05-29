@@ -91,9 +91,9 @@ router.patch("/:id", async (req, res) => {
 // PATCH a job to add or update showDayEntries
 router.patch("/daily/:id", async (req, res) => {
   const { rowId, clockIn, breakTime, clockOut, description } = req.body;
-  console.log("User ID:", req.user.id);
-  console.log("Job ID:", req.params.id);
-  console.log("Row ID:", rowId);
+  //console.log("User ID:", req.user.id);
+  //console.log("Job ID:", req.params.id);
+  //console.log("Row ID:", rowId);
 
   try {
     const job = await Job.findById(req.params.id);

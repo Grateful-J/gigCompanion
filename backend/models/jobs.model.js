@@ -77,10 +77,10 @@ function calculateDuration(startDate, endDate) {
 
 function calculateTravelDays(isLocal) {
   if (isLocal === true) {
-    console.log("Local Job: 0 Days");
+    //console.log("Local Job: 0 Days");
     return 0;
   } else {
-    console.log("Non-Local Job: 2 Days");
+    //console.log("Non-Local Job: 2 Days");
     return 2;
   }
 }
@@ -101,7 +101,7 @@ function calculateWorkHours(clockIn, clockOut, breakTime) {
     end.setHours(end.getHours() + 24);
   }
 
-  console.log(`End Hours: ${end}`);
+  //console.log(`End Hours: ${end}`);
 
   const breakDuration = breakTime * 60 * 1000; // Convert break time to milliseconds
   const totalMilliseconds = end - start - breakDuration;
@@ -183,7 +183,7 @@ function calculateDailyWage(dailyRate, straightTime, overTime, doubleTime) {
 }
 
 jobSchema.pre("save", function (next) {
-  console.log("Pre-save: Starting to calculate fields for save operation.");
+  //console.log("Pre-save: Starting to calculate fields for save operation.");
   calculateFields(this, this);
 
   this.showDayEntries.forEach((entry) => {
