@@ -133,6 +133,7 @@ function addTimecardFlex(job) {
       "text-gray-200",
       "md:space-x-2"
     );
+    row.setAttribute("data-row-id", `${job._id}-${formattedDate}-${i + 1}`);
 
     const dayAndDateCell = document.createElement("div");
     dayAndDateCell.classList.add("md:flex-1", "mb-2", "md:mb-0", "flex", "flex-col", "md:flex-row", "justify-between", "w-full");
@@ -172,6 +173,7 @@ function addTimecardFlex(job) {
     const confirmButton = document.createElement("button");
     confirmButton.classList.add("bg-blue-500", "hover:bg-green-700", "text-white", "font-bold", "py-1", "px-2", "rounded", "w-full", "md:w-auto");
     confirmButton.textContent = "Confirm";
+    confirmButton.id = "confirm-button";
 
     row.appendChild(dayAndDateCell);
     row.appendChild(startTimeCell);
