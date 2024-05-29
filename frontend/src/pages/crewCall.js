@@ -179,6 +179,23 @@ function addTimecardFlex(job) {
     row.appendChild(hoursWorkedCell);
     row.appendChild(confirmButton);
 
+    // Add the travel days functionality back in
+    if ((job.travelDays > 0 && i === 0) || (job.travelDays > 0 && i === job.duration - 1)) {
+      row.classList.add("bg-gray-600");
+      startTimeInput.value = "06:00";
+      endTimeInput.value = "16:00";
+    }
+
+    // Check if there is an entry for the current date and prefill inputs if data exists
+    const rowId = `${job._id}-${formattedDate}-${i + 1}`;
+    row.id = rowId;
+    const entry = job.showDayEntries.find((entry) => entry.rowId === rowId);
+    if (entry) {
+      startTimeInput.value = entry.clockIn;
+      endTimeInput.value = entry.clockOut;
+      hoursWorkedCell.innerHTML = `<span>${entry.dailyDuration}</span>`;
+    }
+
     container.appendChild(row);
   }
 }
