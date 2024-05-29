@@ -223,11 +223,7 @@ function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue) {
     .catch((error) => console.error("Error updating showDayEntries:", error));
 }
 
-// Function to handle confirm button clicks and fetch times
-function handleConfirmClick(button, jobId) {
-  // Retrieve the parent row of the cell
-  const row = button.closest("div[data-row-id]");
-
+function handleConfirmClick(row, jobId) {
   // Retrieve the start and end time inputs within the same row
   const startTimeInput = row.querySelector('input[name="start-time"]');
   const endTimeInput = row.querySelector('input[name="end-time"]');
