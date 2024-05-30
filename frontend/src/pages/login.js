@@ -31,17 +31,22 @@ document.getElementById("login-form").addEventListener("submit", async function 
       // Stores access token in session storage
       sessionStorage.setItem("authToken", data.accessToken);
 
-      // Then looks for /users/ for a matching email and stores it in session storage
-      const userResponse = await fetch("/api/users", {
-        method: "POST",
+      // Then queries api/users with a get request then filters result to match based off email
+      const user = await fetch(`${apiBaseUrl}/api/users/`, {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email }),
-      });
+        credentials: "include",
+      })
+        .then((response) => response.json())
+        .then((userData) => userData.find((user) => user.email === email));
 
-      const userData = await userResponse.json();
-      sessionStorage.setItem("userId", userData._id);
+      // Stores user in session storage
+      sessionStorage.setItem("user", JSON.stringify(user));
+
+      // Stores user id in session storage
+      sessionStorage.setItem("userId", user._id);
 
       // stores access token in HTTP cookie
       //document.cookie = `accessToken=${data.accessToken};`;
