@@ -11,11 +11,11 @@ if (import.meta.env.VITE_MODE === "dev") {
 }
 
 //check local storage for User
-const user = sessionStorage.getItem("role");
+const user = sessionStorage.getItem("authToken");
 if (user === null) {
   window.location.href = "/login";
 } else {
-  console.log("User: " + user);
+  console.log("User verified: Profile Page");
 }
 
 // Function to clear form
