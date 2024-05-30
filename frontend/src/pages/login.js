@@ -31,6 +31,18 @@ document.getElementById("login-form").addEventListener("submit", async function 
       // Stores access token in session storage
       sessionStorage.setItem("authToken", data.accessToken);
 
+      // Then looks for /users/ for a matching email and stores it in session storage
+      const userResponse = await fetch("/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const userData = await userResponse.json();
+      sessionStorage.setItem("userId", userData._id);
+
       // stores access token in HTTP cookie
       //document.cookie = `accessToken=${data.accessToken};`;
 
