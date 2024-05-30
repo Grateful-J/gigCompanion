@@ -45,8 +45,14 @@ document.getElementById("login-form").addEventListener("submit", async function 
       // Stores user in session storage
       sessionStorage.setItem("user", JSON.stringify(user));
 
+      // create modified user object
+      const gigUser = {
+        _id: user._id,
+        firstName: user.firstName,
+      };
+
       // Stores user id in session storage
-      sessionStorage.setItem("userId", user._id);
+      sessionStorage.setItem("gigUser", gigUser);
 
       // stores access token in HTTP cookie
       //document.cookie = `accessToken=${data.accessToken};`;
