@@ -64,6 +64,10 @@ function attachlogOutHandler() {
 function loadWelcomeMessage() {
   const user = sessionStorage.getItem("username");
   const welcome = document.getElementById("navbar-welcome");
+
+  if (!user) {
+    welcome.textContent = `Hello!`;
+  }
   welcome.textContent = `Welcome, ${user}`;
 }
 
