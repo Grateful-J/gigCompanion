@@ -55,9 +55,13 @@ document.getElementById("job-dropdown").addEventListener("change", function () {
 // Function to
 
 // TODO: Function to load job hours sumamry for invoice
+// populates table body "timesheet-table-body"
 function loadJobHoursSummary(selectedJobId) {
   // while loop for duration to add timecard rows based off of duration
-  //
+  const job = selectedJobId;
+  const duration = job.duration;
+
+  // TODO: Add logic to populate table body
 }
 
 // TODO: Function to populate timesheet-table-body with job hours
