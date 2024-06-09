@@ -66,7 +66,7 @@ function loadWelcomeMessage() {
   const welcome = document.getElementById("navbar-welcome");
   console.log(`Hello user: ${firstName}`);
 
-  if (!user) {
+  if (!firstName) {
     welcome.textContent = `Hello!`;
   }
   welcome.textContent = `Welcome, ${firstName}`;
