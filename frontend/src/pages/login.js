@@ -52,7 +52,7 @@ document.getElementById("login-form").addEventListener("submit", async function 
       };
 
       // Stores user id in session storage
-      sessionStorage.setItem("gigUser", gigUser);
+      sessionStorage.setItem("gigUser", JSON.stringify(gigUser));
 
       // stores access token in HTTP cookie
       //document.cookie = `accessToken=${data.accessToken};`;
