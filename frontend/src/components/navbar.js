@@ -62,13 +62,14 @@ function attachlogOutHandler() {
 
 // Pulls username from Session Storage
 function loadWelcomeMessage() {
-  const user = sessionStorage.getItem("gigUser.firstName");
+  const firstName = sessionStorage.getItem("gigUser.firstName");
   const welcome = document.getElementById("navbar-welcome");
+  console.log(`Hello user: ${firstName}`);
 
   if (!user) {
     welcome.textContent = `Hello!`;
   }
-  welcome.textContent = `Welcome, ${user}`;
+  welcome.textContent = `Welcome, ${firstName}`;
 }
 
 export { loadNavbar };
