@@ -206,7 +206,7 @@ function addTimecardFlex(job) {
 // Function to PATCH showDayEntries based on row ID
 function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue, dateValue) {
   //console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}`);
-  console.low(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}, dateValue:${dateValue}) `);
+  console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}, dateValue:${dateValue}) `);
 
   fetch(`${apiBaseUrl}/api/jobs/daily/${jobId}`, {
     method: "PATCH",
