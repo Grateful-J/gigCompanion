@@ -62,9 +62,11 @@ function attachlogOutHandler() {
 
 // Pulls username from Session Storage
 function loadWelcomeMessage() {
-  const user = sessionStorage.getItem("gigUser");
-  console.log(user);
-  const firstName = user.firstName;
+  // pulls object gigUser from session storage
+
+  const data = sessionStorage.getItem("gigUser");
+  console.log(data);
+  const firstName = data.firstName;
   const welcome = document.getElementById("navbar-welcome");
   console.log(`Hello user: ${firstName}`);
 
