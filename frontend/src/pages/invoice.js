@@ -67,12 +67,40 @@ function displayInvoiceSummary(job) {
   ["Date", "Start Time", "End Time", "Hours Worked"].forEach((text) => {
     const div = document.createElement("div");
     div.textContent = text;
+    header.classList.add(
+      "hidden",
+      "md:flex",
+      "w-full",
+      "justify-between",
+      "text-gray-800",
+      "border-b",
+      "border-gray-400",
+      "font-bold",
+      "bg-gray-100",
+      "p-2"
+    );
     header.appendChild(div);
   });
   container.appendChild(header);
 
   job.showDayEntries.forEach((entry) => {
     const row = document.createElement("div");
+
+    row.classList.add(
+      "flex",
+      "flex-col",
+      "md:flex-row",
+      "md:items-center",
+      "w-full",
+      "p-4",
+      "border-b",
+      "border-gray-300",
+      "bg-gray-700",
+      "text-gray-200",
+      "md:space-x-2"
+    );
+    row.setAttribute("data-row-id", `${job._id}-${formattedDate}-${i + 1}`);
+
     row.className = "entry-row";
     ["date", "clockIn", "clockOut", "dailyDuration"].forEach((key) => {
       const cell = document.createElement("div");
