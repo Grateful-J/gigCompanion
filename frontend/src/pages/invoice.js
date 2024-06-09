@@ -105,6 +105,7 @@ function displayInvoiceSummary(job) {
     row.className = "entry-row";
     ["date", "clockIn", "clockOut", "dailyDuration"].forEach((key) => {
       const cell = document.createElement("div");
+      cell.setAttribute("id", `${key}-cell`);
       cell.textContent = entry[key];
       row.appendChild(cell);
     });
