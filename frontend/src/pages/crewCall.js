@@ -143,6 +143,7 @@ function addTimecardFlex(job) {
       </div>
       <div class="flex-1" id="date">
         <span class="block md:hidden font-bold">Date:</span> ${formattedDate}
+        <input type="hidden" name="date" value="${formattedDate}">${formattedDate}
       </div>
     `;
 
@@ -230,7 +231,8 @@ function handleConfirmClick(row, jobId) {
   // Retrieve the start and end time inputs within the same row
   const startTimeInput = row.querySelector('input[name="start-time"]');
   const endTimeInput = row.querySelector('input[name="end-time"]');
-  const dateInput = row.querySelector('id="date"');
+
+  const dateInput = row.querySelector('input[name="date"]');
 
   // Fetch the values from these inputs
   const startTimeValue = startTimeInput ? startTimeInput.value : "No start time";
