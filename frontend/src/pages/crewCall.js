@@ -141,7 +141,7 @@ function addTimecardFlex(job) {
       <div class="flex-1">
         <span class="block md:hidden font-bold">Day of Week:</span> ${dayOfWeek}
       </div>
-      <div class="flex-1">
+      <div class="flex-1" id="date">
         <span class="block md:hidden font-bold">Date:</span> ${formattedDate}
       </div>
     `;
@@ -230,12 +230,12 @@ function handleConfirmClick(row, jobId) {
   // Retrieve the start and end time inputs within the same row
   const startTimeInput = row.querySelector('input[name="start-time"]');
   const endTimeInput = row.querySelector('input[name="end-time"]');
+  const dateInput = row.querySelector('input[name="date"]');
 
   // Fetch the values from these inputs
   const startTimeValue = startTimeInput ? startTimeInput.value : "No start time";
   const endTimeValue = endTimeInput ? endTimeInput.value : "No end time";
-
-  console.log("Start Time:", startTimeValue);
+  const formattedDate = dateInput ? dateInput.value : newDate();
   console.log("End Time:", endTimeValue);
 
   // Find row id of parent row of the clicked cell
