@@ -28,7 +28,10 @@ const loadJobs = function () {
 loadJobs();
 
 // Event listener for job dropdown
-document.getElementById("job-dropdown").addEventListener("change", function () {
+document.getElementById("job-dropdown").addEventListener("change", displayJobDetails());
+
+// Function to display job details
+function displayJobDetails() {
   const selectedJobId = this.value;
   let startDate = new Date();
   let endDate = new Date();
@@ -49,10 +52,12 @@ document.getElementById("job-dropdown").addEventListener("change", function () {
       document.getElementById("hours-ot").textContent = job.totalOverTime || "N/A";
       document.getElementById("hours-dt").textContent = job.totalDoubleTime || "N/A";
     })
+    .then(displayInvoiceSummary(job))
     .catch((error) => console.error("Error loading job details:", error));
-});
+}
 
-// Function to
+// Function to display job summary
+function displayInvoiceSummary() {}
 
 // TODO: Function to load job hours sumamry for invoice
 // populates table body "timesheet-table-body"
