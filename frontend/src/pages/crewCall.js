@@ -143,7 +143,7 @@ function addTimecardFlex(job) {
       </div>
       <div class="flex-1" id="date">
         <span class="block md:hidden font-bold">Date:</span> ${formattedDate}
-        <input type="hidden" name="date" value="${formattedDate}">${formattedDate}
+        <input type="hidden" name="date" value="${formattedDate}">
       </div>
     `;
 
@@ -204,8 +204,9 @@ function addTimecardFlex(job) {
 }
 
 // Function to PATCH showDayEntries based on row ID
-function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue, formattedDate) {
+function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue, dateValue) {
   //console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}`);
+  console.low(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}, dateValue:${dateValue}) `;
 
   fetch(`${apiBaseUrl}/api/jobs/daily/${jobId}`, {
     method: "PATCH",
@@ -217,7 +218,7 @@ function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue, format
       clockIn: startTimeValue,
       breakTime: 0, // Filler for now
       clockOut: endTimeValue,
-      showDate: formattedDate,
+      showDate: dateValue,
     }),
   })
     .then((response) => response.json())
@@ -231,13 +232,12 @@ function handleConfirmClick(row, jobId) {
   // Retrieve the start and end time inputs within the same row
   const startTimeInput = row.querySelector('input[name="start-time"]');
   const endTimeInput = row.querySelector('input[name="end-time"]');
-
   const dateInput = row.querySelector('input[name="date"]');
 
   // Fetch the values from these inputs
   const startTimeValue = startTimeInput ? startTimeInput.value : "No start time";
   const endTimeValue = endTimeInput ? endTimeInput.value : "No end time";
-  const formattedDate = dateInput ? dateInput.value : newDate();
+  const dateValue = dateInput ? dateInput.value : newDate();
   console.log("End Time:", endTimeValue);
 
   // Find row id of parent row of the clicked cell
@@ -245,7 +245,7 @@ function handleConfirmClick(row, jobId) {
   console.log(`Row ID: ${rowId}`);
 
   // PATCH showDayEntries
-  updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue, formattedDate);
+  updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue, dateValue);
 }
 
 // !Right Column: Notes //
