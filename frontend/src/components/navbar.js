@@ -70,7 +70,7 @@ function loadWelcomeMessage() {
   const welcome = document.getElementById("navbar-welcome");
   console.log(`Hello user: ${firstName}`);
 
-  if (!firstName) {
+  if (firstName !== null || firstName !== undefined) {
     welcome.textContent = `Hello!`;
   }
   welcome.textContent = `Welcome, ${firstName}`;
