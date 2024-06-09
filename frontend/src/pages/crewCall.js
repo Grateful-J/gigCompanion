@@ -176,9 +176,7 @@ function addTimecardFlex(job) {
     confirmButton.id = "confirm-button";
 
     row.appendChild(dayAndDateCell);
-    row.appendChild(startTimeCell);
-    row.appendChild(endTimeCell);
-    row.appendChild(hoursWorkedCell);
+    3;
     row.appendChild(confirmButton);
 
     // Add the travel days functionality back in

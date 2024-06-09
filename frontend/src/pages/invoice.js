@@ -28,7 +28,7 @@ const loadJobs = function () {
 loadJobs();
 
 // Event listener for job dropdown
-document.getElementById("job-dropdown").addEventListener("change", displayJobDetails());
+document.getElementById("job-dropdown").addEventListener("change", displayJobDetails);
 
 // Function to display job details
 function displayJobDetails() {
@@ -51,23 +51,39 @@ function displayJobDetails() {
       document.getElementById("hours-st").textContent = job.totalStraightTime || "N/A";
       document.getElementById("hours-ot").textContent = job.totalOverTime || "N/A";
       document.getElementById("hours-dt").textContent = job.totalDoubleTime || "N/A";
+      displayInvoiceSummary(job);
     })
-    .then(displayInvoiceSummary(job))
+
     .catch((error) => console.error("Error loading job details:", error));
 }
 
 // Function to display job summary
-function displayInvoiceSummary() {}
+function displayInvoiceSummary(job) {
+  const container = document.getElementById("timesheet-container");
+  container.innerHTML = "";
 
-// TODO: Function to load job hours sumamry for invoice
-// populates table body "timesheet-table-body"
-function loadJobHoursSummary(selectedJobId) {
-  // while loop for duration to add timecard rows based off of duration
-  const job = selectedJobId;
-  const duration = job.duration;
+  const header = document.createElement("div");
+  header.className = "header-row";
+  ["Date", "Start Time", "End Time", "Hours Worked"].forEach((text) => {
+    const div = document.createElement("div");
+    div.textContent = text;
+    header.appendChild(div);
+  });
+  container.appendChild(header);
 
-  // TODO: Add logic to populate table body
+  job.showDayEntries.forEach((entry) => {
+    const row = document.createElement("div");
+    row.className = "entry-row";
+    ["date", "clockIn", "clockOut", "dailyDuration"].forEach((key) => {
+      const cell = document.createElement("div");
+      cell.textContent = entry[key];
+      row.appendChild(cell);
+    });
+    container.appendChild(row);
+  });
 }
+
+// TODO: Add logic to populate table body
 
 // TODO: Function to populate timesheet-table-body with job hours
 
