@@ -99,7 +99,8 @@ function displayInvoiceSummary(job) {
       "text-gray-200",
       "md:space-x-2"
     );
-    row.setAttribute("data-row-id", `${job._id}-${formattedDate}-${i + 1}`);
+    // TODO: update this to be unique hash
+    row.setAttribute("data-row-id", `${job._id}-${i + 1}`);
 
     row.className = "entry-row";
     ["date", "clockIn", "clockOut", "dailyDuration"].forEach((key) => {
