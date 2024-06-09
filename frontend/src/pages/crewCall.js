@@ -203,7 +203,7 @@ function addTimecardFlex(job) {
 }
 
 // Function to PATCH showDayEntries based on row ID
-function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue) {
+function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue, formattedDate) {
   //console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}`);
 
   fetch(`${apiBaseUrl}/api/jobs/daily/${jobId}`, {
@@ -216,6 +216,7 @@ function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue) {
       clockIn: startTimeValue,
       breakTime: 0, // Filler for now
       clockOut: endTimeValue,
+      showDate: formattedDate,
     }),
   })
     .then((response) => response.json())
@@ -242,7 +243,7 @@ function handleConfirmClick(row, jobId) {
   console.log(`Row ID: ${rowId}`);
 
   // PATCH showDayEntries
-  updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue);
+  updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue, formattedDate);
 }
 
 // !Right Column: Notes //
