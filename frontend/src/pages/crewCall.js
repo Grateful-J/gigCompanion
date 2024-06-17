@@ -3,7 +3,7 @@ import { loadNavbar } from "../components/navbar.js";
 import { fetchAndPopulateJobs, populateJobsDropdown, fetchNonSubmittedJobs, fetchJob } from "../util/jobService.js";
 loadNavbar();
 //fetchAndPopulateJobs(); // Fetch all jobs original **Working**
-fetchNonSubmittedJobs();
+fetchNonSubmittedJobs(); // Fetch Jobs that have isSubmitted = false
 
 // Global Variables
 let duration = 0;
@@ -206,7 +206,7 @@ function addTimecardFlex(job) {
 // Function to PATCH showDayEntries based on row ID
 function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue, dateValue) {
   //console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}`);
-  console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}, dateValue:${dateValue}) `);
+  //console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}, dateValue:${dateValue}) `);
 
   fetch(`${apiBaseUrl}/api/jobs/daily/${jobId}`, {
     method: "PATCH",
@@ -238,11 +238,11 @@ function handleConfirmClick(row, jobId) {
   const startTimeValue = startTimeInput ? startTimeInput.value : "No start time";
   const endTimeValue = endTimeInput ? endTimeInput.value : "No end time";
   const dateValue = dateInput ? dateInput.value : newDate();
-  console.log("End Time:", endTimeValue);
+  //console.log("End Time:", endTimeValue);
 
   // Find row id of parent row of the clicked cell
   const rowId = row.getAttribute("data-row-id");
-  console.log(`Row ID: ${rowId}`);
+  //console.log(`Row ID: ${rowId}`);
 
   // PATCH showDayEntries
   updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue, dateValue);
