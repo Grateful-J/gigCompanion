@@ -574,8 +574,14 @@ document.addEventListener("click", async (event) => {
       handleConfirmClick(row, jobId);
 
       // Clears rows and repopulates
+
       row.innerHTML = "";
-      fetchJobAndDisplayTimecards(jobId);
+      await new Promise((resolve) => {
+        fetchJobAndDisplayTimecards(jobId).then(() => {
+          resolve();
+        });
+      });
+      //fetchJobAndDisplayTimecards(jobId);
 
       //clearAndRepopulate(jobId);
     } else {
