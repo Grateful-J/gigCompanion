@@ -565,6 +565,12 @@ document.addEventListener("click", (event) => {
   }
 }); */
 
+// clear dropdown first then reload
+function cleardropdown() {
+  jobDropdown.innerHTML = "";
+  jobDropdown.value = "";
+}
+
 // Event delegation for "Confirm" button for nested timecards
 document.addEventListener("click", async (event) => {
   // Check if the clicked element or its parent has the 'confirm-button' id
@@ -582,7 +588,8 @@ document.addEventListener("click", async (event) => {
       handleConfirmClick(row, jobId);
 
       // await and reload timecard entries
-      await fetchAndPopulateJobs(jobId);
+      await cleardropdown();
+      fetchNonSubmittedJobs(jobId);
     } else {
       console.log("Confirm button was clicked, but no row was found.");
     }
