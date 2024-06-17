@@ -42,8 +42,8 @@ document.getElementById("login-form").addEventListener("submit", async function 
         .then((response) => response.json())
         .then((userData) => userData.find((user) => user.email === email));
 
-      // Stores user in session storage
-      sessionStorage.setItem("user", JSON.stringify(user));
+      // Stores user in session storage (!only for degug purposes)
+      //sessionStorage.setItem("user", JSON.stringify(user));
 
       // create modified user object
       const gigUser = {
