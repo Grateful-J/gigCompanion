@@ -223,7 +223,7 @@ function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue, dateVa
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log("ShowDayEntries updated successfully:", data);
+      //console.log("ShowDayEntries updated successfully:", data);
     })
     .catch((error) => console.error("Error updating showDayEntries:", error));
 }
@@ -500,14 +500,14 @@ function deleteExpense(expenseId) {
         // Show alert confirmation
         if (confirm("Are you sure you want to delete this expense?")) {
           // Delete expense
-          console.log("Expense deleted:", expense);
+          //console.log("Expense deleted:", expense);
           const expenseId = expense._id;
           fetch(`${apiBaseUrl}/api/jobs/expenses/${globalTimecardId}/${expenseId}`, {
             method: "DELETE",
           })
             .then((response) => response.json())
             .then((data) => {
-              console.log("Expense deleted:", data);
+              //console.log("Expense deleted:", data);
               fetchJobAndDisplayTimecards(globalTimecardId);
             })
             .catch((error) => console.error("Error deleting expense:", error));
@@ -548,7 +548,7 @@ jobDropdown.addEventListener("change", () => {
 function clearTimecardRows() {
   const timecardDiv = document.getElementById("timesheet-flexbox");
   timecardDiv.innerHTML = "";
-  console.log(`timecardDiv: ${timecardDiv} cleared`);
+  //console.log(`timecardDiv: ${timecardDiv} cleared`);
 }
 
 // clears timecard rows and repopulates
@@ -569,7 +569,7 @@ document.addEventListener("click", async (event) => {
     if (row) {
       const jobId = globalTimecardId;
       const rowId = row.getAttribute("data-row-id");
-      console.log(`Job ID: ${jobId}, Row ID: ${rowId}`);
+      //console.log(`Job ID: ${jobId}, Row ID: ${rowId}`);
 
       handleConfirmClick(row, jobId);
 
@@ -611,7 +611,7 @@ document.addEventListener("click", (event) => {
     const row = event.target.closest("div.flex-col.lg\\:flex-row"); // Ensure matching class
     if (row) {
       const expenseId = row.getAttribute("data-expense-id");
-      console.log(`Editing expense ID: ${expenseId}`);
+      //console.log(`Editing expense ID: ${expenseId}`);
       globalExpenseId = expenseId;
       editExpense(expenseId);
     } else {
@@ -628,7 +628,7 @@ document.addEventListener("click", (event) => {
     const row = event.target.closest("div.flex-col.lg\\:flex-row"); // Ensure matching class
     if (row) {
       const expenseId = row.getAttribute("data-expense-id");
-      console.log(`Deleting expense ID: ${expenseId}`);
+      //console.log(`Deleting expense ID: ${expenseId}`);
       deleteExpense(expenseId);
     } else {
       console.log("Delete button was clicked, but no row was found.");
