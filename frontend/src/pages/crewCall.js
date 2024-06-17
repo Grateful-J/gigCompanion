@@ -590,9 +590,9 @@ document.addEventListener("click", async (event) => {
       // await and reload timecard entries
       await cleardropdown();
 
-      fetchJobAndDisplayTimecards(jobId);
+      await fetchJobAndDisplayTimecards(jobId);
 
-      fetchNonSubmittedJobs(jobId);
+      await fetchNonSubmittedJobs(jobId);
     } else {
       console.log("Confirm button was clicked, but no row was found.");
     }
