@@ -573,9 +573,10 @@ document.addEventListener("click", async (event) => {
 
       handleConfirmClick(row, jobId);
 
+      // TODO: Find out why this works but doesnt when i comment out top two lines ??????
       // Clears rows and repopulates
-      //row.innerHTML = "";
-      //fetchJobAndDisplayTimecards(jobId);
+      row.innerHTML = "";
+      fetchJobAndDisplayTimecards(jobId);
       clearAndRepopulate(jobId);
     } else {
       console.log("Confirm button was clicked, but no row was found.");
