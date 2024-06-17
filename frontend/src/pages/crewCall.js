@@ -586,13 +586,7 @@ document.addEventListener("click", async (event) => {
       console.log(`Job ID: ${jobId}, Row ID: ${rowId}`);
 
       handleConfirmClick(row, jobId);
-
-      // await and reload timecard entries
-      await cleardropdown();
-
-      await fetchJobAndDisplayTimecards(jobId);
-
-      await fetchNonSubmittedJobs(jobId);
+      fetchJobAndDisplayTimecards(jobId);
     } else {
       console.log("Confirm button was clicked, but no row was found.");
     }
