@@ -574,9 +574,8 @@ document.addEventListener("click", async (event) => {
       handleConfirmClick(row, jobId);
 
       // Clears rows and repopulates
-      row.innerHTML = "";
-      // make sure
-      fetchJobAndDisplayTimecards(jobId);
+      //row.innerHTML = "";
+      //fetchJobAndDisplayTimecards(jobId);
       clearAndRepopulate(jobId);
     } else {
       console.log("Confirm button was clicked, but no row was found.");
