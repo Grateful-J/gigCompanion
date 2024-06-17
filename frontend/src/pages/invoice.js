@@ -103,7 +103,7 @@ function displayInvoiceSummary(job) {
     const dateFormatOptions = { month: "2-digit", day: "2-digit", year: "numeric" };
     const dateDisplay = isValidDate ? dateObject.toLocaleDateString("en-US", dateFormatOptions) : "Invalid date";
 
-    ["date", "clockIn", "clockOut", "dailyDuration"].forEach((key) => {
+    ["showDate", "clockIn", "clockOut", "dailyDuration"].forEach((key) => {
       const cell = document.createElement("div");
       cell.textContent = key === "date" ? dateDisplay : entry[key];
       row.appendChild(cell);
