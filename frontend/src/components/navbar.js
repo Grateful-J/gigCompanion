@@ -64,7 +64,8 @@ function attachlogOutHandler() {
 function loadWelcomeMessage() {
   // pulls object gigUser from session storage
 
-  const data = sessionStorage.getItem("gigUser");
+  const data = JSON.parse(sessionStorage.getItem("gigUser"));
+  //const data = sessionStorage.getItem("gigUser");
   console.log(data);
   const firstName = data.firstName;
   const welcome = document.getElementById("navbar-welcome");
