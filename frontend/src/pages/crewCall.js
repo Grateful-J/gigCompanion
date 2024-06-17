@@ -566,9 +566,10 @@ document.addEventListener("click", (event) => {
 }); */
 
 // clear dropdown first then reload
-function cleardropdown() {
-  jobDropdown.innerHTML = "";
-  jobDropdown.value = "";
+function clearTimecardRows() {
+  const timecardDiv = document.getElementById("timesheet-flexbox");
+  timecardDiv.innerHTML = "";
+  console.log(`timecardDiv: ${timecardDiv} cleared`);
 }
 
 // Event delegation for "Confirm" button for nested timecards
