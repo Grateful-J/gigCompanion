@@ -6,6 +6,10 @@ I am a solo developer creating an app for my friends and colleagues in the live 
 
 I will provide the code as open-source and will try to host it for free or as cheaply as possible for as long as I can.
 
+### Dashboard
+
+![Dashboard](screenshots/homepage.png)
+
 ## Features
 
 - **Labor Tracking**: Automatically track standard rate, overtime, and double time.
@@ -14,7 +18,15 @@ I will provide the code as open-source and will try to host it for free or as ch
 - **Schedule Management**: Keep track of upcoming shows with detailed schedules.
 - **Data Security**: Google Drive integration planned for local data storage to ensure your data is secure and under your control.
 
+### Jobs Screen
+
+![JobsScreen](screenshots/jobsscreen.png)
+
 ## Made for Show Techs and Project Managers by a Show Tech and PM
+
+### Crewcall Job Tracker
+
+![CrewCall](screenshots/crewcall.png)
 
 ## Milestones
 
