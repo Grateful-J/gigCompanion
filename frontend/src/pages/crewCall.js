@@ -586,12 +586,18 @@ document.addEventListener("click", async (event) => {
       console.log(`Job ID: ${jobId}, Row ID: ${rowId}`);
 
       handleConfirmClick(row, jobId);
-      fetchJobAndDisplayTimecards(jobId);
+      clearAndRepopulate();
     } else {
       console.log("Confirm button was clicked, but no row was found.");
     }
   }
 });
+
+// clears timecard rows and repopulates
+function clearAndRepopulate() {
+  clearTimecardRows();
+  fetchJobAndDisplayTimecards(globalTimecardId);
+}
 
 // event listener for save note button
 document.getElementById("save-note-btn").addEventListener("click", function () {
