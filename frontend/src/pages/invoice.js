@@ -98,8 +98,10 @@ function displayInvoiceSummary(job) {
       "md:space-x-2"
     );
 
+    const dateObject = new Date(entry.date);
+    const isValidDate = !isNaN(dateObject.getTime());
     const dateFormatOptions = { month: "2-digit", day: "2-digit", year: "numeric" };
-    const dateDisplay = new Date(entry.date).toLocaleDateString("en-US", dateFormatOptions);
+    const dateDisplay = isValidDate ? dateObject.toLocaleDateString("en-US", dateFormatOptions) : "Invalid date";
 
     ["date", "clockIn", "clockOut", "dailyDuration"].forEach((key) => {
       const cell = document.createElement("div");
