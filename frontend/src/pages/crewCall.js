@@ -517,7 +517,7 @@ function deleteExpense(expenseId) {
     .catch((error) => console.error("Error fetching expenses:", error));
 }
 
-// !Event Listeners //
+// !Event Listeners && Helper //
 // !----------------------------------------------------------- //
 
 // Event listener for job dropdown
@@ -543,33 +543,18 @@ jobDropdown.addEventListener("change", () => {
     });
   }
 });
-/* 
-// Event delegation for "Confirm"  button for nested timecards
-document.addEventListener("click", (event) => {
-  // Check if the clicked element or its parent has the 'confirm-button' id
-  if (event.target.id === "confirm-button" || event.target.closest("#confirm-button")) {
-    event.preventDefault();
-    //console.log(`confirm button clicked ${event.target.id}`);
-    // Find the row by navigating up from the confirm button
-    const row = event.target.closest("div:flex-row");
-    if (row) {
-      const jobId = globalTimecardId;
-      //console.log(`now cicking Job ID: ${jobId}`);
-      handleConfirmClick(row, jobId);
-
-      // await and reload timecarentries
-      fetchAndPopulateJobs(jobId);
-    } else {
-      console.log("Confirm button was clicked, but no row was found.");
-    }
-  }
-}); */
 
 // clear dropdown first then reload
 function clearTimecardRows() {
   const timecardDiv = document.getElementById("timesheet-flexbox");
   timecardDiv.innerHTML = "";
   console.log(`timecardDiv: ${timecardDiv} cleared`);
+}
+
+// clears timecard rows and repopulates
+function clearAndRepopulate(jobId) {
+  clearTimecardRows();
+  fetchJobAndDisplayTimecards(jobId);
 }
 
 // Event delegation for "Confirm" button for nested timecards
@@ -587,18 +572,12 @@ document.addEventListener("click", async (event) => {
       console.log(`Job ID: ${jobId}, Row ID: ${rowId}`);
 
       handleConfirmClick(row, jobId);
-      clearAndRepopulate();
+      clearAndRepopulate(jobId);
     } else {
       console.log("Confirm button was clicked, but no row was found.");
     }
   }
 });
-
-// clears timecard rows and repopulates
-function clearAndRepopulate() {
-  clearTimecardRows();
-  fetchJobAndDisplayTimecards(globalTimecardId);
-}
 
 // event listener for save note button
 document.getElementById("save-note-btn").addEventListener("click", function () {
