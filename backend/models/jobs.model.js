@@ -4,6 +4,7 @@ const rtwStates = require("../utils/rtwStates");
 // Schema for showDayEntries
 const showDayEntriesSchema = new mongoose.Schema({
   rowId: String,
+  showDate: Date,
   clockIn: String, // in 24 hour HH:MM format
   breakTime: { type: Number, default: 0 }, // In minutes
   clockOut: String, // in 24 hour HH:MM format

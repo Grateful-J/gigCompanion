@@ -6,25 +6,33 @@ const { App, Credentials } = require("realm");
 const appId = process.env.MONGODB_APP_ID;
 const realmApp = new App({ id: appId });
 
+const envCheck = process.env.NODE_ENV;
+
 async function authenticateToken(req, res, next) {
-  const token = req.headers["authorization"]?.split(" ")[1] || req.cookies.authToken;
-  //console.log("authenticateToken token init from middleware:", token);
+  //! Remove before deployment // !!
+  if (envCheck !== "production") {
+    return next();
+    //! REMOVE//
+  } else {
+    const token = req.headers["authorization"]?.split(" ")[1] || req.cookies.authToken;
+    //console.log("authenticateToken token init from middleware:", token);
 
-  if (!token) return res.sendStatus(401); // Unauthorized
+    if (!token) return res.sendStatus(401); // Unauthorized
 
-  try {
-    const user = realmApp.currentUser;
+    try {
+      const user = realmApp.currentUser;
 
-    // Check if the current user is already logged in and token matches
-    if (user && user.accessToken === token) {
-      req.user = user;
-      next();
-    } else {
-      return res.sendStatus(401); // Unauthorized
+      // Check if the current user is already logged in and token matches
+      if (user && user.accessToken === token) {
+        req.user = user;
+        next();
+      } else {
+        return res.sendStatus(401); // Unauthorized
+      }
+    } catch (err) {
+      console.error("User session validation failed:", err.message);
+      res.sendStatus(403); // Forbidden
     }
-  } catch (err) {
-    console.error("User session validation failed:", err.message);
-    res.sendStatus(403); // Forbidden
   }
 }
 

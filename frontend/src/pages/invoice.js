@@ -28,7 +28,10 @@ const loadJobs = function () {
 loadJobs();
 
 // Event listener for job dropdown
-document.getElementById("job-dropdown").addEventListener("change", function () {
+document.getElementById("job-dropdown").addEventListener("change", displayJobDetails);
+
+// Function to display job details
+function displayJobDetails() {
   const selectedJobId = this.value;
   let startDate = new Date();
   let endDate = new Date();
@@ -48,17 +51,69 @@ document.getElementById("job-dropdown").addEventListener("change", function () {
       document.getElementById("hours-st").textContent = job.totalStraightTime || "N/A";
       document.getElementById("hours-ot").textContent = job.totalOverTime || "N/A";
       document.getElementById("hours-dt").textContent = job.totalDoubleTime || "N/A";
+      displayInvoiceSummary(job);
     })
+
     .catch((error) => console.error("Error loading job details:", error));
-});
-
-// Function to
-
-// TODO: Function to load job hours sumamry for invoice
-function loadJobHoursSummary(selectedJobId) {
-  // while loop for duration to add timecard rows based off of duration
-  //
 }
+
+// Function to display job summary
+function displayInvoiceSummary(job) {
+  const container = document.getElementById("timesheet-container");
+  container.innerHTML = "";
+
+  const header = document.createElement("div");
+  header.className = "header-row";
+  ["Date", "Start Time", "End Time", "Hours Worked"].forEach((text) => {
+    const div = document.createElement("div");
+    div.textContent = text;
+    header.classList.add(
+      "hidden",
+      "md:flex",
+      "w-full",
+      "justify-between",
+      "text-gray-800",
+      "border-b",
+      "border-gray-400",
+      "font-bold",
+      "bg-gray-100",
+      "p-2"
+    );
+    header.appendChild(div);
+  });
+  container.appendChild(header);
+
+  job.showDayEntries.forEach((entry) => {
+    const row = document.createElement("div");
+
+    row.classList.add(
+      "flex",
+      "flex-col",
+      "md:flex-row",
+      "md:items-center",
+      "w-full",
+      "p-4",
+      "border-b",
+      "border-gray-300",
+      "bg-gray-700",
+      "text-gray-200",
+      "md:space-x-2"
+    );
+    // TODO: update this to be unique hash
+    //row.setAttribute("data-row-id", `${job._id}-${i + 1}`);
+
+    row.className = "entry-row";
+    ["date", "clockIn", "clockOut", "dailyDuration"].forEach((key) => {
+      const cell = document.createElement("div");
+      cell.setAttribute("id", `${key}-cell`);
+      cell.textContent = entry[key];
+      row.appendChild(cell);
+    });
+    container.appendChild(row);
+  });
+}
+
+// TODO: Add logic to populate table body
 
 // TODO: Function to populate timesheet-table-body with job hours
 

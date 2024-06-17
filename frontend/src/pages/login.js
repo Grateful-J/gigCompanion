@@ -31,6 +31,29 @@ document.getElementById("login-form").addEventListener("submit", async function 
       // Stores access token in session storage
       sessionStorage.setItem("authToken", data.accessToken);
 
+      // Then queries api/users with a get request then filters result to match based off email
+      const user = await fetch(`${apiBaseUrl}/api/users/`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      })
+        .then((response) => response.json())
+        .then((userData) => userData.find((user) => user.email === email));
+
+      // Stores user in session storage (!only for degug purposes)
+      //sessionStorage.setItem("user", JSON.stringify(user));
+
+      // create modified user object
+      const gigUser = {
+        _id: user._id,
+        firstName: user.firstName,
+      };
+
+      // Stores user id in session storage
+      sessionStorage.setItem("gigUser", JSON.stringify(gigUser));
+
       // stores access token in HTTP cookie
       //document.cookie = `accessToken=${data.accessToken};`;
 

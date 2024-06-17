@@ -8,6 +8,13 @@ function loadNavbar() {
       loadWelcomeMessage();
     });
 }
+let apiBaseUrl;
+//checks if env is dev or prod
+if (import.meta.env.VITE_MODE === "dev") {
+  apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+} else {
+  apiBaseUrl = import.meta.env.VITE_API_BASE_URL_PROD;
+}
 
 //function to chage navebar
 function toggleNavbar() {
@@ -23,10 +30,13 @@ function logOut() {
     credentials: "include", // Include cookies in the request
   })
     .then((response) => {
-      if (response.redirected) {
-        sessionStorage.clear(); // Clear session storage on the client side
-        window.location.href = response.url; // Redirect to the redirected URL
-        console.log("Logout successful");
+      if (response.ok) {
+        // Successful logout, clear the session storage
+        sessionStorage.clear();
+        // Successful logout, redirect to the login page
+        window.location.href = "login.html";
+      } else {
+        throw new Error("Failed to log out");
       }
     })
     .catch((error) => {
@@ -52,9 +62,19 @@ function attachlogOutHandler() {
 
 // Pulls username from Session Storage
 function loadWelcomeMessage() {
-  const user = sessionStorage.getItem("username");
+  // pulls object gigUser from session storage
+
+  const data = JSON.parse(sessionStorage.getItem("gigUser"));
+  //const data = sessionStorage.getItem("gigUser");
+  console.log(data);
+  const firstName = data.firstName;
   const welcome = document.getElementById("navbar-welcome");
-  welcome.textContent = `Welcome, ${user}`;
+  console.log(`Hello user: ${firstName}`);
+
+  if (firstName !== null || firstName !== undefined) {
+    welcome.textContent = `Hello!`;
+  }
+  welcome.textContent = `Welcome, ${firstName}`;
 }
 
 export { loadNavbar };
