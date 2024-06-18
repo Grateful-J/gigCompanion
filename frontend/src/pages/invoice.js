@@ -94,6 +94,10 @@ function displayInvoiceSummary(job) {
     dataValues.forEach((value) => row.appendChild(createCell(value)));
     container.appendChild(row);
   });
+
+  // Show Invoice Button Div
+  const invoiceButtonDiv = document.getElementById("invoice-button-div");
+  invoiceButtonDiv.classList.remove("hidden");
 }
 
 // TODO: Add logic to populate table body
