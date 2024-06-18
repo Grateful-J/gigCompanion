@@ -206,7 +206,7 @@ function addTimecardFlex(job) {
 // Function to PATCH showDayEntries based on row ID
 function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue, dateValue) {
   //console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}`);
-  //console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}, dateValue:${dateValue}) `);
+  console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}, dateValue:${dateValue}) `);
 
   fetch(`${apiBaseUrl}/api/jobs/daily/${jobId}`, {
     method: "PATCH",
@@ -237,8 +237,9 @@ function handleConfirmClick(row, jobId) {
   // Fetch the values from these inputs
   const startTimeValue = startTimeInput ? startTimeInput.value : "No start time";
   const endTimeValue = endTimeInput ? endTimeInput.value : "No end time";
-  const dateValue = dateInput ? dateInput.value : newDate();
+  const dateValue = newDate(dateInput.value).toISOString().slice(0, 10);
   //console.log("End Time:", endTimeValue);
+  console.log("handleconfirmClick Date:", dateValue);
 
   // Find row id of parent row of the clicked cell
   const rowId = row.getAttribute("data-row-id");
