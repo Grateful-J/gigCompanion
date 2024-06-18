@@ -10,9 +10,9 @@ if (import.meta.env.VITE_MODE === "dev") {
   apiBaseUrl = import.meta.env.VITE_API_BASE_URL_PROD;
 }
 
-// Example of loading jobs into the dropdown
+// Example of loading jobs that isSubmitted = false into the dropdown
 const loadJobs = function () {
-  fetch(`${apiBaseUrl}/api/jobs`)
+  fetch(`${apiBaseUrl}/api/jobs?isSubmitted=false`)
     .then((response) => response.json())
     .then((jobs) => {
       const select = document.getElementById("job-dropdown");
