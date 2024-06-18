@@ -237,7 +237,7 @@ function handleConfirmClick(row, jobId) {
   // Fetch the values from these inputs
   const startTimeValue = startTimeInput ? startTimeInput.value : "No start time";
   const endTimeValue = endTimeInput ? endTimeInput.value : "No end time";
-  const dateValue = newDate(dateInput.value).toISOString().slice(0, 10);
+  const dateValue = new Date(dateInput.value).toISOString().slice(0, 10);
   //console.log("End Time:", endTimeValue);
   console.log("handleconfirmClick Date:", dateValue);
 
