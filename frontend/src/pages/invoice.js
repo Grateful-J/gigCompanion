@@ -104,7 +104,7 @@ function displayInvoiceSummary(job) {
   container.appendChild(invoiceButtonDiv);
 }
 
-// Event listener for generate invoice button
+// Event delegate for generate invoice button
 document.getElementById("generate-invoice-button").addEventListener("click", generateInvoice);
 
 // Function to generate invoice
@@ -135,9 +135,6 @@ function generateInvoice() {
   // TODO: just xlsx.js to generate invoice
   // TODO: Then PATCH job with invoice url & marked isInvoiced true
 }
-// TODO: Add logic to populate table body
-
-// TODO: Function to populate timesheet-table-body with job hours
 
 //TODO: Look Into https://pdfkit.org/ to create PDFs for invoice
 //TODO: Look into puppeteer to generate invoice pdf https://developer.chrome.com/docs/puppeteer/get-started/
