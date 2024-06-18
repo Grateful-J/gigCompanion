@@ -107,34 +107,32 @@ function displayInvoiceSummary(job) {
 // Event listener for invoice button
 document.getElementById("generate-invoice-button").addEventListener("click", generateInvoice);
 
+function invoiceJob() {
+  fetch(`${apiBaseUrl}/api/jobs/${globalJobId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      //invoiceUrl: "https://example.com/invoice.pdf",
+      isInvoiced: true,
+      isSubmitted: true,
+    }),
+  });
+  // TODO: add mail app to send invoice
+
+  // TODO: then PATCH job with isSubmitted true
+
+  console.log("Invoice generated.");
+}
+
 // Function to generate invoice
 function generateInvoice() {
   // TODO: Add logic to generate invoice
   console.log("Generating invoice...");
-
+  invoiceJob();
   // TODO: just xlsx.js to generate invoice
-
   // TODO: Then PATCH job with invoice url & marked isInvoiced true
-
-  function invoiceJob() {
-    fetch(`${apiBaseUrl}/api/jobs/${globalJobId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        //invoiceUrl: "https://example.com/invoice.pdf",
-        isInvoiced: true,
-        isSubmitted: true,
-      }),
-    });
-
-    // TODO: add mail app to send invoice
-
-    // TODO: then PATCH job with isSubmitted true
-
-    console.log("Invoice generated.");
-  }
 }
 // TODO: Add logic to populate table body
 
