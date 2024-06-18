@@ -96,8 +96,10 @@ function displayInvoiceSummary(job) {
   });
 
   // Show Invoice Button Div
-  const invoiceButtonDiv = document.getElementById("invoice-button-div");
-  invoiceButtonDiv.classList.remove("hidden");
+  const invoiceButtonDiv = document.createElement("div");
+  invoiceButtonDiv.classList.add("flex", "w-full", "justify-center", "mt-4");
+  invoiceButtonDiv.innerHTML = `<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="generate-invoice-button">Generate Invoice</button>`;
+  container.appendChild(invoiceButtonDiv);
 }
 
 // TODO: Add logic to populate table body
