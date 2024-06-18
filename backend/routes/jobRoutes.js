@@ -90,7 +90,7 @@ router.patch("/:id", async (req, res) => {
 // Update job show timesheets
 // PATCH a job to add or update showDayEntries
 router.patch("/daily/:id", async (req, res) => {
-  const { rowId, clockIn, breakTime, clockOut, description } = req.body;
+  const { rowId, clockIn, breakTime, clockOut, description, dateValue } = req.body;
   //console.log("User ID:", req.user.id);
   //console.log("Job ID:", req.params.id);
   //console.log("Row ID:", rowId);
@@ -103,10 +103,10 @@ router.patch("/daily/:id", async (req, res) => {
 
     if (entryIndex !== -1) {
       // Update existing entry
-      job.showDayEntries[entryIndex] = { rowId, clockIn, breakTime, clockOut, description };
+      job.showDayEntries[entryIndex] = { rowId, clockIn, breakTime, clockOut, description, dateValue };
     } else {
       // Add new entry
-      job.showDayEntries.push({ rowId, clockIn, breakTime, clockOut, description });
+      job.showDayEntries.push({ rowId, clockIn, breakTime, clockOut, description, dateValue });
     }
 
     const updatedJob = await job.save();
