@@ -105,7 +105,7 @@ function displayInvoiceSummary(job) {
 
     ["showDate", "clockIn", "clockOut", "dailyDuration"].forEach((key) => {
       const cell = document.createElement("div");
-      cell.textContent = key === "date" ? dateDisplay : entry[key];
+      cell.textContent = key === "showDate" ? dateDisplay : entry[key];
       row.appendChild(cell);
     });
     container.appendChild(row);
