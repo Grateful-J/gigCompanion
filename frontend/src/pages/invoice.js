@@ -12,11 +12,12 @@ if (import.meta.env.VITE_MODE === "dev") {
 
 // Example of loading jobs that isSubmitted = false into the dropdown
 const loadJobs = function () {
-  fetch(`${apiBaseUrl}/api/jobs?isSubmitted=false`)
+  fetch(`${apiBaseUrl}/api/jobs`)
     .then((response) => response.json())
     .then((jobs) => {
       const select = document.getElementById("job-dropdown");
-      jobs.forEach((job) => {
+      const filteredJobs = jobs.filter((job) => job.isSubmitted === false);
+      filteredJobs.forEach((job) => {
         const option = document.createElement("option");
         option.value = job._id;
         option.textContent = job.jobName;
