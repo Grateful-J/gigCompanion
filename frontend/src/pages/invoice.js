@@ -105,7 +105,11 @@ function displayInvoiceSummary(job) {
 }
 
 // Event delegate for generate invoice button
-document.getElementById("generate-invoice-button").addEventListener("click", generateInvoice);
+document.addEventListener("click", (event) => {
+  if (event.target.id === "generate-invoice-button") {
+    generateInvoice();
+  }
+});
 
 // Function to generate invoice
 function invoiceJob() {
