@@ -12,11 +12,11 @@ I will provide the code as open-source and will try to host it for free or as ch
 
 ## Features
 
-- **Labor Tracking**: Automatically track standard rate, overtime, and double time.
-- **Expense Tracking**: Log, categorize, and manage expenses.
-- **Invoicing**: Generate and manage invoices based on logged work hours and expenses.
-- **Schedule Management**: Keep track of upcoming shows with detailed schedules.
-- **Data Security**: Google Drive integration planned for local data storage to ensure your data is secure and under your control.
+- **Labor Tracking :ledger:**: Automatically track standard rate, overtime, and double time.
+- **Expense Tracking :clipboard:**: Log, categorize, and manage expenses.
+- **Invoicing :page_facing_up:**: Generate and manage invoices based on logged work hours and expenses.
+- **Schedule Management :calendar:**: Keep track of upcoming shows with detailed schedules.
+- **Data Security :closed_lock_with_key:**: Google Drive integration planned for local data storage to ensure your data is secure and under your control.
 
 ### Jobs Screen
 
@@ -44,6 +44,7 @@ I will provide the code as open-source and will try to host it for free or as ch
 
 ### Items Left To Do
 
+- **Sign in with Google & GitHub**: One click sign-on with your Google Account or Github.
 - **Complete PM Portal**: Allows PMs to create jobs and assign users, filling out job details including rate automatically.
 - **QR Code Storage**: Allow users to store generated QR codes for credentials pickup, eliminating the need to search for old emails.
 - **Mail Portal**: Enable users to forward confirmation emails, with the server scraping important data and auto-filling for the user.
