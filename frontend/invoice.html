@@ -80,7 +80,7 @@
     </div>
 
            <!-- Timesheet -->
-           <div id="timesheet-container" class="flex flex-col border border-grey-200 rounded-lg p-4 lg:w-2/3 mb-4 lg:mb-0">
+           <div id="timesheet-container" class="flex flex-col border border-grey-200 rounded-lg p-4 lg:w-2/3 mb-4 lg:mb-0 items-center">
             <h2 class="text-xl font-semibold mb-4">Timesheet</h2>
             <table class="table-auto w-full">
               <thead>
@@ -93,45 +93,12 @@
               </thead>
               <tbody id="timesheet-table-body">
                 <!-- Dynamically filled -->
-                <!-- Demo filler data for frontend testing -->
-                <h1 class="text-2xl font-bold mb-6 text-center">Generic Data for Dev Below</h1>
-                <tr id="time-test-01">
-                  <td class="py-2 px-4">2024-01-01</td>
-                  <td class="py-2 px-4">9:00</td>
-                  <td class="py-2 px-4">17:00</td>
-                  <td class="py-2 px-4">8</td>
-                </tr>
-
-                <tr id="time-test-02">
-                  <td class="py-2 px-4">2024-01-02</td>
-                  <td class="py-2 px-4">9:00</td>
-                  <td class="py-2 px-4">17:00</td>
-                  <td class="py-2 px-4">8</td>
-                </tr>
-
-                <tr id="time-test-03">
-                  <td class="py-2 px-4">2024-01-03</td>
-                  <td class="py-2 px-4">9:00</td>
-                  <td class="py-2 px-4">17:00</td>
-                  <td class="py-2 px-4">8</td>
-                </tr>
-
-                <tr id="time-test-04">
-                  <td class="py-2 px-4">2024-01-04</td>
-                  <td class="py-2 px-4">9:00</td>
-                  <td class="py-2 px-4">17:00</td>
-                  <td class="py-2 px-4">8</td>
-                </tr>
-
-                <tr id="time-test-05">
-                  <td class="py-2 px-4">2024-01-05</td>
-                  <td class="py-2 px-4">9:00</td>
-                  <td class="py-2 px-4">17:00</td>
-                  <td class="py-2 px-4">8</td>
-                </tr>
-
+      
               </tbody>
             </table>
+            <div id ="invoice-container" class="flex flex-col border border-grey-200 rounded-lg p-4 lg:w-2/3 mb-4 lg:mb-0 position-relative bottom-1">
+              <button id="invoice-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-4">Generate Invoice</button>
+            </div>
           </div>
       </div>
 
