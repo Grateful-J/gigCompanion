@@ -104,9 +104,10 @@ function displayInvoiceSummary(job) {
   container.appendChild(invoiceButtonDiv);
 }
 
-// Event listener for invoice button
+// Event listener for generate invoice button
 document.getElementById("generate-invoice-button").addEventListener("click", generateInvoice);
 
+// Function to generate invoice
 function invoiceJob() {
   fetch(`${apiBaseUrl}/api/jobs/${globalJobId}`, {
     method: "PATCH",
