@@ -115,9 +115,9 @@ function generateInvoice() {
   // TODO: just xlsx.js to generate invoice
 
   // TODO: Then PATCH job with invoice url & marked isInvoiced true
-  
+
   function invoiceJob() {
-    fetch (`${apiBaseUrl}/api/jobs/${globalJobId}`, {
+    fetch(`${apiBaseUrl}/api/jobs/${globalJobId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -126,17 +126,16 @@ function generateInvoice() {
         //invoiceUrl: "https://example.com/invoice.pdf",
         isInvoiced: true,
         isSubmitted: true,
-        console.log("Job invoiced.");
       }),
-    })
+    });
 
-  // TODO: add mail app to send invoice
+    // TODO: add mail app to send invoice
 
-  // TODO: then PATCH job with isSubmitted true
+    // TODO: then PATCH job with isSubmitted true
 
-  console.log("Invoice generated.");
+    console.log("Invoice generated.");
+  }
 }
-
 // TODO: Add logic to populate table body
 
 // TODO: Function to populate timesheet-table-body with job hours
