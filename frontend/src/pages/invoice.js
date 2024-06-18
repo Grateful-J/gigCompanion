@@ -73,7 +73,7 @@ function displayInvoiceSummary(job) {
   // Create and append header row
   const headerTitles = ["Date", "Start Time", "End Time", "Hours Worked"];
   const header = document.createElement("div");
-  header.classList.add("flex", "w-full", "justify-between", "bg-gray-100", "border-b", "border-gray-400");
+  header.classList.add("flex", "w-full", "justify-between", "bg-gray-100", "border-b", "border-gray-400", "text-gray-700");
   headerTitles.forEach((title) => header.appendChild(createCell(title, true)));
   container.appendChild(header);
 
