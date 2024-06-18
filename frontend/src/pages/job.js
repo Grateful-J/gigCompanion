@@ -54,6 +54,7 @@ loader.importLibrary("places").then(async () => {
     let country = selectedPlace.address_components[6].long_name || "";
 
     currentState = state; //updates global variable for r2w logic
+    console.log(`Current State: ${currentState}`);
 
     //console log address examples
     console.log(`Street Number: ${streetNumber}`);
@@ -162,7 +163,8 @@ function clearJobForm() {
 async function submitNewJob() {
   const jobName = document.querySelector("#job-name").value;
   const client = document.querySelector("#client").value;
-  const location = currentState || document.querySelector("#location-input").value;
+  const location = document.querySelector("#location-input").value;
+  const jobState = currentState;
   const startDate = document.querySelector("#start-date").value;
   const endDate = document.querySelector("#end-date").value;
   const showCode = document.querySelector("#show-code").value;
@@ -173,6 +175,7 @@ async function submitNewJob() {
     jobName,
     client,
     location,
+    jobState,
     startDate,
     endDate,
     showCode,
