@@ -42,6 +42,7 @@ const jobSchema = new mongoose.Schema(
     jobName: String,
     client: String,
     location: String,
+    jobState: String,
     startDate: Date,
     endDate: Date,
     duration: Number,
