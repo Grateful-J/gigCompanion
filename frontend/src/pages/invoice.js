@@ -141,6 +141,10 @@ function generateInvoice() {
   // TODO: Then PATCH job with invoice url & marked isInvoiced true
 }
 
+// TODO: Show previous invoices and allow edit before submitting
+
+// TODO: Show invoice preview for specific templates
+
 //TODO: Look Into https://pdfkit.org/ to create PDFs for invoice
 //TODO: Look into puppeteer to generate invoice pdf https://developer.chrome.com/docs/puppeteer/get-started/
 //TODO: Add functionality to generate invoice
