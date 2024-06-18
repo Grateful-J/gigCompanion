@@ -11,8 +11,8 @@ if (import.meta.env.VITE_MODE === "dev") {
 }
 
 //check local storage for User
-const user = sessionStorage.getItem("authToken");
-if (user === null) {
+const userAuth = sessionStorage.getItem("authToken");
+if (userAuth === null) {
   window.location.href = "/login";
 } else {
   console.log("User verified: Profile Page");
@@ -24,6 +24,8 @@ function resetForm() {
 }
 
 // Fetch user details
+const data = JSON.parse(sessionStorage.getItem("gigUser"));
+const user = data._id;
 fetch(`${apiBaseUrl}/api/users/${user}`, {
   method: "GET",
   headers: {
