@@ -1,4 +1,5 @@
 let apiBaseUrl;
+
 import { loadNavbar } from "../components/navbar.js";
 loadNavbar();
 
@@ -100,6 +101,25 @@ function displayInvoiceSummary(job) {
   invoiceButtonDiv.classList.add("flex", "w-full", "justify-center", "mt-4");
   invoiceButtonDiv.innerHTML = `<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="generate-invoice-button">Generate Invoice</button>`;
   container.appendChild(invoiceButtonDiv);
+}
+
+// Event listener for invoice button
+document.getElementById("generate-invoice-button").addEventListener("click", generateInvoice);
+
+// Function to generate invoice
+function generateInvoice() {
+  // TODO: Add logic to generate invoice
+  console.log("Generating invoice...");
+
+  // TODO: just xlsx.js to generate invoice
+
+  // TODO: Then PATCH job with invoice url & marked isInvoiced true
+
+  // TODO: add mail app to send invoice
+
+  // TODO: then PATCH job with isSubmitted true
+
+  console.log("Invoice generated.");
 }
 
 // TODO: Add logic to populate table body
