@@ -1,5 +1,5 @@
 let apiBaseUrl;
-
+let globalJobId;
 import { loadNavbar } from "../components/navbar.js";
 loadNavbar();
 
@@ -34,6 +34,7 @@ document.getElementById("job-dropdown").addEventListener("change", displayJobDet
 // Function to display job details
 function displayJobDetails() {
   const selectedJobId = this.value;
+  globalJobId = selectedJobId;
   let startDate = new Date();
   let endDate = new Date();
   console.log(`Selected job ID: ${selectedJobId}`);
@@ -114,6 +115,20 @@ function generateInvoice() {
   // TODO: just xlsx.js to generate invoice
 
   // TODO: Then PATCH job with invoice url & marked isInvoiced true
+  
+  function invoiceJob() {
+    fetch (`${apiBaseUrl}/api/jobs/${globalJobId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        //invoiceUrl: "https://example.com/invoice.pdf",
+        isInvoiced: true,
+        isSubmitted: true,
+        console.log("Job invoiced.");
+      }),
+    })
 
   // TODO: add mail app to send invoice
 
