@@ -204,9 +204,9 @@ function addTimecardFlex(job) {
 }
 
 // Function to PATCH showDayEntries based on row ID
-function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue, dateValue) {
+function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue, showDate) {
   //console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}`);
-  //console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}, dateValue:${dateValue}) `);
+  //console.log(`Updating showDayEntries for Job ID: ${jobId}, Row ID: ${rowId}, showDate:${showDate}) `);
 
   fetch(`${apiBaseUrl}/api/jobs/daily/${jobId}`, {
     method: "PATCH",
@@ -218,7 +218,7 @@ function updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue, dateVa
       clockIn: startTimeValue,
       breakTime: 0, // Filler for now
       clockOut: endTimeValue,
-      showDate: dateValue,
+      showDate: showDate,
     }),
   })
     .then((response) => response.json())
@@ -237,15 +237,16 @@ function handleConfirmClick(row, jobId) {
   // Fetch the values from these inputs
   const startTimeValue = startTimeInput ? startTimeInput.value : "No start time";
   const endTimeValue = endTimeInput ? endTimeInput.value : "No end time";
-  const dateValue = dateInput ? dateInput.value : newDate();
+  const showDate = new Date(dateInput.value).toISOString();
   //console.log("End Time:", endTimeValue);
+  //console.log("handleconfirmClick Date:", showDate);
 
   // Find row id of parent row of the clicked cell
   const rowId = row.getAttribute("data-row-id");
   //console.log(`Row ID: ${rowId}`);
 
   // PATCH showDayEntries
-  updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue, dateValue);
+  updateShowDayEntries(jobId, rowId, startTimeValue, endTimeValue, showDate);
 }
 
 // !Right Column: Notes //
@@ -562,7 +563,7 @@ document.addEventListener("click", async (event) => {
   // Check if the clicked element or its parent has the 'confirm-button' id
   if (event.target.id === "confirm-button" || event.target.closest("#confirm-button")) {
     event.preventDefault();
-    console.log(`Confirm button clicked`);
+    //console.log(`Confirm button clicked`);
 
     // Find the row by navigating up from the confirm button
     const row = event.target.closest("div[data-row-id]");
