@@ -18,6 +18,9 @@ const noteRoutes = require("./routes/noteRoutes");
 const mongoRoutes = require("./routes/mongoAuthRoutes");
 const authenticateToken = require("./middleware/authMiddleware");
 
+//Library to parse Excel files
+const ExcelJS = require("exceljs");
+
 // Express app
 const app = express();
 
